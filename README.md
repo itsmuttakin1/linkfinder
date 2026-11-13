@@ -57,6 +57,57 @@ A modern, high-performance link monetization and protection platform built with 
 
 ---
 
+## 🔒 Firebase Security Rules (Hacking & Tamper Protection)
+
+To prevent anyone from overwriting, tampering with, or deleting existing links in your Firebase Realtime Database, apply the rules from `database.rules.json`:
+
+1. Go to **Firebase Console** > **Realtime Database** > **Rules** tab.
+2. Replace all existing content with:
+```json
+{
+  "rules": {
+    "links": {
+      ".read": true,
+      "$id": {
+        ".write": "auth != null || (!data.exists() && newData.exists()) || (data.exists() && newData.exists() && newData.child('originalUrl').val() === data.child('originalUrl').val())",
+        ".validate": "newData.hasChildren(['id', 'originalUrl'])",
+        "id": {
+          ".validate": "newData.isString() && newData.val() === $id && newData.val().length >= 3 && newData.val().length <= 64"
+        },
+        "originalUrl": {
+          ".validate": "newData.isString() && (newData.val().beginsWith('https://') || newData.val().beginsWith('http://')) && newData.val().length <= 2048"
+        },
+        "clicks": {
+          ".validate": "newData.isNumber() && (!data.exists() || newData.val() >= data.val())"
+        },
+        "createdAt": {
+          ".validate": "!data.exists() || newData.val() === data.val()"
+        },
+        "createdBy": {
+          ".validate": "!data.exists() || newData.val() === data.val()"
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+    "$other": {
+      ".read": false,
+      ".write": "auth != null"
+    }
+  }
+}
+```
+3. Click **Publish**.
+
+This ensures:
+- Anyone can read links for verification.
+- Public users can only CREATE a brand-new link or increment clicks.
+- **Nobody can delete, overwrite, or hijack other people's existing links.**
+- Authenticated admins (`/admin`) retain full management capabilities.
+
+---
+
 ## 🌐 Deploy to Cloudflare Pages via GitHub
 
 1. Connect this repository `https://github.com/itsmuttakin1/linkfinder` to **Cloudflare Pages**.

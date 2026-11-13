@@ -1,0 +1,41 @@
+{
+  "rules": {
+    "links": {
+      ".read": true,
+      "$id": {
+        // Authenticated admins have full control (create, update, delete)
+        // Public users can ONLY create a brand new link or increment clicks
+        ".write": "auth != null || (!data.exists() && newData.exists()) || (data.exists() && newData.exists() && newData.child('originalUrl').val() === data.child('originalUrl').val())",
+        
+        // Data validations to prevent malformed or malicious payloads
+        ".validate": "newData.hasChildren(['id', 'originalUrl'])",
+        
+        "id": {
+          ".validate": "newData.isString() && newData.val() === $id && newData.val().length >= 3 && newData.val().length <= 64"
+        },
+        "originalUrl": {
+          // Must be a valid HTTP/HTTPS URL and not exceed 2048 chars
+          ".validate": "newData.isString() && (newData.val().beginsWith('https://') || newData.val().beginsWith('http://')) && newData.val().length <= 2048"
+        },
+        "clicks": {
+          // Clicks must be a valid number and can only stay same or increment
+          ".validate": "newData.isNumber() && (!data.exists() || newData.val() >= data.val())"
+        },
+        "createdAt": {
+          ".validate": "!data.exists() || newData.val() === data.val()"
+        },
+        "createdBy": {
+          ".validate": "!data.exists() || newData.val() === data.val()"
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+    // Block all other root database paths completely
+    "$other": {
+      ".read": false,
+      ".write": "auth != null"
+    }
+  }
+}
