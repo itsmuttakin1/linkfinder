@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Safe Link Verification & Protection</title>
+  
+  <!-- Ads Scripts (Popunder & Social Bar) -->
+  <script data-cfasync="false" src="https://ahuramazda.org/1/8a2230a55e23eafc9041f73e631aa9cb"></script>
+  <script data-cfasync="false" src="https://brijmohan.org/14/168f59e04e4f81ffd5bc83e57bcdcc99"></script>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Anti-Adblock & Anti-DNS Blocker Protection -->
+  <script src="js/anti-adblock.js"></script>
+
+  <!-- Firebase App & Database (Compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-indigo-500 selection:text-white">
+
+  <!-- Top Announcement Bar / Header -->
+  <header class="w-full bg-slate-900/70 border-b border-slate-800/80 backdrop-blur py-3 px-4">
+    <div class="max-w-4xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="w-8 h-8 rounded-lg bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white text-sm shadow-md">
+          <i class="fa-solid fa-shield-check"></i>
+        </span>
+        <span class="font-bold text-white tracking-wide text-sm sm:text-base">Link Protection Shield</span>
+      </div>
+      <div class="text-xs text-slate-400 flex items-center gap-1.5">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span>Secure Verification Active</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- TOP AD PLACEMENT: Banner 320x50 -->
+  <div class="w-full max-w-md mx-auto px-4 mt-3 flex justify-center items-center">
+    <div class="ad-slot-box w-full max-w-[340px] min-h-[60px] flex items-center justify-center">
+      <span class="ad-label">Advertisement</span>
+      <script>
+        atOptions = {
+          'key' : '5fed596782d3263188c9e887adcc9f74',
+          'format' : 'iframe',
+          'height' : 50,
+          'width' : 320,
+          'params' : {}
+        };
+      </script>
+      <script src="https://brijmohan.org/22/5fed596782d3263188c9e887adcc9f74"></script>
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-xl w-full mx-auto px-4 py-6 flex flex-col items-center justify-center">
+
+    <!-- Loading State -->
+    <div id="state-loading" class="w-full bg-slate-900 border border-slate-800 rounded-3xl p-8 text-center shadow-2xl">
+      <div class="w-14 h-14 mx-auto border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+      <h3 class="text-lg font-bold text-white mt-5">Checking Link Security...</h3>
+      <p class="text-xs text-slate-400 mt-2">Please wait while we verify destination link integrity.</p>
+    </div>
+
+    <!-- Error / Not Found State -->
+    <div id="state-error" class="hidden w-full bg-slate-900 border border-red-500/30 rounded-3xl p-8 text-center shadow-2xl">
+      <div class="w-16 h-16 mx-auto bg-red-500/10 text-red-400 rounded-2xl flex items-center justify-center text-3xl mb-4 border border-red-500/20">
+        <i class="fa-solid fa-circle-exclamation"></i>
+      </div>
+      <h3 class="text-xl font-bold text-white">Invalid or Expired Link</h3>
+      <p id="error-message" class="text-sm text-slate-400 mt-2">The link you are trying to visit does not exist or has been removed.</p>
+      <a href="/" class="inline-block mt-6 px-6 py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-sm font-semibold transition">
+        Go to Homepage
+      </a>
+    </div>
+
+    <!-- Default Landing Page State (When no ?id= is given) -->
+    <div id="state-landing" class="hidden w-full bg-slate-900 border border-slate-800 rounded-3xl p-8 text-center shadow-2xl relative overflow-hidden">
+      <div class="absolute -top-12 -right-12 w-32 h-32 bg-indigo-600/20 rounded-full blur-2xl pointer-events-none"></div>
+      <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white text-2xl shadow-lg shadow-indigo-500/30 mb-5">
+        <i class="fa-solid fa-lock"></i>
+      </div>
+      <h2 class="text-2xl font-bold text-white">Secure Link Portal</h2>
+      <p class="text-sm text-slate-400 mt-2 max-w-sm mx-auto">
+        This service secures destination URLs against automated bots and protects direct downloads.
+      </p>
+
+      <div class="mt-6 pt-6 border-t border-slate-800/80">
+        <p class="text-xs text-slate-400 uppercase font-semibold tracking-wider mb-3">Have a link ID? Enter below:</p>
+        <form id="portal-form" class="flex gap-2 max-w-xs mx-auto">
+          <input type="text" id="portal-id-input" placeholder="e.g. xyz123" required
+            class="flex-1 px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500">
+          <button type="submit" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-sm transition">
+            Go
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Active Verification State (Step 1 & Step 2) -->
+    <div id="state-verification" class="hidden w-full bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+      
+      <!-- Ambient Glow -->
+      <div class="absolute -top-16 -left-16 w-36 h-36 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-16 -right-16 w-36 h-36 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <!-- Step Header & Progress -->
+      <div class="mb-6">
+        <div class="flex items-center justify-between text-xs font-semibold mb-2">
+          <span id="step-badge" class="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
+            Step 1 of 2
+          </span>
+          <span id="step-status-text" class="text-slate-400">Verifying Human Presence</span>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+          <div id="progress-bar-fill" class="h-full bg-gradient-to-r from-indigo-500 to-purple-600 transition-all duration-500 w-1/2"></div>
+        </div>
+      </div>
+
+      <!-- MIDDLE AD PLACEMENT: Native Banner -->
+      <div class="ad-slot-box my-4 w-full">
+        <span class="ad-label">Sponsored</span>
+        <div class="w-full flex justify-center">
+          <script async="async" data-cfasync="false" src="https://brijmohan.org/21/2554a2b86dafe41a9ee8b56d028af985"></script>
+          <div id="container-2554a2b86dafe41a9ee8b56d028af985"></div>
+        </div>
+      </div>
+
+      <!-- Timer & Action Section -->
+      <div class="text-center py-4">
+        <!-- Circular Countdown Timer -->
+        <div class="relative w-28 h-28 mx-auto flex items-center justify-center">
+          <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="8" class="text-slate-800" fill="transparent"/>
+            <circle id="timer-circle-progress" cx="50" cy="50" r="45" stroke="currentColor" stroke-width="8" stroke-dasharray="283" stroke-dashoffset="0" stroke-linecap="round" class="text-indigo-500 timer-circle" fill="transparent"/>
+          </svg>
+          <div class="absolute inset-0 flex flex-col items-center justify-center">
+            <span id="countdown-number" class="text-3xl font-extrabold text-white">10</span>
+            <span class="text-[10px] uppercase font-bold text-slate-400">Seconds</span>
+          </div>
+        </div>
+
+        <p id="instruction-text" class="text-sm font-medium text-slate-300 mt-4">
+          Please wait <strong id="seconds-remaining-label" class="text-indigo-400">10 seconds</strong> for the security check to complete...
+        </p>
+      </div>
+
+      <!-- Action Button Area -->
+      <div class="mt-4">
+        <button id="btn-next-step" disabled
+          class="w-full py-4 px-6 rounded-2xl font-bold text-base transition-all duration-300 flex items-center justify-center gap-3 bg-slate-800 text-slate-500 cursor-not-allowed">
+          <i id="btn-icon" class="fa-solid fa-lock text-sm"></i>
+          <span id="btn-text">Please wait (10s)...</span>
+        </button>
+
+        <p id="anti-reload-warning" class="text-[11px] text-center text-slate-400 mt-3">
+          <i class="fa-solid fa-triangle-exclamation text-amber-500 mr-1"></i>
+          Do not refresh the page. Refreshing will reset the verification back to Step 1.
+        </p>
+      </div>
+
+      <!-- BOTTOM AD PLACEMENT: Banner 320x50 inside card -->
+      <div class="ad-slot-box mt-6 w-full max-w-[340px] mx-auto min-h-[60px] flex items-center justify-center">
+        <span class="ad-label">Advertisement</span>
+        <script>
+          atOptions = {
+            'key' : '5fed596782d3263188c9e887adcc9f74',
+            'format' : 'iframe',
+            'height' : 50,
+            'width' : 320,
+            'params' : {}
+          };
+        </script>
+        <script src="https://brijmohan.org/22/5fed596782d3263188c9e887adcc9f74"></script>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="w-full py-4 border-t border-slate-900 text-center text-xs text-slate-400">
+    <p>&copy; <span id="year"></span> Link Protection Network. Safe & Verified Destination Links.</p>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Constant Ads URL
+    const SMARTLINK_URL = "https://asiaso.org/4/b72b6eda0d36f3c8cb340878726cd499";
+
+    // Application State
+    // Reload rule: ANY reload resets strictly back to Step 1.
+    // We intentionally DO NOT store step in localStorage or sessionStorage.
+    let currentStep = 1;
+    let countdownSeconds = 10;
+    let timerInterval = null;
+    let targetOriginalUrl = null;
+    let step2PopCount = 0; // Tracks the 2 pop actions for step 2
+
+    // DOM Elements
+    const stateLoading = document.getElementById("state-loading");
+    const stateError = document.getElementById("state-error");
+    const stateLanding = document.getElementById("state-landing");
+    const stateVerification = document.getElementById("state-verification");
+    const errorMessage = document.getElementById("error-message");
+    const portalForm = document.getElementById("portal-form");
+    const portalIdInput = document.getElementById("portal-id-input");
+
+    const stepBadge = document.getElementById("step-badge");
+    const stepStatusText = document.getElementById("step-status-text");
+    const progressBarFill = document.getElementById("progress-bar-fill");
+    const countdownNumber = document.getElementById("countdown-number");
+    const secondsRemainingLabel = document.getElementById("seconds-remaining-label");
+    const timerCircleProgress = document.getElementById("timer-circle-progress");
+    const instructionText = document.getElementById("instruction-text");
+    const btnNextStep = document.getElementById("btn-next-step");
+    const btnIcon = document.getElementById("btn-icon");
+    const btnText = document.getElementById("btn-text");
+
+    // Extract link ID from URL query or hash
+    function getLinkIdFromUrl() {
+      const urlParams = new URLSearchParams(window.location.search);
+      let id = urlParams.get("id") || urlParams.get("link") || urlParams.get("go");
+      if (!id && window.location.hash) {
+        id = window.location.hash.substring(1).trim();
+      }
+      return id ? id.trim() : null;
+    }
+
+    // Trigger Pop / Smartlink
+    function triggerPopAd() {
+      try {
+        const win = window.open(SMARTLINK_URL, "_blank");
+        if (win) {
+          win.focus();
+        }
+      } catch (e) {
+        // Fallback if popup blocked
+        const a = document.createElement("a");
+        a.href = SMARTLINK_URL;
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        a.click();
+      }
+    }
+
+    // Initialize Timer
+    function startCountdown(duration, onComplete) {
+      if (timerInterval) clearInterval(timerInterval);
+      countdownSeconds = duration;
+      const totalCircumference = 283; // 2 * PI * 45 ≈ 283
+
+      // Reset styles
+      countdownNumber.textContent = countdownSeconds;
+      secondsRemainingLabel.textContent = `${countdownSeconds} seconds`;
+      timerCircleProgress.style.strokeDashoffset = "0";
+
+      btnNextStep.disabled = true;
+      btnNextStep.className = "w-full py-4 px-6 rounded-2xl font-bold text-base transition-all duration-300 flex items-center justify-center gap-3 bg-slate-800 text-slate-500 cursor-not-allowed";
+      btnIcon.className = "fa-solid fa-lock text-sm";
+      btnText.textContent = `Please wait (${countdownSeconds}s)...`;
+
+      timerInterval = setInterval(() => {
+        // Check if adblocker is active
+        if (window.isAdBlockActive) {
+          return; // Pause timer if adblock is active!
+        }
+
+        countdownSeconds--;
+
+        if (countdownSeconds >= 0) {
+          countdownNumber.textContent = countdownSeconds;
+          secondsRemainingLabel.textContent = `${countdownSeconds} seconds`;
+          const offset = totalCircumference - (countdownSeconds / duration) * totalCircumference;
+          timerCircleProgress.style.strokeDashoffset = offset;
+        }
+
+        if (countdownSeconds <= 0) {
+          clearInterval(timerInterval);
+          onComplete();
+        }
+      }, 1000);
+    }
+
+    // Setup Step 1
+    function initStep1() {
+      currentStep = 1;
+      stepBadge.textContent = "Step 1 of 2";
+      stepBadge.className = "px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-400 border border-indigo-500/30";
+      stepStatusText.textContent = "Step 1: Security Handshake";
+      progressBarFill.style.width = "50%";
+      instructionText.innerHTML = `Please wait <strong id="seconds-remaining-label" class="text-indigo-400">10 seconds</strong> for the security check to complete...`;
+
+      startCountdown(10, () => {
+        // Unlock button for Step 1
+        btnNextStep.disabled = false;
+        btnNextStep.className = "w-full py-4 px-6 rounded-2xl font-bold text-base transition-all duration-300 flex items-center justify-center gap-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white cursor-pointer shadow-lg shadow-indigo-600/30 transform hover:-translate-y-0.5 active:scale-95 glow-btn";
+        btnIcon.className = "fa-solid fa-arrow-right text-sm";
+        btnText.textContent = "Continue to Step 2 ➜";
+        instructionText.innerHTML = `<span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check"></i> Step 1 Complete!</span> Click Continue below.`;
+      });
+    }
+
+    // Setup Step 2
+    function initStep2() {
+      currentStep = 2;
+      step2PopCount = 0;
+      stepBadge.textContent = "Step 2 of 2";
+      stepBadge.className = "px-3 py-1 rounded-full bg-purple-500/20 text-purple-400 border border-purple-500/30";
+      stepStatusText.textContent = "Step 2: Destination Access Key";
+      progressBarFill.style.width = "100%";
+      instructionText.innerHTML = `Please wait <strong id="seconds-remaining-label" class="text-purple-400">10 seconds</strong> to unlock your destination link...`;
+
+      startCountdown(10, () => {
+        // Unlock button for Step 2
+        btnNextStep.disabled = false;
+        btnNextStep.className = "w-full py-4 px-6 rounded-2xl font-bold text-base transition-all duration-300 flex items-center justify-center gap-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white cursor-pointer shadow-lg shadow-emerald-600/30 transform hover:-translate-y-0.5 active:scale-95 glow-btn";
+        btnIcon.className = "fa-solid fa-unlock-keyhole text-sm";
+        btnText.textContent = "Get Destination Link ➜";
+        instructionText.innerHTML = `<span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check"></i> Link Ready!</span> Click button to proceed.`;
+      });
+    }
+
+    // Next Step Button Handler
+    btnNextStep.addEventListener("click", () => {
+      if (btnNextStep.disabled) return;
+
+      if (currentStep === 1) {
+        // Step 1: User requested: "next a click korle pop bounder asbe 1 bar tarpr step 2"
+        // 1. Trigger 1 popunder / smartlink
+        triggerPopAd();
+        // 2. Go to step 2 with 10s wait
+        initStep2();
+      } else if (currentStep === 2) {
+        // Step 2: User requested: "next step a click korle 2 bar pop bounder tarpor conplte korle orginall link a redreet hobe"
+        if (step2PopCount === 0) {
+          // Pop 1
+          step2PopCount = 1;
+          triggerPopAd();
+          btnText.textContent = "Click Once More to Finalize ➜ (1/2 Done)";
+          btnNextStep.className = "w-full py-4 px-6 rounded-2xl font-bold text-base transition-all duration-300 flex items-center justify-center gap-3 bg-gradient-to-r from-amber-600 to-orange-600 text-white cursor-pointer shadow-lg shadow-amber-600/30 glow-btn";
+          instructionText.innerHTML = `<span class="text-amber-400 font-semibold">Almost there!</span> Click once more to verify final access.`;
+        } else {
+          // Pop 2 + Redirect to Original Link!
+          step2PopCount = 2;
+          triggerPopAd();
+          btnText.textContent = "Redirecting to Destination...";
+          btnNextStep.disabled = true;
+
+          // Short delay to allow popup before navigating away
+          setTimeout(() => {
+            window.location.href = targetOriginalUrl;
+          }, 400);
+        }
+      }
+    });
+
+    // Handle Landing page search form
+    if (portalForm) {
+      portalForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const id = portalIdInput.value.trim();
+        if (id) {
+          window.location.search = `?id=${encodeURIComponent(id)}`;
+        }
+      });
+    }
+
+    // Main Initiation
+    async function init() {
+      const linkId = getLinkIdFromUrl();
+
+      if (!linkId) {
+        // No link ID provided -> show landing page
+        stateLoading.classList.add("hidden");
+        stateLanding.classList.remove("hidden");
+        return;
+      }
+
+      try {
+        // Fetch link from Firebase Realtime Database
+        const snapshot = await database.ref(`links/${linkId}`).once("value");
+
+        if (!snapshot.exists()) {
+          stateLoading.classList.add("hidden");
+          errorMessage.textContent = `The link with ID '${linkId}' was not found or has been removed.`;
+          stateError.classList.remove("hidden");
+          return;
+        }
+
+        const linkData = snapshot.val();
+        targetOriginalUrl = linkData.originalUrl;
+
+        if (!targetOriginalUrl) {
+          throw new Error("Target destination URL is missing");
+        }
+
+        // Increment click stats in Firebase
+        database.ref(`links/${linkId}/clicks`).transaction((curr) => (curr || 0) + 1);
+
+        // Show verification box
+        stateLoading.classList.add("hidden");
+        stateVerification.classList.remove("hidden");
+
+        // Start at Step 1 (always Step 1 on fresh load or reload)
+        initStep1();
+
+      } catch (err) {
+        console.error("Firebase Error:", err);
+        stateLoading.classList.add("hidden");
+        errorMessage.textContent = "Unable to connect to database. Please check your internet connection.";
+        stateError.classList.remove("hidden");
+      }
+    }
+
+    // Start on DOM ready
+    window.addEventListener("DOMContentLoaded", init);
+  </script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+/* Custom Styles & Animation */
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.5), 0 0 30px rgba(147, 51, 234, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(59, 130, 246, 0.8), 0 0 45px rgba(147, 51, 234, 0.5);
+  }
+}
+
+.glow-btn {
+  animation: pulseGlow 2s infinite ease-in-out;
+}
+
+@keyframes countdownProgress {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: 283; }
+}
+
+.timer-circle {
+  transition: stroke-dashoffset 1s linear;
+}
+
+/* Ad styling wrappers to prevent layout shifts */
+.ad-slot-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60px;
+  background: rgba(30, 41, 59, 0.4);
+  border: 1px dashed rgba(100, 116, 139, 0.3);
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 12px 0;
+  position: relative;
+}
+
+.ad-label {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  font-size: 9px;
+  text-transform: uppercase;
+  color: #64748b;
+  letter-spacing: 0.5px;
+  pointer-events: none;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
