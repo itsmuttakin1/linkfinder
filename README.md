@@ -6,15 +6,17 @@ A high-performance link monetization and 100-Step Giveaway platform built with F
 
 ## 🚀 Key Features
 
-1. **Admin Panel (`/admin`)**:
+1. **Admin Panel (`/ad`)**:
+   - Accessed at **`/ad`** (renamed from `/admin`).
    - Protected by **Firebase Authentication** (Email & Password).
-   - **Tab 1: Links Manager**: Create and manage 4-step monetized redirect links with analytics.
-   - **Tab 2: 100-Step Giveaway & Lottery Hub**:
+   - **Tab 1: Campaign & Lottery Hub**:
+     - **Campaign Builder**: Customize quest title, steps count (1 to 100 steps), and timer.
+     - **Promotional Post Caption Generator**: Ready-to-copy Bengali post formatted for Telegram/Facebook channels with instant 1-click copy.
+     - **👑 Admin Special Secret Winner System**: Lock any registered participant OR enter a custom Name & bKash/Nagad number to secretly win the live draw without viewers knowing!
+     - **Live Slot Machine Lottery**: Realistic spinning reel with synthesized audio and confetti burst.
      - **Fast-Forward Test**: Direct 1-click test to jump straight to Step 100 form.
-     - **Participant Data Table**: View all submitted users (Name, bKash/Nagad number, Ticket ID, submission date).
-     - **Live Animated Lottery Draw**: Spin slot wheel animation with synthesized audio and confetti effects.
-     - **Secret Admin Pre-Set Winner**: Choose any participant in advance or run pure random selection without viewers noticing.
-     - **Social Media Caption Generator**: Pre-formatted promotional Bengali text for Telegram/Facebook channels.
+     - **Participant Data Table**: View, search, and manage all submitted users.
+   - **Tab 2: Short Links Manager**: Create and manage 4-step monetized redirect links with analytics.
 
 2. **100-Step Giveaway Quest (`/giveaway`)**:
    - 100 sequential steps with real-time countdown timer and progress indicator.

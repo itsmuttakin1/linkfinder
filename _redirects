@@ -1,3 +1,5 @@
+/ad        /ad/index.html    200
+/ad/*      /ad/index.html    200
+/admin     /ad/index.html    200
+/admin/*   /ad/index.html    200
 /giveaway  /giveaway.html    200
-/admin     /admin/index.html 200
-/admin/*   /admin/index.html 200

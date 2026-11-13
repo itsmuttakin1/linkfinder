@@ -277,7 +277,7 @@
     // Constant URLs & Configuration
     const SMARTLINK_URL = "https://asiaso.org/4/b72b6eda0d36f3c8cb340878726cd499";
     const RTDB_URL = "https://itsmuttakin-adf2b-default-rtdb.asia-southeast1.firebasedatabase.app";
-    const TOTAL_STEPS = 100;
+    let TOTAL_STEPS = 100; // Default 100 steps, can be configured by admin
     const STEP_DURATION = 10; // 10 seconds per step
     const ADMIN_BYPASS_KEY = "adm100_pass_8829"; // Secret bypass key for admin test
 
@@ -473,7 +473,22 @@
     }
 
     // Initialization
-    function init() {
+    async function init() {
+      // 0. Fetch Campaign Configuration if set by admin
+      try {
+        const resp = await fetch(`${RTDB_URL}/campaign_config.json`);
+        if (resp.ok) {
+          const cfg = await resp.json();
+          if (cfg && cfg.totalSteps && cfg.totalSteps >= 1 && cfg.totalSteps <= 100) {
+            TOTAL_STEPS = cfg.totalSteps;
+          }
+          if (cfg && cfg.title) {
+            const hText = document.querySelector("header .font-bold");
+            if (hText) hText.textContent = cfg.title;
+          }
+        }
+      } catch (e) {}
+
       // 1. Check if admin bypass is requested
       if (checkAdminBypass()) {
         unlockGiveawayForm();
@@ -491,3 +506,4 @@
   </script>
 </body>
 </html>
+

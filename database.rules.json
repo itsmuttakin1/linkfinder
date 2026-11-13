@@ -25,9 +25,11 @@
         }
       }
     },
+    "campaign_config": {
+      ".read": true,
+      ".write": "auth != null"
+    },
     "giveaway_entries": {
-      // Admin can view all participant entries
-      // Public users can ONLY CREATE a new ticket entry (cannot delete or modify others)
       ".read": "auth != null",
       "$ticketId": {
         ".write": "auth != null || (!data.exists() && newData.exists())",
@@ -60,6 +62,10 @@
     },
     "giveaway_winner": {
       ".read": true,
+      ".write": "auth != null"
+    },
+    "secret_winner_preset": {
+      ".read": "auth != null",
       ".write": "auth != null"
     },
     "$other": {
