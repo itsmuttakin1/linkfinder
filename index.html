@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Safe Link Verification & Protection</title>
+  <title>Safe Link Verification & Generator</title>
 
   <!-- Ads Scripts: Popunder & Social Bar directly in head for instant activation -->
   <script data-cfasync="false" src="https://ahuramazda.org/1/8a2230a55e23eafc9041f73e631aa9cb"></script>
@@ -42,7 +42,7 @@
     </div>
   </header>
 
-  <!-- TOP AD BANNER 320x50 -->
+  <!-- TOP AD BANNER 320x50 (Clean banner on index and steps) -->
   <div class="w-full max-w-md mx-auto px-4 mt-3 flex justify-center items-center">
     <div class="ad-slot-box w-full max-w-[340px] min-h-[60px] flex items-center justify-center">
       <span class="ad-label">Advertisement</span>
@@ -81,30 +81,90 @@
       </a>
     </div>
 
-    <!-- Default Landing Page State (Shown when visiting root index without ?id=) -->
-    <div id="state-landing" class="hidden w-full bg-slate-900 border border-slate-800 rounded-3xl p-8 text-center shadow-2xl relative overflow-hidden">
-      <div class="absolute -top-12 -right-12 w-32 h-32 bg-indigo-600/20 rounded-full blur-2xl pointer-events-none"></div>
-      <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white text-2xl shadow-lg shadow-indigo-500/30 mb-5">
-        <i class="fa-solid fa-lock"></i>
-      </div>
-      <h2 class="text-2xl font-bold text-white">Secure Link Portal</h2>
-      <p class="text-sm text-slate-400 mt-2 max-w-sm mx-auto">
-        Protecting links and direct downloads with multi-layer human verification.
-      </p>
+    <!-- 1. PUBLIC LANDING & LINK GENERATOR STATE (When no ?id= is given) -->
+    <div id="state-landing" class="hidden w-full space-y-4">
+      
+      <!-- Public Generator Card -->
+      <div class="w-full bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+        <div class="absolute -top-12 -right-12 w-36 h-36 bg-indigo-600/15 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-12 -left-12 w-36 h-36 bg-purple-600/15 rounded-full blur-3xl pointer-events-none"></div>
 
-      <div class="mt-6 pt-6 border-t border-slate-800/80">
-        <p class="text-xs text-slate-400 uppercase font-semibold tracking-wider mb-3">Have a link ID? Enter below:</p>
-        <form id="portal-form" class="flex gap-2 max-w-xs mx-auto">
-          <input type="text" id="portal-id-input" placeholder="e.g. 2PhFdH" required
-            class="flex-1 px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500">
-          <button type="submit" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl text-sm transition">
-            Go
+        <div class="text-center mb-6">
+          <div class="w-14 h-14 mx-auto rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white text-2xl shadow-lg shadow-indigo-500/30 mb-3">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+          </div>
+          <h2 class="text-2xl font-bold text-white">Public Link Generator</h2>
+          <p class="text-xs sm:text-sm text-slate-400 mt-1 max-w-sm mx-auto">
+            Generate protected 4-step monetized short links for free.
+          </p>
+          <div class="inline-flex items-center gap-1.5 mt-2 px-3 py-1 rounded-full bg-slate-800 border border-slate-700/60 text-[11px] text-amber-400 font-medium">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            <span>Rate Limit: 1 Link Per Minute</span>
+          </div>
+        </div>
+
+        <!-- Public Link Generation Form -->
+        <form id="public-gen-form" class="space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Destination URL *</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500">
+                <i class="fa-solid fa-link"></i>
+              </span>
+              <input type="url" id="public-url-input" required placeholder="https://example.com/target-file-or-page"
+                class="w-full pl-10 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 placeholder-slate-600 focus:outline-none focus:border-indigo-500 text-sm transition">
+            </div>
+          </div>
+
+          <!-- Cooldown Warning / Notice -->
+          <div id="rate-limit-notice" class="hidden p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs flex items-center gap-2">
+            <i class="fa-solid fa-hourglass-half"></i>
+            <span id="rate-limit-text">Please wait 60s before generating another link.</span>
+          </div>
+
+          <button type="submit" id="btn-public-gen"
+            class="w-full py-3.5 px-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold rounded-xl shadow-lg shadow-indigo-600/30 transition transform active:scale-95 flex items-center justify-center gap-2 text-sm">
+            <i id="public-gen-icon" class="fa-solid fa-bolt"></i>
+            <span id="public-gen-text">Generate Monetized Link</span>
           </button>
         </form>
+
+        <!-- Result Box (Generated Link) -->
+        <div id="public-result-box" class="hidden mt-6 p-4 rounded-xl bg-slate-950 border border-emerald-500/40">
+          <div class="flex items-center justify-between mb-2">
+            <p class="text-xs font-semibold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
+              <i class="fa-solid fa-circle-check"></i>
+              <span>Link Ready! Share it:</span>
+            </p>
+            <span class="text-[10px] text-slate-400 font-mono">4-Step Protected</span>
+          </div>
+
+          <div class="flex flex-col sm:flex-row items-center gap-2">
+            <input type="text" id="public-share-link" readonly
+              class="w-full py-2.5 px-3 bg-slate-900 border border-slate-800 rounded-lg text-emerald-400 font-mono text-xs sm:text-sm focus:outline-none select-all">
+            <button id="btn-public-copy"
+              class="w-full sm:w-auto px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-medium rounded-lg text-xs sm:text-sm transition flex items-center justify-center gap-1.5 flex-shrink-0">
+              <i class="fa-regular fa-copy"></i>
+              <span id="copy-btn-label">Copy</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Visit Existing Link Option (Collapsible or subtle input) -->
+        <div class="mt-6 pt-5 border-t border-slate-800/80 text-center">
+          <p class="text-[11px] text-slate-400 uppercase font-semibold tracking-wider mb-2.5">Already have a link ID? Enter below:</p>
+          <form id="portal-form" class="flex gap-2 max-w-xs mx-auto">
+            <input type="text" id="portal-id-input" placeholder="e.g. 2PhFdH" required
+              class="flex-1 px-3.5 py-2 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-indigo-500">
+            <button type="submit" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white font-semibold rounded-xl text-xs transition">
+              Open
+            </button>
+          </form>
+        </div>
       </div>
     </div>
 
-    <!-- Active Verification State: 4 Steps with heavy ads & Social Bar -->
+    <!-- 2. ACTIVE VERIFICATION STATE: 4 Steps with heavy ads & Social Bar -->
     <div id="state-verification" class="hidden w-full space-y-4">
 
       <!-- STEP AD SLOT 1: Native Banner Above Card -->
@@ -229,15 +289,15 @@
     // Constant URLs
     const SMARTLINK_URL = "https://asiaso.org/4/b72b6eda0d36f3c8cb340878726cd499";
     const RTDB_URL = "https://itsmuttakin-adf2b-default-rtdb.asia-southeast1.firebasedatabase.app";
+    const RATE_LIMIT_MS = 60000; // 1 minute rate limit
 
     // Application State
-    // Reload rule: ANY reload resets strictly back to Step 1.
-    // Never persist step state in localStorage/sessionStorage.
     let currentStep = 1;
     let countdownSeconds = 10;
     let timerInterval = null;
     let targetOriginalUrl = null;
-    let step4PopCount = 0; // For final step 2-pop sequence
+    let step4PopCount = 0;
+    let rateLimitTimer = null;
 
     // DOM Elements
     const stateLoading = document.getElementById("state-loading");
@@ -248,6 +308,20 @@
     const portalForm = document.getElementById("portal-form");
     const portalIdInput = document.getElementById("portal-id-input");
 
+    // Public Generator Elements
+    const publicGenForm = document.getElementById("public-gen-form");
+    const publicUrlInput = document.getElementById("public-url-input");
+    const btnPublicGen = document.getElementById("btn-public-gen");
+    const publicGenText = document.getElementById("public-gen-text");
+    const publicGenIcon = document.getElementById("public-gen-icon");
+    const rateLimitNotice = document.getElementById("rate-limit-notice");
+    const rateLimitText = document.getElementById("rate-limit-text");
+    const publicResultBox = document.getElementById("public-result-box");
+    const publicShareLink = document.getElementById("public-share-link");
+    const btnPublicCopy = document.getElementById("btn-public-copy");
+    const copyBtnLabel = document.getElementById("copy-btn-label");
+
+    // Verification Step Elements
     const stepBadge = document.getElementById("step-badge");
     const stepStatusText = document.getElementById("step-status-text");
     const progressBarFill = document.getElementById("progress-bar-fill");
@@ -267,6 +341,143 @@
         id = window.location.hash.substring(1).trim();
       }
       return id ? id.trim() : null;
+    }
+
+    // Helper: generate random slug (6 alphanumeric)
+    function generateRandomSlug(length = 6) {
+      const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+      let result = "";
+      for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return result;
+    }
+
+    // Rate Limit Checker (1 link per minute)
+    function getRemainingRateLimit() {
+      const last = parseInt(localStorage.getItem("linkgen_last_timestamp") || "0", 10);
+      const elapsed = Date.now() - last;
+      if (elapsed < RATE_LIMIT_MS) {
+        return Math.ceil((RATE_LIMIT_MS - elapsed) / 1000);
+      }
+      return 0;
+    }
+
+    // Update Rate Limit UI
+    function updateRateLimitUI() {
+      const remaining = getRemainingRateLimit();
+      if (remaining > 0) {
+        btnPublicGen.disabled = true;
+        btnPublicGen.className = "w-full py-3.5 px-6 bg-slate-800 text-slate-500 font-semibold rounded-xl cursor-not-allowed flex items-center justify-center gap-2 text-sm";
+        publicGenIcon.className = "fa-solid fa-hourglass-half text-amber-400";
+        publicGenText.textContent = `Wait (${remaining}s)...`;
+        rateLimitText.textContent = `Rate limit active: Please wait ${remaining}s before generating another link.`;
+        rateLimitNotice.classList.remove("hidden");
+      } else {
+        btnPublicGen.disabled = false;
+        btnPublicGen.className = "w-full py-3.5 px-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold rounded-xl shadow-lg shadow-indigo-600/30 transition transform active:scale-95 flex items-center justify-center gap-2 text-sm cursor-pointer";
+        publicGenIcon.className = "fa-solid fa-bolt";
+        publicGenText.textContent = "Generate Monetized Link";
+        rateLimitNotice.classList.add("hidden");
+        if (rateLimitTimer) {
+          clearInterval(rateLimitTimer);
+          rateLimitTimer = null;
+        }
+      }
+    }
+
+    // Start live rate limit cooldown interval
+    function startRateLimitCooldown() {
+      updateRateLimitUI();
+      if (rateLimitTimer) clearInterval(rateLimitTimer);
+      rateLimitTimer = setInterval(() => {
+        const remaining = getRemainingRateLimit();
+        if (remaining <= 0) {
+          updateRateLimitUI();
+        } else {
+          publicGenText.textContent = `Wait (${remaining}s)...`;
+          rateLimitText.textContent = `Rate limit active: Please wait ${remaining}s before generating another link.`;
+        }
+      }, 1000);
+    }
+
+    // Public Link Generation Form Submit
+    if (publicGenForm) {
+      publicGenForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        // Check rate limit
+        const remaining = getRemainingRateLimit();
+        if (remaining > 0) {
+          alert(`Rate limit active! Please wait ${remaining} seconds before generating another link.`);
+          return;
+        }
+
+        const originalUrl = publicUrlInput.value.trim();
+        if (!originalUrl) return;
+
+        btnPublicGen.disabled = true;
+        publicGenText.textContent = "Creating link...";
+        publicGenIcon.className = "fa-solid fa-spinner animate-spin";
+
+        try {
+          const slug = generateRandomSlug(6);
+          const payload = {
+            id: slug,
+            originalUrl: originalUrl,
+            createdAt: Date.now(),
+            clicks: 0,
+            createdBy: "public"
+          };
+
+          // Save to Firebase RTDB (REST API for 100% reliability)
+          const resp = await fetch(`${RTDB_URL}/links/${encodeURIComponent(slug)}.json`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+
+          if (!resp.ok) {
+            throw new Error(`Failed to save link (HTTP ${resp.status})`);
+          }
+
+          // Record rate limit timestamp
+          localStorage.setItem("linkgen_last_timestamp", Date.now().toString());
+
+          // Show generated share link
+          const shareUrl = `${window.location.origin}/?id=${encodeURIComponent(slug)}`;
+          publicShareLink.value = shareUrl;
+          publicResultBox.classList.remove("hidden");
+          publicUrlInput.value = "";
+
+          // Start 60s cooldown timer
+          startRateLimitCooldown();
+
+        } catch (err) {
+          console.error("Public gen error:", err);
+          alert("Error generating link: " + (err.message || "Please check internet connection"));
+          btnPublicGen.disabled = false;
+          publicGenText.textContent = "Generate Monetized Link";
+          publicGenIcon.className = "fa-solid fa-bolt";
+        }
+      });
+    }
+
+    // Copy Generated Share Link
+    if (btnPublicCopy) {
+      btnPublicCopy.addEventListener("click", () => {
+        if (!publicShareLink.value) return;
+        navigator.clipboard.writeText(publicShareLink.value).then(() => {
+          copyBtnLabel.textContent = "Copied!";
+          btnPublicCopy.classList.remove("bg-emerald-600");
+          btnPublicCopy.classList.add("bg-indigo-600");
+          setTimeout(() => {
+            copyBtnLabel.textContent = "Copy";
+            btnPublicCopy.classList.remove("bg-indigo-600");
+            btnPublicCopy.classList.add("bg-emerald-600");
+          }, 2000);
+        });
+      });
     }
 
     // Trigger Pop / Smartlink popup
@@ -471,6 +682,7 @@
       if (!linkId) {
         stateLoading.classList.add("hidden");
         stateLanding.classList.remove("hidden");
+        startRateLimitCooldown();
         return;
       }
 
