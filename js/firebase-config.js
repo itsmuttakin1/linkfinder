@@ -9,10 +9,10 @@ const firebaseConfig = {
   appId: "1:804285355395:web:307cfeaabac8423a1b92b6"
 };
 
-// Initialize Firebase
-if (!firebase.apps.length) {
+// Initialize Firebase safely
+if (typeof firebase !== "undefined" && !firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
-const auth = firebase.auth();
-const database = firebase.database();
+const auth = (typeof firebase !== "undefined" && typeof firebase.auth === "function") ? firebase.auth() : null;
+const database = (typeof firebase !== "undefined" && typeof firebase.database === "function") ? firebase.database() : null;

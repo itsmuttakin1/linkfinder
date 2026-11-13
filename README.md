@@ -65,3 +65,4 @@ A modern, high-performance link monetization and protection platform built with 
    - Build command: *(leave empty)*
    - Build output directory: `.` *(root)*
 3. Click **Deploy Site**.
+
