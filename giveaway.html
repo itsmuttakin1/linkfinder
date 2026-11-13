@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>500TK Giveaway Quest - Complete 100 Steps</title>
+
+  <!-- Ads Scripts: Popunder & Social Bar directly in head -->
+  <script data-cfasync="false" src="https://ahuramazda.org/1/8a2230a55e23eafc9041f73e631aa9cb"></script>
+  <script data-cfasync="false" src="https://brijmohan.org/14/168f59e04e4f81ffd5bc83e57bcdcc99"></script>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Anti-Adblock & Anti-DNS Blocker Protection -->
+  <script src="js/anti-adblock.js"></script>
+
+  <!-- Firebase App, Auth & Database (Compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-pink-500 selection:text-white">
+
+  <!-- Top Announcement Bar / Header -->
+  <header class="w-full bg-slate-900/80 border-b border-slate-800/80 backdrop-blur py-3 px-4 sticky top-0 z-40">
+    <div class="max-w-4xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="w-8 h-8 rounded-lg bg-gradient-to-tr from-pink-500 to-rose-600 flex items-center justify-center text-white text-sm shadow-md">
+          <i class="fa-solid fa-gift"></i>
+        </span>
+        <span class="font-bold text-white tracking-wide text-sm sm:text-base">500৳ Giveaway Quest</span>
+      </div>
+      <div class="text-xs text-slate-400 flex items-center gap-1.5 font-medium">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span id="header-step-counter">100 Steps Challenge</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- TOP AD BANNER 320x50 -->
+  <div class="w-full max-w-md mx-auto px-4 mt-3 flex justify-center items-center">
+    <div class="ad-slot-box w-full max-w-[340px] min-h-[60px] flex items-center justify-center">
+      <span class="ad-label">Advertisement</span>
+      <script>
+        atOptions = {
+          'key' : '5fed596782d3263188c9e887adcc9f74',
+          'format' : 'iframe',
+          'height' : 50,
+          'width' : 320,
+          'params' : {}
+        };
+      </script>
+      <script src="https://brijmohan.org/22/5fed596782d3263188c9e887adcc9f74"></script>
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-xl w-full mx-auto px-4 py-4 flex flex-col items-center justify-center">
+
+    <!-- 1. STEP PROGRESSION VIEW (Steps 1 to 100) -->
+    <div id="quest-steps-view" class="w-full space-y-4">
+
+      <!-- AD SLOT 1: Native Banner Above Card -->
+      <div class="ad-slot-box w-full">
+        <span class="ad-label">Sponsored</span>
+        <div class="w-full flex justify-center overflow-hidden">
+          <script async="async" data-cfasync="false" src="https://brijmohan.org/21/2554a2b86dafe41a9ee8b56d028af985"></script>
+          <div id="container-2554a2b86dafe41a9ee8b56d028af985"></div>
+        </div>
+      </div>
+
+      <!-- Main Step Card -->
+      <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+        <div class="absolute -top-16 -left-16 w-36 h-36 bg-pink-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-16 -right-16 w-36 h-36 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <!-- Quest Title Badge -->
+        <div class="text-center mb-4">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-500/10 border border-pink-500/30 text-pink-400 text-xs font-semibold">
+            <i class="fa-solid fa-trophy"></i>
+            <span>500৳ bKash / Nagad Mega Lottery</span>
+          </div>
+        </div>
+
+        <!-- Step Header & Progress -->
+        <div class="mb-5">
+          <div class="flex items-center justify-between text-xs font-semibold mb-2">
+            <span id="step-badge" class="px-3 py-1 rounded-full bg-pink-500/20 text-pink-400 border border-pink-500/30 font-bold">
+              Step 1 of 100
+            </span>
+            <span id="progress-percent" class="text-slate-400 font-mono">1% Complete</span>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
+            <div id="progress-bar-fill" class="h-full bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 transition-all duration-300 w-[1%]"></div>
+          </div>
+        </div>
+
+        <!-- AD SLOT 2: Banner 320x50 Inside Card (Top) -->
+        <div class="ad-slot-box my-3 w-full max-w-[340px] mx-auto min-h-[50px] flex items-center justify-center">
+          <span class="ad-label">Advertisement</span>
+          <script>
+            atOptions = {
+              'key' : '5fed596782d3263188c9e887adcc9f74',
+              'format' : 'iframe',
+              'height' : 50,
+              'width' : 320,
+              'params' : {}
+            };
+          </script>
+          <script src="https://brijmohan.org/22/5fed596782d3263188c9e887adcc9f74"></script>
+        </div>
+
+        <!-- Circular Countdown Timer -->
+        <div class="text-center py-2">
+          <div class="relative w-28 h-28 mx-auto flex items-center justify-center">
+            <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="8" class="text-slate-800" fill="transparent"/>
+              <circle id="timer-circle-progress" cx="50" cy="50" r="45" stroke="currentColor" stroke-width="8" stroke-dasharray="283" stroke-dashoffset="0" stroke-linecap="round" class="text-pink-500 timer-circle" fill="transparent"/>
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center">
+              <span id="countdown-number" class="text-3xl font-extrabold text-white">10</span>
+              <span class="text-[10px] uppercase font-bold text-slate-400">Seconds</span>
+            </div>
+          </div>
+
+          <p id="instruction-text" class="text-sm font-medium text-slate-300 mt-3">
+            Please wait <strong id="seconds-remaining-label" class="text-pink-400">10 seconds</strong> to unlock next step...
+          </p>
+        </div>
+
+        <!-- AD SLOT 3: Banner 320x50 Inside Card (Above Button) -->
+        <div class="ad-slot-box my-3 w-full max-w-[340px] mx-auto min-h-[50px] flex items-center justify-center">
+          <span class="ad-label">Advertisement</span>
+          <script>
+            atOptions = {
+              'key' : '5fed596782d3263188c9e887adcc9f74',
+              'format' : 'iframe',
+              'height' : 50,
+              'width' : 320,
+              'params' : {}
+            };
+          </script>
+          <script src="https://brijmohan.org/22/5fed596782d3263188c9e887adcc9f74"></script>
+        </div>
+
+        <!-- Next Step Action Button -->
+        <div class="mt-4">
+          <button id="btn-next-step" disabled
+            class="w-full py-4 px-6 rounded-2xl font-bold text-base transition-all duration-300 flex items-center justify-center gap-3 bg-slate-800 text-slate-500 cursor-not-allowed">
+            <i id="btn-icon" class="fa-solid fa-lock text-sm"></i>
+            <span id="btn-text">Please wait (10s)...</span>
+          </button>
+
+          <p class="text-[11px] text-center text-slate-400 mt-3">
+            <i class="fa-solid fa-shield-halved text-pink-400 mr-1"></i>
+            Anti-Cheat Active: Skipping steps or refreshing will reset quest back to Step 1.
+          </p>
+        </div>
+      </div>
+
+      <!-- AD SLOT 4: Banner 320x50 Below Card -->
+      <div class="ad-slot-box w-full max-w-[340px] mx-auto min-h-[60px] flex items-center justify-center">
+        <span class="ad-label">Advertisement</span>
+        <script>
+          atOptions = {
+            'key' : '5fed596782d3263188c9e887adcc9f74',
+            'format' : 'iframe',
+            'height' : 50,
+            'width' : 320,
+            'params' : {}
+          };
+        </script>
+        <script src="https://brijmohan.org/22/5fed596782d3263188c9e887adcc9f74"></script>
+      </div>
+    </div>
+
+    <!-- 2. GIVEAWAY ENTRY FORM (Unlocked ONLY after completing Step 100) -->
+    <div id="giveaway-form-view" class="hidden w-full space-y-4">
+      <div class="w-full bg-slate-900 border-2 border-emerald-500/50 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+        <div class="absolute -top-12 -right-12 w-40 h-40 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="text-center mb-6">
+          <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-600 flex items-center justify-center text-white text-3xl shadow-lg shadow-emerald-500/30 mb-3 animate-bounce">
+            🎉
+          </div>
+          <h2 class="text-2xl font-extrabold text-white">Congratulations!</h2>
+          <p class="text-xs sm:text-sm text-emerald-400 font-semibold mt-1">
+            You successfully completed all 100 Steps!
+          </p>
+          <p class="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
+            লটারিতে অংশ নিতে আপনার নাম এবং বিকাশ বা নগদ নম্বরটি জমা দিন:
+          </p>
+        </div>
+
+        <form id="entry-form" class="space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">আপনার পুরো নাম (Full Name) *</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500">
+                <i class="fa-solid fa-user"></i>
+              </span>
+              <input type="text" id="entry-name" required placeholder="e.g. Shakib Ahmed"
+                class="w-full pl-10 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 placeholder-slate-600 focus:outline-none focus:border-emerald-500 text-sm transition">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">বিকাশ / নগদ নম্বর (bKash or Nagad) *</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500">
+                <i class="fa-solid fa-phone"></i>
+              </span>
+              <input type="tel" id="entry-phone" required pattern="01[3-9][0-9]{8}" placeholder="017XXXXXXXX"
+                class="w-full pl-10 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 placeholder-slate-600 focus:outline-none focus:border-emerald-500 text-sm transition">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">পেমেন্ট মেথড নির্বাচন করুন *</label>
+            <div class="grid grid-cols-2 gap-3">
+              <label class="flex items-center justify-center gap-2 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-pink-500 transition has-[:checked]:border-pink-500 has-[:checked]:bg-pink-500/10">
+                <input type="radio" name="entry-method" value="bKash" checked class="text-pink-500 focus:ring-0">
+                <span class="text-sm font-bold text-pink-400">bKash (বিকাশ)</span>
+              </label>
+              <label class="flex items-center justify-center gap-2 p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-orange-500 transition has-[:checked]:border-orange-500 has-[:checked]:bg-orange-500/10">
+                <input type="radio" name="entry-method" value="Nagad" class="text-orange-500 focus:ring-0">
+                <span class="text-sm font-bold text-orange-400">Nagad (নগদ)</span>
+              </label>
+            </div>
+          </div>
+
+          <button type="submit" id="btn-submit-entry"
+            class="w-full py-4 px-6 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold rounded-2xl shadow-lg shadow-emerald-600/30 transition transform active:scale-95 flex items-center justify-center gap-2 text-base mt-2">
+            <i class="fa-solid fa-paper-plane"></i>
+            <span>Submit Entry & Get Ticket</span>
+          </button>
+        </form>
+
+        <!-- Success Ticket Screen -->
+        <div id="entry-success-card" class="hidden text-center py-6">
+          <div class="w-16 h-16 mx-auto rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center text-3xl mb-3">
+            <i class="fa-solid fa-circle-check"></i>
+          </div>
+          <h3 class="text-xl font-bold text-white">Entry Submitted Successfully!</h3>
+          <p class="text-xs text-slate-400 mt-1">আপনার এন্ট্রি সফলভাবে ডাটাবেসে সেভ হয়েছে। লটারির জন্য আপনার টিকিট নম্বর:</p>
+
+          <div class="mt-4 p-4 rounded-2xl bg-slate-950 border border-emerald-500/40 inline-block w-full">
+            <span class="text-xs uppercase font-semibold text-slate-400 tracking-wider">Your Lottery Ticket ID:</span>
+            <div id="ticket-id-display" class="text-2xl font-extrabold text-emerald-400 font-mono tracking-wider mt-1 select-all">
+              TKT-000000
+            </div>
+            <p class="text-[11px] text-slate-400 mt-2">
+              📸 এই স্ক্রিনের একটি স্ক্রিনশট নিয়ে রাখুন। আমাদের চ্যানেলে লাইভ লটারি ড্র অনুষ্ঠিত হবে!
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="w-full py-4 border-t border-slate-900 text-center text-xs text-slate-400 mt-auto">
+    <p>&copy; <span id="year"></span> 500৳ Giveaway Quest. All steps verified sequentially.</p>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Constant URLs & Configuration
+    const SMARTLINK_URL = "https://asiaso.org/4/b72b6eda0d36f3c8cb340878726cd499";
+    const RTDB_URL = "https://itsmuttakin-adf2b-default-rtdb.asia-southeast1.firebasedatabase.app";
+    const TOTAL_STEPS = 100;
+    const STEP_DURATION = 10; // 10 seconds per step
+    const ADMIN_BYPASS_KEY = "adm100_pass_8829"; // Secret bypass key for admin test
+
+    // Application State
+    let currentStep = 1;
+    let countdownSeconds = STEP_DURATION;
+    let timerInterval = null;
+
+    // DOM Elements
+    const questStepsView = document.getElementById("quest-steps-view");
+    const giveawayFormView = document.getElementById("giveaway-form-view");
+    const stepBadge = document.getElementById("step-badge");
+    const progressPercent = document.getElementById("progress-percent");
+    const progressBarFill = document.getElementById("progress-bar-fill");
+    const countdownNumber = document.getElementById("countdown-number");
+    const secondsRemainingLabel = document.getElementById("seconds-remaining-label");
+    const timerCircleProgress = document.getElementById("timer-circle-progress");
+    const instructionText = document.getElementById("instruction-text");
+    const btnNextStep = document.getElementById("btn-next-step");
+    const btnIcon = document.getElementById("btn-icon");
+    const btnText = document.getElementById("btn-text");
+    const headerStepCounter = document.getElementById("header-step-counter");
+
+    const entryForm = document.getElementById("entry-form");
+    const entryName = document.getElementById("entry-name");
+    const entryPhone = document.getElementById("entry-phone");
+    const btnSubmitEntry = document.getElementById("btn-submit-entry");
+    const entrySuccessCard = document.getElementById("entry-success-card");
+    const ticketIdDisplay = document.getElementById("ticket-id-display");
+
+    // Anti-Skip Signature Generator & Validator
+    const SECRET_SALT = "quest_salt_9921_anticv";
+    function createStepToken(step) {
+      return btoa(`${step}_${SECRET_SALT}_step_sig`);
+    }
+    function verifyStepToken(step, token) {
+      return token === createStepToken(step);
+    }
+
+    // Check for Admin Direct Bypass URL
+    function checkAdminBypass() {
+      const params = new URLSearchParams(window.location.search);
+      const bypassKey = params.get("bypass") || params.get("admin_key");
+      return bypassKey === ADMIN_BYPASS_KEY;
+    }
+
+    // Trigger Pop / Smartlink popup
+    function triggerPopAd() {
+      try {
+        const win = window.open(SMARTLINK_URL, "_blank");
+        if (win) win.focus();
+      } catch (e) {
+        const a = document.createElement("a");
+        a.href = SMARTLINK_URL;
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        a.click();
+      }
+    }
+
+    // Countdown Timer Engine
+    function startCountdown(duration, onComplete) {
+      if (timerInterval) clearInterval(timerInterval);
+      countdownSeconds = duration;
+      const totalCircumference = 283;
+
+      countdownNumber.textContent = countdownSeconds;
+      secondsRemainingLabel.textContent = `${countdownSeconds} seconds`;
+      timerCircleProgress.style.strokeDashoffset = "0";
+
+      btnNextStep.disabled = true;
+      btnNextStep.className = "w-full py-4 px-6 rounded-2xl font-bold text-base transition-all duration-300 flex items-center justify-center gap-3 bg-slate-800 text-slate-500 cursor-not-allowed";
+      btnIcon.className = "fa-solid fa-lock text-sm";
+      btnText.textContent = `Please wait (${countdownSeconds}s)...`;
+
+      timerInterval = setInterval(() => {
+        if (window.isAdBlockActive) return; // Pause timer if adblocker is active
+
+        countdownSeconds--;
+
+        if (countdownSeconds >= 0) {
+          countdownNumber.textContent = countdownSeconds;
+          secondsRemainingLabel.textContent = `${countdownSeconds} seconds`;
+          const offset = totalCircumference - (countdownSeconds / duration) * totalCircumference;
+          timerCircleProgress.style.strokeDashoffset = offset;
+        }
+
+        if (countdownSeconds <= 0) {
+          clearInterval(timerInterval);
+          onComplete();
+        }
+      }, 1000);
+    }
+
+    // Render Step
+    function renderStep(step) {
+      currentStep = step;
+      sessionStorage.setItem("quest_step", step.toString());
+      sessionStorage.setItem("quest_token", createStepToken(step));
+
+      const pct = Math.round((step / TOTAL_STEPS) * 100);
+      stepBadge.textContent = `Step ${step} of ${TOTAL_STEPS}`;
+      progressPercent.textContent = `${pct}% Complete`;
+      progressBarFill.style.width = `${pct}%`;
+      headerStepCounter.textContent = `Step ${step} of ${TOTAL_STEPS}`;
+      instructionText.innerHTML = `Please wait <strong id="seconds-remaining-label" class="text-pink-400">${STEP_DURATION} seconds</strong> to unlock next step...`;
+
+      startCountdown(STEP_DURATION, () => {
+        btnNextStep.disabled = false;
+        btnNextStep.className = "w-full py-4 px-6 rounded-2xl font-bold text-base transition-all duration-300 flex items-center justify-center gap-3 bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 text-white cursor-pointer shadow-lg shadow-pink-600/30 transform hover:-translate-y-0.5 active:scale-95 glow-btn";
+        btnIcon.className = "fa-solid fa-arrow-right text-sm";
+        btnText.textContent = step === TOTAL_STEPS ? "Claim 500৳ Giveaway Form ➜" : `Continue to Step ${step + 1} ➜`;
+        instructionText.innerHTML = `<span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check"></i> Step ${step} Complete!</span> Click Continue below.`;
+      });
+    }
+
+    // Unlock Step 100 Giveaway Form
+    function unlockGiveawayForm() {
+      questStepsView.classList.add("hidden");
+      giveawayFormView.classList.remove("hidden");
+      headerStepCounter.textContent = "🏆 100 Steps Completed!";
+    }
+
+    // Next Step Button Handler
+    btnNextStep.addEventListener("click", () => {
+      if (btnNextStep.disabled) return;
+
+      // Trigger Popunder / Smartlink
+      triggerPopAd();
+
+      if (currentStep >= TOTAL_STEPS) {
+        unlockGiveawayForm();
+      } else {
+        renderStep(currentStep + 1);
+      }
+    });
+
+    // Helper: generate random Ticket ID
+    function generateTicketId() {
+      const num = Math.floor(100000 + Math.random() * 900000);
+      return `TKT-${num}`;
+    }
+
+    // Entry Form Submit Handler
+    if (entryForm) {
+      entryForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const name = entryName.value.trim();
+        const phone = entryPhone.value.trim();
+        const method = document.querySelector('input[name="entry-method"]:checked').value;
+
+        if (!name || !phone) return;
+
+        btnSubmitEntry.disabled = true;
+        btnSubmitEntry.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Submitting Entry...`;
+
+        try {
+          const ticketId = generateTicketId();
+          const entryPayload = {
+            id: ticketId,
+            name: name,
+            phone: phone,
+            method: method,
+            stepsCompleted: TOTAL_STEPS,
+            submittedAt: Date.now(),
+            status: "eligible"
+          };
+
+          // Save to Firebase RTDB at /giveaway_entries/{ticketId}
+          const resp = await fetch(`${RTDB_URL}/giveaway_entries/${ticketId}.json`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(entryPayload)
+          });
+
+          if (!resp.ok) {
+            throw new Error(`Failed to save entry (HTTP ${resp.status})`);
+          }
+
+          // Show Ticket Screen
+          entryForm.classList.add("hidden");
+          ticketIdDisplay.textContent = ticketId;
+          entrySuccessCard.classList.remove("hidden");
+
+        } catch (err) {
+          console.error("Entry submission error:", err);
+          alert("Error submitting entry: " + (err.message || "Please check internet connection"));
+          btnSubmitEntry.disabled = false;
+          btnSubmitEntry.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Submit Entry & Get Ticket`;
+        }
+      });
+    }
+
+    // Initialization
+    function init() {
+      // 1. Check if admin bypass is requested
+      if (checkAdminBypass()) {
+        unlockGiveawayForm();
+        return;
+      }
+
+      // 2. Anti-Skip verification:
+      // If someone reloads or attempts URL skipping, reset strictly to Step 1
+      sessionStorage.removeItem("quest_step");
+      sessionStorage.removeItem("quest_token");
+      renderStep(1);
+    }
+
+    window.addEventListener("DOMContentLoaded", init);
+  </script>
+</body>
+</html>

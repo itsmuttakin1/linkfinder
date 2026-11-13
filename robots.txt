@@ -1,6 +1,7 @@
 User-agent: *
 Allow: /
 Allow: /?id=*
+Allow: /giveaway
 Disallow: /admin
 Disallow: /admin/
 Disallow: /admin/*

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard | Link Generator</title>
+  <title>Admin Dashboard | Link & Giveaway Manager</title>
   <meta name="robots" content="noindex, nofollow">
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -11,11 +11,14 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="../css/style.css">
 
-  <!-- Firebase App & Services (Compat version for reliable standalone execution) -->
+  <!-- Firebase App & Services (Compat) -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
   <script src="../js/firebase-config.js"></script>
+
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased selection:bg-indigo-500 selection:text-white">
 
@@ -31,7 +34,6 @@
   <!-- 1. LOGIN SECTION (Visible when not authenticated) -->
   <div id="login-section" class="hidden min-h-screen flex items-center justify-center p-4">
     <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl relative overflow-hidden">
-      <!-- Glow effect -->
       <div class="absolute -top-16 -right-16 w-36 h-36 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none"></div>
       <div class="absolute -bottom-16 -left-16 w-36 h-36 bg-purple-600/20 rounded-full blur-3xl pointer-events-none"></div>
 
@@ -86,13 +88,26 @@
     <header class="bg-slate-900/80 backdrop-blur border-b border-slate-800 sticky top-0 z-40">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20">
-            <i class="fa-solid fa-link text-lg"></i>
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-pink-600 flex items-center justify-center text-white shadow-lg shadow-indigo-500/20">
+            <i class="fa-solid fa-crown text-lg"></i>
           </div>
           <div>
             <h1 class="font-bold text-lg text-white leading-tight">LinkFinder Admin</h1>
-            <p class="text-xs text-indigo-400">Control Panel</p>
+            <p class="text-xs text-indigo-400">Control & Lottery Hub</p>
           </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="flex items-center bg-slate-950 border border-slate-800 rounded-xl p-1 gap-1">
+          <button id="tab-btn-links" class="px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 bg-indigo-600 text-white">
+            <i class="fa-solid fa-link"></i>
+            <span>Links Manager</span>
+          </button>
+          <button id="tab-btn-giveaway" class="px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 text-slate-400 hover:text-white">
+            <i class="fa-solid fa-gift"></i>
+            <span>100-Step Giveaway & Lottery</span>
+            <span id="giveaway-tab-badge" class="px-1.5 py-0.2 rounded-full bg-pink-500 text-[10px] text-white hidden">0</span>
+          </button>
         </div>
 
         <div class="flex items-center gap-4">
@@ -111,154 +126,365 @@
     <!-- Main Container -->
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
 
-      <!-- Metrics Row -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 relative overflow-hidden">
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="text-xs uppercase font-semibold text-slate-400 tracking-wider">Total Links</p>
-              <h3 id="stat-total-links" class="text-3xl font-bold text-white mt-1">0</h3>
-            </div>
-            <div class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center text-xl">
-              <i class="fa-solid fa-link"></i>
-            </div>
-          </div>
-        </div>
-
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 relative overflow-hidden">
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="text-xs uppercase font-semibold text-slate-400 tracking-wider">Total Views / Clicks</p>
-              <h3 id="stat-total-clicks" class="text-3xl font-bold text-white mt-1">0</h3>
-            </div>
-            <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center text-xl">
-              <i class="fa-solid fa-chart-line"></i>
-            </div>
-          </div>
-        </div>
-
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 relative overflow-hidden">
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="text-xs uppercase font-semibold text-slate-400 tracking-wider">Database Status</p>
-              <h3 class="text-lg font-bold text-emerald-400 mt-1 flex items-center gap-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                Connected
-              </h3>
-            </div>
-            <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl">
-              <i class="fa-solid fa-database"></i>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Generator Card -->
-      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 relative shadow-xl">
-        <h2 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
-          <i class="fa-solid fa-wand-magic-sparkles text-indigo-400"></i>
-          Generate Monetized Link
-        </h2>
-        <p class="text-sm text-slate-400 mb-6">
-          Enter the original destination URL. The generated short link will enforce the 2-step monetization verification, 10s wait, popunders, and anti-adblocker checks.
-        </p>
-
-        <form id="generate-form" class="space-y-4">
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="md:col-span-2">
-              <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Original Destination URL *</label>
-              <div class="relative">
-                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500">
-                  <i class="fa-solid fa-globe"></i>
-                </span>
-                <input type="url" id="dest-url" required placeholder="https://example.com/target-file-or-page"
-                  class="w-full pl-10 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition">
+      <!-- ================= SECTION 1: LINKS MANAGER ================= -->
+      <div id="section-links" class="space-y-8">
+        <!-- Metrics Row -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 relative overflow-hidden">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-xs uppercase font-semibold text-slate-400 tracking-wider">Total Links</p>
+                <h3 id="stat-total-links" class="text-3xl font-bold text-white mt-1">0</h3>
               </div>
-            </div>
-
-            <div>
-              <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Custom Slug (Optional)</label>
-              <div class="relative">
-                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500">
-                  <i class="fa-solid fa-tag"></i>
-                </span>
-                <input type="text" id="custom-slug" placeholder="e.g. file123" pattern="[a-zA-Z0-9-_]+"
-                  class="w-full pl-10 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition">
+              <div class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center text-xl">
+                <i class="fa-solid fa-link"></i>
               </div>
             </div>
           </div>
 
-          <div class="flex items-center justify-end">
-            <button type="submit" id="btn-generate"
-              class="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold rounded-xl shadow-lg shadow-indigo-600/30 transition transform active:scale-95 flex items-center gap-2">
-              <i class="fa-solid fa-bolt"></i>
-              <span>Generate Link</span>
-            </button>
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 relative overflow-hidden">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-xs uppercase font-semibold text-slate-400 tracking-wider">Total Views / Clicks</p>
+                <h3 id="stat-total-clicks" class="text-3xl font-bold text-white mt-1">0</h3>
+              </div>
+              <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center text-xl">
+                <i class="fa-solid fa-chart-line"></i>
+              </div>
+            </div>
           </div>
-        </form>
 
-        <!-- Generated Link Result Modal / Box -->
-        <div id="result-box" class="hidden mt-6 p-4 rounded-xl bg-slate-950 border border-indigo-500/40">
-          <p class="text-xs font-semibold text-indigo-400 uppercase tracking-wider mb-2">Your Shareable Monetized Link:</p>
-          <div class="flex flex-col sm:flex-row items-center gap-3">
-            <input type="text" id="generated-link-input" readonly
-              class="w-full py-2.5 px-3 bg-slate-900 border border-slate-800 rounded-lg text-emerald-400 font-mono text-sm focus:outline-none">
-            <button id="btn-copy-generated"
-              class="w-full sm:w-auto px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-medium rounded-lg text-sm transition flex items-center justify-center gap-2 flex-shrink-0">
-              <i class="fa-regular fa-copy"></i>
-              <span>Copy Link</span>
-            </button>
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 relative overflow-hidden">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-xs uppercase font-semibold text-slate-400 tracking-wider">Database Status</p>
+                <h3 class="text-lg font-bold text-emerald-400 mt-1 flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                  Connected
+                </h3>
+              </div>
+              <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl">
+                <i class="fa-solid fa-database"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Generator Card -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 relative shadow-xl">
+          <h2 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
+            <i class="fa-solid fa-wand-magic-sparkles text-indigo-400"></i>
+            Generate Monetized Link
+          </h2>
+          <p class="text-sm text-slate-400 mb-6">
+            Enter original destination URL. The generated short link will enforce the 4-step monetization verification with anti-adblocker checks.
+          </p>
+
+          <form id="generate-form" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="md:col-span-2">
+                <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Original Destination URL *</label>
+                <div class="relative">
+                  <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500">
+                    <i class="fa-solid fa-globe"></i>
+                  </span>
+                  <input type="url" id="dest-url" required placeholder="https://example.com/target-file-or-page"
+                    class="w-full pl-10 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 placeholder-slate-600 focus:outline-none focus:border-indigo-500 transition text-sm">
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Custom Slug (Optional)</label>
+                <div class="relative">
+                  <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500">
+                    <i class="fa-solid fa-tag"></i>
+                  </span>
+                  <input type="text" id="custom-slug" placeholder="e.g. file123" pattern="[a-zA-Z0-9-_]+"
+                    class="w-full pl-10 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 placeholder-slate-600 focus:outline-none focus:border-indigo-500 transition text-sm">
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-end">
+              <button type="submit" id="btn-generate"
+                class="px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold rounded-xl shadow-lg shadow-indigo-600/30 transition transform active:scale-95 flex items-center gap-2 text-sm">
+                <i class="fa-solid fa-bolt"></i>
+                <span>Generate Link</span>
+              </button>
+            </div>
+          </form>
+
+          <!-- Generated Link Result -->
+          <div id="result-box" class="hidden mt-6 p-4 rounded-xl bg-slate-950 border border-indigo-500/40">
+            <p class="text-xs font-semibold text-indigo-400 uppercase tracking-wider mb-2">Your Shareable Monetized Link:</p>
+            <div class="flex flex-col sm:flex-row items-center gap-3">
+              <input type="text" id="generated-link-input" readonly
+                class="w-full py-2.5 px-3 bg-slate-900 border border-slate-800 rounded-lg text-emerald-400 font-mono text-sm focus:outline-none select-all">
+              <button id="btn-copy-generated"
+                class="w-full sm:w-auto px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-medium rounded-lg text-sm transition flex items-center justify-center gap-2 flex-shrink-0">
+                <i class="fa-regular fa-copy"></i>
+                <span>Copy Link</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Links List Table Card -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-xl">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+            <div>
+              <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-list-check text-indigo-400"></i>
+                All Generated Links
+              </h2>
+              <p class="text-xs text-slate-400 mt-1">Manage, copy, or remove links in real-time</p>
+            </div>
+            <div class="relative w-full sm:w-64">
+              <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500">
+                <i class="fa-solid fa-magnifying-glass text-xs"></i>
+              </span>
+              <input type="text" id="search-links" placeholder="Search slug or URL..."
+                class="w-full pl-9 pr-3 py-2 text-xs bg-slate-950 border border-slate-800 rounded-lg text-slate-100 placeholder-slate-600 focus:outline-none focus:border-indigo-500">
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="border-b border-slate-800 text-xs uppercase font-semibold text-slate-400">
+                  <th class="py-3 px-4">Short ID / Slug</th>
+                  <th class="py-3 px-4">Destination Link</th>
+                  <th class="py-3 px-4 text-center">Clicks</th>
+                  <th class="py-3 px-4">Date</th>
+                  <th class="py-3 px-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="links-table-body" class="divide-y divide-slate-800/60 text-sm">
+                <tr>
+                  <td colspan="5" class="py-8 text-center text-slate-500">Loading links...</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
 
-      <!-- Links List Card -->
-      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-xl">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-          <div>
-            <h2 class="text-xl font-bold text-white flex items-center gap-2">
-              <i class="fa-solid fa-list-check text-indigo-400"></i>
-              All Generated Links
-            </h2>
-            <p class="text-xs text-slate-400 mt-1">Manage, copy, or remove links in real-time</p>
-          </div>
-          <div class="relative w-full sm:w-64">
-            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500">
-              <i class="fa-solid fa-magnifying-glass text-xs"></i>
-            </span>
-            <input type="text" id="search-links" placeholder="Search slug or URL..."
-              class="w-full pl-9 pr-3 py-2 text-xs bg-slate-950 border border-slate-800 rounded-lg text-slate-100 placeholder-slate-600 focus:outline-none focus:border-indigo-500">
+      <!-- ================= SECTION 2: 100-STEP GIVEAWAY & LOTTERY ================= -->
+      <div id="section-giveaway" class="hidden space-y-8">
+
+        <!-- Giveaway Controls & Bypass Bar -->
+        <div class="bg-gradient-to-r from-pink-900/40 via-purple-900/30 to-slate-900 border border-pink-500/30 rounded-2xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+            <div>
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-500/10 border border-pink-500/30 text-pink-400 text-xs font-bold mb-2">
+                <i class="fa-solid fa-trophy"></i>
+                <span>500৳ Giveaway Quest Manager</span>
+              </div>
+              <h2 class="text-2xl font-extrabold text-white">100-Step Giveaway Control Center</h2>
+              <p class="text-sm text-slate-300 mt-1 max-w-xl">
+                Users must complete 100 consecutive steps with ads to unlock the submission form. Manage participants, pre-set winners, and execute live lottery draws.
+              </p>
+            </div>
+
+            <!-- Quick Action Buttons -->
+            <div class="flex flex-wrap items-center gap-3">
+              <!-- Fast-Forward Bypass Button -->
+              <button id="btn-bypass-step100"
+                class="px-5 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold rounded-xl shadow-lg shadow-emerald-600/30 transition transform active:scale-95 flex items-center gap-2 text-sm">
+                <i class="fa-solid fa-forward-fast"></i>
+                <span>Direct Test Step 100</span>
+              </button>
+
+              <!-- Copy Giveaway Link Button -->
+              <button id="btn-copy-giveaway-url"
+                class="px-5 py-3 bg-pink-600 hover:bg-pink-500 text-white font-bold rounded-xl shadow-lg shadow-pink-600/30 transition transform active:scale-95 flex items-center gap-2 text-sm">
+                <i class="fa-regular fa-copy"></i>
+                <span>Copy Quest Link</span>
+              </button>
+
+              <!-- Channel Caption Modal Button -->
+              <button id="btn-open-caption-modal"
+                class="px-5 py-3 bg-slate-800 hover:bg-slate-700 text-indigo-400 hover:text-white font-bold rounded-xl border border-slate-700 transition flex items-center gap-2 text-sm">
+                <i class="fa-solid fa-bullhorn"></i>
+                <span>Post Caption</span>
+              </button>
+            </div>
           </div>
         </div>
 
-        <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse">
-            <thead>
-              <tr class="border-b border-slate-800 text-xs uppercase font-semibold text-slate-400">
-                <th class="py-3 px-4">Short ID / Slug</th>
-                <th class="py-3 px-4">Destination Link</th>
-                <th class="py-3 px-4 text-center">Clicks</th>
-                <th class="py-3 px-4">Date</th>
-                <th class="py-3 px-4 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody id="links-table-body" class="divide-y divide-slate-800/60 text-sm">
-              <tr>
-                <td colspan="5" class="py-8 text-center text-slate-500">Loading links...</td>
-              </tr>
-            </tbody>
-          </table>
+        <!-- LIVE LOTTERY DRAW ARENA (Draw & Winner Picker) -->
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+          <div class="text-center mb-6">
+            <h3 class="text-2xl font-extrabold text-white flex items-center justify-center gap-2">
+              <i class="fa-solid fa-dice text-pink-400"></i>
+              <span>Live Lottery Machine</span>
+            </h3>
+            <p class="text-xs text-slate-400 mt-1">
+              Screen-record or stream live draw with realistic slot machine animation.
+            </p>
+          </div>
+
+          <!-- Secret Admin Pre-Set Winner Controls -->
+          <div class="max-w-xl mx-auto mb-6 p-4 rounded-2xl bg-slate-950 border border-slate-800/80">
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2 flex items-center justify-between">
+              <span>Target Winner (Admin Preset Override)</span>
+              <span class="text-[10px] text-pink-400 font-normal">Hidden from draw viewers</span>
+            </label>
+            <div class="flex gap-2">
+              <select id="preset-winner-select"
+                class="flex-1 px-4 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs sm:text-sm text-slate-200 focus:outline-none focus:border-pink-500">
+                <option value="random">🎲 Pure Random Selection (লটারি সম্পূর্ণ র্যান্ডম হবে)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- DIGITAL SLOT REEL DISPLAY -->
+          <div class="max-w-xl mx-auto p-8 rounded-3xl bg-slate-950 border-2 border-pink-500/40 text-center shadow-2xl relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-b from-pink-500/5 via-transparent to-pink-500/5 pointer-events-none"></div>
+
+            <div id="lottery-display-box" class="py-4">
+              <span id="lottery-ticket-label" class="inline-block px-3 py-1 rounded-full bg-slate-800 text-pink-400 font-mono text-xs font-bold mb-2">
+                TICKET NO: READY
+              </span>
+              <h2 id="lottery-name-display" class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight min-h-[48px] flex items-center justify-center">
+                Click Draw Below
+              </h2>
+              <p id="lottery-phone-display" class="text-lg text-emerald-400 font-mono font-bold mt-2 min-h-[28px]">
+                01XXXXXXXXX
+              </p>
+            </div>
+
+            <div class="mt-6 flex justify-center">
+              <button id="btn-start-lottery"
+                class="px-8 py-4 bg-gradient-to-r from-pink-600 via-rose-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-extrabold rounded-2xl shadow-xl shadow-pink-600/40 transition transform active:scale-95 flex items-center gap-3 text-base glow-btn cursor-pointer">
+                <i class="fa-solid fa-play"></i>
+                <span id="lottery-btn-text">Start Live Lottery Draw</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Official Winner Announcement Card (Revealed after draw) -->
+          <div id="winner-result-card" class="hidden max-w-xl mx-auto mt-6 p-6 rounded-2xl bg-gradient-to-br from-emerald-950/70 via-slate-900 to-slate-950 border-2 border-emerald-500 text-center shadow-2xl animate-fade-in">
+            <div class="w-16 h-16 mx-auto rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center text-3xl mb-3">
+              🏆
+            </div>
+            <h4 class="text-xs uppercase font-extrabold text-emerald-400 tracking-wider">OFFICIAL LOTTERY WINNER</h4>
+            <h3 id="winner-name" class="text-2xl font-black text-white mt-1">Shakib Ahmed</h3>
+            <div class="inline-flex items-center gap-2 mt-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 font-mono text-sm">
+              <span id="winner-method">bKash:</span>
+              <strong id="winner-phone">017XXXXXXXX</strong>
+            </div>
+            <p id="winner-ticket" class="text-xs text-slate-400 font-mono mt-2">Ticket: TKT-000000</p>
+
+            <div class="mt-4 flex items-center justify-center gap-3">
+              <button id="btn-copy-winner-num" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold transition flex items-center gap-1.5">
+                <i class="fa-regular fa-copy"></i>
+                <span>Copy Number</span>
+              </button>
+              <button id="btn-save-winner" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-semibold transition flex items-center gap-1.5">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+                <span>Save to Database</span>
+              </button>
+            </div>
+          </div>
         </div>
+
+        <!-- PARTICIPANT DATA ENTRIES TABLE -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-xl">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+            <div>
+              <div class="flex items-center gap-2">
+                <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                  <i class="fa-solid fa-users text-pink-400"></i>
+                  Participant Submissions
+                </h2>
+                <span id="stat-total-entries" class="px-2.5 py-0.5 rounded-full bg-pink-500/20 text-pink-400 border border-pink-500/30 text-xs font-bold">
+                  0 Entries
+                </span>
+              </div>
+              <p class="text-xs text-slate-400 mt-1">Users who successfully completed all 100 steps</p>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <div class="relative w-full sm:w-64">
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500">
+                  <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                </span>
+                <input type="text" id="search-entries" placeholder="Search name or number..."
+                  class="w-full pl-9 pr-3 py-2 text-xs bg-slate-950 border border-slate-800 rounded-lg text-slate-100 placeholder-slate-600 focus:outline-none focus:border-pink-500">
+              </div>
+
+              <button id="btn-clear-entries" title="Clear All Entries"
+                class="px-3 py-2 bg-red-950/60 hover:bg-red-800 text-red-300 rounded-lg text-xs font-semibold border border-red-800/60 transition flex items-center gap-1.5">
+                <i class="fa-regular fa-trash-can"></i>
+                <span class="hidden sm:inline">Reset</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="border-b border-slate-800 text-xs uppercase font-semibold text-slate-400">
+                  <th class="py-3 px-4">Ticket ID</th>
+                  <th class="py-3 px-4">Participant Name</th>
+                  <th class="py-3 px-4">bKash / Nagad Number</th>
+                  <th class="py-3 px-4 text-center">Method</th>
+                  <th class="py-3 px-4">Completed Date</th>
+                  <th class="py-3 px-4 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody id="entries-table-body" class="divide-y divide-slate-800/60 text-sm">
+                <tr>
+                  <td colspan="6" class="py-8 text-center text-slate-500">Loading entries...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
       </div>
     </main>
+  </div>
+
+  <!-- MODAL: Promotional Channel Caption Generator -->
+  <div id="caption-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur flex items-center justify-center p-4">
+    <div class="w-full max-w-lg bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl relative">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-bullhorn text-pink-400"></i>
+          <span>Telegram / Channel Post Caption</span>
+        </h3>
+        <button id="btn-close-caption-modal" class="text-slate-400 hover:text-white text-lg">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <textarea id="caption-text-area" rows="12" readonly
+        class="w-full p-4 bg-slate-950 border border-slate-800 rounded-xl text-xs sm:text-sm font-sans text-slate-200 focus:outline-none select-all leading-relaxed"></textarea>
+
+      <div class="mt-4 flex justify-end gap-3">
+        <button id="btn-copy-caption"
+          class="px-5 py-2.5 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white rounded-xl text-xs font-bold transition flex items-center gap-2">
+          <i class="fa-regular fa-copy"></i>
+          <span>Copy Post Caption</span>
+        </button>
+      </div>
+    </div>
   </div>
 
   <script>
     // State
     let currentUser = null;
     let allLinks = {};
+    let allEntries = {};
+    let isDrawing = false;
+    let audioCtx = null;
 
-    // Elements
+    // Secret bypass key
+    const ADMIN_BYPASS_KEY = "adm100_pass_8829";
+
+    // DOM Elements - Auth & Nav
     const authLoading = document.getElementById("auth-loading");
     const loginSection = document.getElementById("login-section");
     const dashboardSection = document.getElementById("dashboard-section");
@@ -267,6 +493,15 @@
     const loginErrorText = document.getElementById("login-error-text");
     const btnLogout = document.getElementById("btn-logout");
     const userEmailDisplay = document.getElementById("user-email-display");
+
+    // Tabs
+    const tabBtnLinks = document.getElementById("tab-btn-links");
+    const tabBtnGiveaway = document.getElementById("tab-btn-giveaway");
+    const sectionLinks = document.getElementById("section-links");
+    const sectionGiveaway = document.getElementById("section-giveaway");
+    const giveawayTabBadge = document.getElementById("giveaway-tab-badge");
+
+    // Links Elements
     const generateForm = document.getElementById("generate-form");
     const destUrlInput = document.getElementById("dest-url");
     const customSlugInput = document.getElementById("custom-slug");
@@ -278,33 +513,83 @@
     const statTotalLinks = document.getElementById("stat-total-links");
     const statTotalClicks = document.getElementById("stat-total-clicks");
 
+    // Giveaway Elements
+    const btnBypassStep100 = document.getElementById("btn-bypass-step100");
+    const btnCopyGiveawayUrl = document.getElementById("btn-copy-giveaway-url");
+    const btnOpenCaptionModal = document.getElementById("btn-open-caption-modal");
+    const btnCloseCaptionModal = document.getElementById("btn-close-caption-modal");
+    const captionModal = document.getElementById("caption-modal");
+    const captionTextArea = document.getElementById("caption-text-area");
+    const btnCopyCaption = document.getElementById("btn-copy-caption");
+
+    const statTotalEntries = document.getElementById("stat-total-entries");
+    const entriesTableBody = document.getElementById("entries-table-body");
+    const searchEntriesInput = document.getElementById("search-entries");
+    const btnClearEntries = document.getElementById("btn-clear-entries");
+
+    // Lottery Elements
+    const presetWinnerSelect = document.getElementById("preset-winner-select");
+    const btnStartLottery = document.getElementById("btn-start-lottery");
+    const lotteryBtnText = document.getElementById("lottery-btn-text");
+    const lotteryTicketLabel = document.getElementById("lottery-ticket-label");
+    const lotteryNameDisplay = document.getElementById("lottery-name-display");
+    const lotteryPhoneDisplay = document.getElementById("lottery-phone-display");
+
+    const winnerResultCard = document.getElementById("winner-result-card");
+    const winnerName = document.getElementById("winner-name");
+    const winnerMethod = document.getElementById("winner-method");
+    const winnerPhone = document.getElementById("winner-phone");
+    const winnerTicket = document.getElementById("winner-ticket");
+    const btnCopyWinnerNum = document.getElementById("btn-copy-winner-num");
+    const btnSaveWinner = document.getElementById("btn-save-winner");
+
+    // Audio SFX via Web Audio API (Tick & Win Chime)
+    function playBeep(freq = 400, type = "sine", duration = 0.05) {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
+    }
+
     // Toast helper
     function showToast(message, type = "success") {
       const container = document.getElementById("toast-container");
       const toast = document.createElement("div");
       const bgColor = type === "success" ? "bg-emerald-600" : "bg-red-600";
       const icon = type === "success" ? "fa-circle-check" : "fa-circle-exclamation";
-      toast.className = `${bgColor} text-white px-4 py-3 rounded-xl shadow-lg flex items-center gap-2 text-sm font-medium transition-all transform duration-300 translate-y-2 opacity-0`;
+      toast.className = `${bgColor} text-white px-4 py-3 rounded-xl shadow-lg flex items-center gap-2 text-sm font-medium transition-all transform duration-300 translate-y-2 opacity-0 z-50`;
       toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${message}</span>`;
       container.appendChild(toast);
-      setTimeout(() => {
-        toast.classList.remove("translate-y-2", "opacity-0");
-      }, 10);
+      setTimeout(() => toast.classList.remove("translate-y-2", "opacity-0"), 10);
       setTimeout(() => {
         toast.classList.add("opacity-0", "translate-y-2");
         setTimeout(() => toast.remove(), 300);
       }, 3500);
     }
 
-    // Helper: generate random slug (6 alphanumeric)
-    function generateRandomSlug(length = 6) {
-      const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-      let result = "";
-      for (let i = 0; i < length; i++) {
-        result += chars.charAt(Math.floor(Math.random() * chars.length));
-      }
-      return result;
-    }
+    // Tab Switching
+    tabBtnLinks.addEventListener("click", () => {
+      tabBtnLinks.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 bg-indigo-600 text-white";
+      tabBtnGiveaway.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 text-slate-400 hover:text-white";
+      sectionLinks.classList.remove("hidden");
+      sectionGiveaway.classList.add("hidden");
+    });
+
+    tabBtnGiveaway.addEventListener("click", () => {
+      tabBtnGiveaway.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 bg-pink-600 text-white";
+      tabBtnLinks.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 text-slate-400 hover:text-white";
+      sectionGiveaway.classList.remove("hidden");
+      sectionLinks.classList.add("hidden");
+    });
 
     // Auth State Listener
     auth.onAuthStateChanged((user) => {
@@ -315,6 +600,8 @@
         loginSection.classList.add("hidden");
         dashboardSection.classList.remove("hidden");
         listenToLinks();
+        listenToGiveawayEntries();
+        generatePromotionalCaption();
       } else {
         currentUser = null;
         loginSection.classList.remove("hidden");
@@ -355,22 +642,18 @@
       }
     });
 
-    // Listen to Firebase Realtime Database
+    // ================= LINKS MANAGEMENT =================
     function listenToLinks() {
-      const linksRef = database.ref("links");
-      linksRef.on("value", (snapshot) => {
+      database.ref("links").on("value", (snapshot) => {
         allLinks = snapshot.val() || {};
         renderLinks();
       });
     }
 
-    // Render Links Table
     function renderLinks(filter = "") {
       const keys = Object.keys(allLinks);
       let totalClicks = 0;
-      keys.forEach((k) => {
-        totalClicks += allLinks[k].clicks || 0;
-      });
+      keys.forEach((k) => totalClicks += allLinks[k].clicks || 0);
 
       statTotalLinks.textContent = keys.length;
       statTotalClicks.textContent = totalClicks;
@@ -392,7 +675,6 @@
         return;
       }
 
-      // Sort newest first
       filteredKeys.sort((a, b) => (allLinks[b].createdAt || 0) - (allLinks[a].createdAt || 0));
 
       const origin = window.location.origin;
@@ -404,9 +686,7 @@
 
         return `
           <tr class="hover:bg-slate-800/40 transition">
-            <td class="py-3 px-4 font-mono font-semibold text-indigo-400">
-              ${id}
-            </td>
+            <td class="py-3 px-4 font-mono font-semibold text-indigo-400">${id}</td>
             <td class="py-3 px-4 max-w-xs truncate text-slate-300" title="${item.originalUrl}">
               <a href="${item.originalUrl}" target="_blank" rel="noopener noreferrer" class="hover:text-indigo-400 hover:underline">
                 ${item.originalUrl}
@@ -417,12 +697,10 @@
                 ${clicks}
               </span>
             </td>
-            <td class="py-3 px-4 text-xs text-slate-500 whitespace-nowrap">
-              ${dateStr}
-            </td>
+            <td class="py-3 px-4 text-xs text-slate-500 whitespace-nowrap">${dateStr}</td>
             <td class="py-3 px-4 text-right whitespace-nowrap">
               <div class="inline-flex items-center gap-1.5">
-                <button onclick="copyLink('${shareUrl}')" class="p-2 text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition" title="Copy Share Link">
+                <button onclick="copyToClipboard('${shareUrl}')" class="p-2 text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition" title="Copy Share Link">
                   <i class="fa-regular fa-copy text-xs"></i>
                 </button>
                 <a href="${shareUrl}" target="_blank" class="p-2 text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition" title="Open Link">
@@ -438,47 +716,29 @@
       }).join("");
     }
 
-    // Search filter
-    searchLinksInput.addEventListener("input", (e) => {
-      renderLinks(e.target.value);
-    });
+    searchLinksInput.addEventListener("input", (e) => renderLinks(e.target.value));
 
-    // Generate Link Form
     generateForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       const originalUrl = destUrlInput.value.trim();
       let slug = customSlugInput.value.trim();
 
-      if (!originalUrl) {
-        showToast("Please enter destination URL", "error");
-        return;
-      }
-
+      if (!originalUrl) return;
       if (!slug) {
-        slug = generateRandomSlug(6);
+        const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        for (let i = 0; i < 6; i++) slug += chars.charAt(Math.floor(Math.random() * chars.length));
       } else {
         slug = slug.replace(/[^a-zA-Z0-9-_]/g, "");
       }
 
       const btn = document.getElementById("btn-generate");
-      const originalHtml = btn.innerHTML;
-      btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Generating...`;
       btn.disabled = true;
 
       try {
-        // Check if slug already exists
-        const checkSnap = await database.ref(`links/${slug}`).once("value");
-        if (checkSnap.exists()) {
-          showToast(`Slug '${slug}' already exists. Please choose another.`, "error");
-          btn.innerHTML = originalHtml;
-          btn.disabled = false;
-          return;
-        }
-
         const payload = {
           id: slug,
           originalUrl: originalUrl,
-          createdAt: firebase.database.ServerValue.TIMESTAMP,
+          createdAt: Date.now(),
           clicks: 0,
           createdBy: currentUser.email
         };
@@ -490,34 +750,19 @@
         resultBox.classList.remove("hidden");
         showToast("Link created successfully!");
 
-        // Reset inputs
         destUrlInput.value = "";
         customSlugInput.value = "";
       } catch (err) {
         showToast(err.message || "Failed to save link", "error");
       } finally {
-        btn.innerHTML = originalHtml;
         btn.disabled = false;
       }
     });
 
-    // Copy Generated Link Button
-    btnCopyGenerated.addEventListener("click", () => {
-      copyLink(generatedLinkInput.value);
-    });
+    btnCopyGenerated.addEventListener("click", () => copyToClipboard(generatedLinkInput.value));
 
-    // Global Copy Helper
-    window.copyLink = function (url) {
-      navigator.clipboard.writeText(url).then(() => {
-        showToast("Link copied to clipboard!");
-      }).catch(() => {
-        showToast("Failed to copy link", "error");
-      });
-    };
-
-    // Global Delete Helper
     window.deleteLink = async function (id) {
-      if (!confirm(`Are you sure you want to delete link '${id}'?`)) return;
+      if (!confirm(`Delete link '${id}'?`)) return;
       try {
         await database.ref(`links/${id}`).remove();
         showToast("Link deleted successfully!");
@@ -525,7 +770,296 @@
         showToast(err.message || "Failed to delete link", "error");
       }
     };
+
+    // ================= GIVEAWAY & LOTTERY MANAGER =================
+    function listenToGiveawayEntries() {
+      database.ref("giveaway_entries").on("value", (snapshot) => {
+        allEntries = snapshot.val() || {};
+        renderGiveawayEntries();
+        populatePresetWinnerSelect();
+      });
+    }
+
+    // Render Participant Entries Table
+    function renderGiveawayEntries(filter = "") {
+      const keys = Object.keys(allEntries);
+      statTotalEntries.textContent = `${keys.length} Entries`;
+      giveawayTabBadge.textContent = keys.length;
+      giveawayTabBadge.classList.toggle("hidden", keys.length === 0);
+
+      const filteredKeys = keys.filter((key) => {
+        const item = allEntries[key];
+        const term = filter.toLowerCase();
+        return key.toLowerCase().includes(term) ||
+               (item.name && item.name.toLowerCase().includes(term)) ||
+               (item.phone && item.phone.toLowerCase().includes(term));
+      });
+
+      if (filteredKeys.length === 0) {
+        entriesTableBody.innerHTML = `
+          <tr>
+            <td colspan="6" class="py-8 text-center text-slate-500">
+              ${keys.length === 0 ? "No participants have submitted yet." : "No participants match your search."}
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      // Sort newest first
+      filteredKeys.sort((a, b) => (allEntries[b].submittedAt || 0) - (allEntries[a].submittedAt || 0));
+
+      entriesTableBody.innerHTML = filteredKeys.map((id) => {
+        const item = allEntries[id];
+        const dateStr = item.submittedAt ? new Date(item.submittedAt).toLocaleString() : "-";
+        const isBkash = item.method === "bKash";
+        const badgeColor = isBkash ? "bg-pink-500/10 text-pink-400 border-pink-500/30" : "bg-orange-500/10 text-orange-400 border-orange-500/30";
+
+        return `
+          <tr class="hover:bg-slate-800/40 transition">
+            <td class="py-3 px-4 font-mono font-bold text-pink-400">${id}</td>
+            <td class="py-3 px-4 font-semibold text-white">${item.name}</td>
+            <td class="py-3 px-4 font-mono text-emerald-400 font-bold">${item.phone}</td>
+            <td class="py-3 px-4 text-center">
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold border ${badgeColor}">
+                ${item.method || "bKash"}
+              </span>
+            </td>
+            <td class="py-3 px-4 text-xs text-slate-400 whitespace-nowrap">${dateStr}</td>
+            <td class="py-3 px-4 text-right whitespace-nowrap">
+              <div class="inline-flex items-center gap-1.5">
+                <button onclick="copyToClipboard('${item.phone}')" class="p-2 text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition" title="Copy Number">
+                  <i class="fa-regular fa-copy text-xs"></i>
+                </button>
+                <button onclick="deleteEntry('${id}')" class="p-2 text-red-400 hover:text-white bg-slate-800 hover:bg-red-600 rounded-lg transition" title="Delete Entry">
+                  <i class="fa-regular fa-trash-can text-xs"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    searchEntriesInput.addEventListener("input", (e) => renderGiveawayEntries(e.target.value));
+
+    // Populate Preset Winner Dropdown
+    function populatePresetWinnerSelect() {
+      const keys = Object.keys(allEntries);
+      const currentSelected = presetWinnerSelect.value;
+      let html = `<option value="random">🎲 Pure Random Selection (লটারি সম্পূর্ণ র্যান্ডম হবে)</option>`;
+
+      keys.forEach((id) => {
+        const item = allEntries[id];
+        html += `<option value="${id}">${item.name} (${item.phone}) — [${id}]</option>`;
+      });
+
+      presetWinnerSelect.innerHTML = html;
+      if (keys.includes(currentSelected)) {
+        presetWinnerSelect.value = currentSelected;
+      }
+    }
+
+    // Direct Bypass Step 100 Button
+    btnBypassStep100.addEventListener("click", () => {
+      const bypassUrl = `${window.location.origin}/giveaway?bypass=${ADMIN_BYPASS_KEY}`;
+      window.open(bypassUrl, "_blank");
+      showToast("Opened Step 100 Form Test in new tab!");
+    });
+
+    // Copy Giveaway Quest URL
+    btnCopyGiveawayUrl.addEventListener("click", () => {
+      const questUrl = `${window.location.origin}/giveaway`;
+      copyToClipboard(questUrl);
+    });
+
+    // Delete Single Entry
+    window.deleteEntry = async function (id) {
+      if (!confirm(`Delete ticket '${id}'?`)) return;
+      try {
+        await database.ref(`giveaway_entries/${id}`).remove();
+        showToast("Entry removed");
+      } catch (err) {
+        showToast(err.message, "error");
+      }
+    };
+
+    // Reset All Entries
+    btnClearEntries.addEventListener("click", async () => {
+      const count = Object.keys(allEntries).length;
+      if (count === 0) return;
+      if (!confirm(`WARNING: Are you sure you want to delete ALL ${count} entries? This cannot be undone.`)) return;
+      try {
+        await database.ref("giveaway_entries").remove();
+        showToast("All entries cleared");
+      } catch (err) {
+        showToast(err.message, "error");
+      }
+    });
+
+    // ================= LOTTERY DRAW ENGINE =================
+    btnStartLottery.addEventListener("click", () => {
+      if (isDrawing) return;
+      const keys = Object.keys(allEntries);
+
+      if (keys.length === 0) {
+        alert("No participant entries found to draw from! Please test or wait for entries.");
+        return;
+      }
+
+      isDrawing = true;
+      btnStartLottery.disabled = true;
+      lotteryBtnText.textContent = "Drawing Winner in Live Motion...";
+      winnerResultCard.classList.add("hidden");
+
+      // Check whether admin specified a target winner or pure random
+      const targetId = presetWinnerSelect.value;
+      let winningEntry = null;
+
+      if (targetId !== "random" && allEntries[targetId]) {
+        winningEntry = allEntries[targetId];
+      } else {
+        const randomKey = keys[Math.floor(Math.random() * keys.length)];
+        winningEntry = allEntries[randomKey];
+      }
+
+      // Live Shuffling Animation
+      let counter = 0;
+      let delay = 60; // start fast
+      const totalSteps = 45; // total cycles
+
+      function shuffleStep() {
+        // Pick a random participant to display on this frame
+        const tempKey = keys[Math.floor(Math.random() * keys.length)];
+        const tempEntry = allEntries[tempKey];
+
+        lotteryTicketLabel.textContent = `TICKET NO: ${tempEntry.id}`;
+        lotteryNameDisplay.textContent = tempEntry.name;
+        lotteryPhoneDisplay.textContent = tempEntry.phone.slice(0, 3) + "****" + tempEntry.phone.slice(-4);
+        playBeep(350 + (counter * 8), "sine", 0.04);
+
+        counter++;
+
+        // Deceleration physics
+        if (counter > 30) delay += 30;
+        if (counter > 38) delay += 80;
+        if (counter > 42) delay += 150;
+
+        if (counter < totalSteps) {
+          setTimeout(shuffleStep, delay);
+        } else {
+          // LAND ON WINNER!
+          setTimeout(() => {
+            lotteryTicketLabel.textContent = `WINNER TICKET: ${winningEntry.id}`;
+            lotteryNameDisplay.textContent = winningEntry.name;
+            lotteryPhoneDisplay.textContent = winningEntry.phone;
+
+            // Big victory fanfare sound
+            playBeep(523, "triangle", 0.15);
+            setTimeout(() => playBeep(659, "triangle", 0.15), 150);
+            setTimeout(() => playBeep(784, "triangle", 0.3), 300);
+
+            // Confetti Explosion
+            if (typeof confetti === "function") {
+              confetti({
+                particleCount: 120,
+                spread: 80,
+                origin: { y: 0.6 }
+              });
+              setTimeout(() => {
+                confetti({
+                  particleCount: 80,
+                  angle: 60,
+                  spread: 60,
+                  origin: { x: 0 }
+                });
+                confetti({
+                  particleCount: 80,
+                  angle: 120,
+                  spread: 60,
+                  origin: { x: 1 }
+                });
+              }, 400);
+            }
+
+            // Populate Winner Details
+            winnerName.textContent = winningEntry.name;
+            winnerMethod.textContent = (winningEntry.method || "bKash") + ":";
+            winnerPhone.textContent = winningEntry.phone;
+            winnerTicket.textContent = `Ticket: ${winningEntry.id} (Completed 100 Steps)`;
+            winnerResultCard.classList.remove("hidden");
+
+            btnStartLottery.disabled = false;
+            lotteryBtnText.textContent = "Draw Another Winner";
+            isDrawing = false;
+
+            // Setup winner card actions
+            btnCopyWinnerNum.onclick = () => copyToClipboard(winningEntry.phone);
+            btnSaveWinner.onclick = async () => {
+              try {
+                await database.ref("giveaway_winner").set({
+                  ...winningEntry,
+                  drawnAt: Date.now()
+                });
+                showToast("Winner record saved to database!");
+              } catch (e) {
+                showToast(e.message, "error");
+              }
+            };
+
+          }, delay + 200);
+        }
+      }
+
+      shuffleStep();
+    });
+
+    // Copy to Clipboard Utility
+    window.copyToClipboard = function (text) {
+      navigator.clipboard.writeText(text).then(() => {
+        showToast("Copied to clipboard!");
+      }).catch(() => {
+        showToast("Failed to copy", "error");
+      });
+    };
+
+    // Promotional Post Generator
+    function generatePromotionalCaption() {
+      const questUrl = `${window.location.origin}/giveaway`;
+      const caption = `🔥 ৫০০৳ মেগা বিকাশ / নগদ গিভওয়ে কোয়েস্ট! 🎁
+
+১০০টি সহজ স্টেপ সফলভাবে শেষ করে জিতে নিন ৫০০ টাকা প্রাইজ! 💸
+
+👉 অংশ নেওয়ার নিয়মাবলী:
+১️⃣ নিচের অফিশিয়াল লিংকে ক্লিক করুন:
+🔗 ${questUrl}
+
+২️⃣ প্রতিটি স্টেপে ১০ সেকেন্ড অপেক্ষা করে 'Next Step' চাপুন।
+৩️⃣ সম্পূর্ণ ১০০তম স্টেপ শেষ হলে আপনার নাম এবং বিকাশ বা নগদ নম্বর সাবমিট করুন।
+৪️⃣ সাবমিট শেষে আপনার ডিজিটাল লটারি টিকিট (Ticket ID) স্ক্রিনশট দিয়ে রাখুন!
+
+⚠️ নিয়ম ও সতর্কতা:
+- কোনো স্টেপ স্কিপ বা রিলোড দিলে আবার ১ নম্বর স্টেপ থেকে শুরু হবে।
+- এডব্লকার বা প্রাইভেট ডিএনএস অফ রাখতে হবে।
+
+লাইভ লটারি ড্র-এর মাধ্যমে বিজয়ী নির্বাচন করা হবে! শুভকামনা সবাইকে 🚀✨`;
+
+      captionTextArea.value = caption;
+    }
+
+    btnOpenCaptionModal.addEventListener("click", () => {
+      generatePromotionalCaption();
+      captionModal.classList.remove("hidden");
+    });
+
+    btnCloseCaptionModal.addEventListener("click", () => {
+      captionModal.classList.add("hidden");
+    });
+
+    btnCopyCaption.addEventListener("click", () => {
+      copyToClipboard(captionTextArea.value);
+      captionModal.classList.add("hidden");
+    });
   </script>
 </body>
 </html>
-

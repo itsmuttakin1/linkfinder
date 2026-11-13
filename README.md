@@ -1,68 +1,40 @@
-# LinkFinder - Monetized Link Generator & Multi-Step Verification
+# LinkFinder - Monetized Link Generator, 100-Step Giveaway Quest & Lottery Hub
 
-A modern, high-performance link monetization and protection platform built with Firebase and ready for deployment on **Cloudflare Pages**.
+A high-performance link monetization and 100-Step Giveaway platform built with Firebase, designed for deployment on **Cloudflare Pages**.
 
-## 🚀 Features
+---
+
+## 🚀 Key Features
 
 1. **Admin Panel (`/admin`)**:
    - Protected by **Firebase Authentication** (Email & Password).
-   - Generates monetized links with custom slugs or auto-generated 6-character short IDs.
-   - Saves to **Firebase Realtime Database**.
-   - One-click copy shareable link.
-   - Real-time link management, clicks tracking, and deletion.
+   - **Tab 1: Links Manager**: Create and manage 4-step monetized redirect links with analytics.
+   - **Tab 2: 100-Step Giveaway & Lottery Hub**:
+     - **Fast-Forward Test**: Direct 1-click test to jump straight to Step 100 form.
+     - **Participant Data Table**: View all submitted users (Name, bKash/Nagad number, Ticket ID, submission date).
+     - **Live Animated Lottery Draw**: Spin slot wheel animation with synthesized audio and confetti effects.
+     - **Secret Admin Pre-Set Winner**: Choose any participant in advance or run pure random selection without viewers noticing.
+     - **Social Media Caption Generator**: Pre-formatted promotional Bengali text for Telegram/Facebook channels.
 
-2. **2-Step Verification Flow (`/?id=xyz`)**:
-   - **Step 1**:
-     - 10-second security countdown with animated circular progress indicator.
-     - "Continue to Step 2" button remains locked until timer ends.
-     - Clicking "Continue" triggers 1 popunder / Smartlink ad and transitions to Step 2.
-   - **Step 2**:
-     - 10-second final countdown timer.
-     - "Get Destination Link" button unlocks after timer.
-     - Requires 2 popunder / Smartlink ad interactions before instantly redirecting the user to the destination URL.
+2. **100-Step Giveaway Quest (`/giveaway`)**:
+   - 100 sequential steps with real-time countdown timer and progress indicator.
+   - Heavy ads placed on every step (Native banner, 320x50 banners, Social Bar, Popunder, Smartlink).
+   - **Anti-Cheat & Anti-Skip Protection**: Cryptographic sequential step token in memory. Users cannot skip steps by modifying URL or storage. Reloading restarts the quest at Step 1.
+   - **Step 100 Unlock**: Unlocks the official participant submission form for Full Name and bKash / Nagad number. Generates a unique digital Lottery Ticket ID.
 
-3. **Anti-Reload Protection**:
-   - Reloading or refreshing at any point in Step 2 immediately resets the verification process back to Step 1.
+3. **Public Monetized Link Generator (`/`)**:
+   - Public visitors can generate short links directly from homepage.
+   - Enforces a 1-link-per-minute rate limit with live cooldown timer.
 
 4. **Anti-AdBlocker & Anti-DNS Blocker**:
-   - Real-time detection of browser adblock extensions (uBlock Origin, AdBlock Plus, Brave Shield) and DNS-level blockers (AdGuard DNS, NextDNS, Pi-hole).
-   - Shows an unclosable fullscreen modal requiring the user to disable their ad blocker / private DNS and refresh to proceed.
-
-5. **Integrated Ad Placements**:
-   - Popunder: `ahuramazda.org`
-   - Smartlink: `asiaso.org`
-   - Native Banner: `brijmohan.org`
-   - Social Bar: `brijmohan.org`
-   - 320x50 Banners: `brijmohan.org`
+   - Blocks access until AdGuard DNS, NextDNS, Brave Shield, or ad block extensions are disabled.
 
 ---
 
-## 🔑 Firebase Admin Account Setup
+## 🔒 Firebase Security Rules
 
-1. Go to the [Firebase Console](https://console.firebase.google.com/).
-2. Select project **`itsmuttakin-adf2b`**.
-3. Under **Build** > **Authentication** > **Sign-in method**, make sure **Email/Password** is enabled.
-4. Under the **Users** tab, click **Add User** and create your admin email and password.
-5. In **Realtime Database** > **Rules**, ensure your database rules allow read/write:
-   ```json
-   {
-     "rules": {
-       ".read": true,
-       ".write": true
-     }
-   }
-   ```
-   *(Or restrict write to authenticated users: `".write": "auth != null"`)*.
-6. Visit `https://your-domain.com/admin` and sign in with your email & password.
+Paste these rules in **Firebase Console** > **Realtime Database** > **Rules**:
 
----
-
-## 🔒 Firebase Security Rules (Hacking & Tamper Protection)
-
-To prevent anyone from overwriting, tampering with, or deleting existing links in your Firebase Realtime Database, apply the rules from `database.rules.json`:
-
-1. Go to **Firebase Console** > **Realtime Database** > **Rules** tab.
-2. Replace all existing content with:
 ```json
 {
   "rules": {
@@ -91,6 +63,41 @@ To prevent anyone from overwriting, tampering with, or deleting existing links i
         }
       }
     },
+    "giveaway_entries": {
+      ".read": "auth != null",
+      "$ticketId": {
+        ".write": "auth != null || (!data.exists() && newData.exists())",
+        ".validate": "newData.hasChildren(['id', 'name', 'phone'])",
+        "id": {
+          ".validate": "newData.isString() && newData.val() === $ticketId"
+        },
+        "name": {
+          ".validate": "newData.isString() && newData.val().length >= 2 && newData.val().length <= 100"
+        },
+        "phone": {
+          ".validate": "newData.isString() && newData.val().length >= 10 && newData.val().length <= 20"
+        },
+        "method": {
+          ".validate": "newData.isString()"
+        },
+        "stepsCompleted": {
+          ".validate": "newData.isNumber()"
+        },
+        "submittedAt": {
+          ".validate": "newData.isNumber()"
+        },
+        "status": {
+          ".validate": "newData.isString()"
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
+    },
+    "giveaway_winner": {
+      ".read": true,
+      ".write": "auth != null"
+    },
     "$other": {
       ".read": false,
       ".write": "auth != null"
@@ -98,22 +105,3 @@ To prevent anyone from overwriting, tampering with, or deleting existing links i
   }
 }
 ```
-3. Click **Publish**.
-
-This ensures:
-- Anyone can read links for verification.
-- Public users can only CREATE a brand-new link or increment clicks.
-- **Nobody can delete, overwrite, or hijack other people's existing links.**
-- Authenticated admins (`/admin`) retain full management capabilities.
-
----
-
-## 🌐 Deploy to Cloudflare Pages via GitHub
-
-1. Connect this repository `https://github.com/itsmuttakin1/linkfinder` to **Cloudflare Pages**.
-2. **Build Settings**:
-   - Framework preset: `None`
-   - Build command: *(leave empty)*
-   - Build output directory: `.` *(root)*
-3. Click **Deploy Site**.
-
