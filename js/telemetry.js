@@ -134,10 +134,11 @@
   window.recordClickTelemetry = async function(rtdbUrl, targetId, targetType, title) {
     if (!rtdbUrl || !targetId) return;
 
-    // Prevent duplicate records on simple refreshes within the same tab session
+    // Prevent rapid duplicate clicks (10s cooldown per target)
     const sessionKey = `clk_recorded_${targetType}_${targetId}`;
-    if (sessionStorage.getItem(sessionKey)) return;
-    sessionStorage.setItem(sessionKey, "1");
+    const lastTime = parseInt(sessionStorage.getItem(sessionKey) || "0", 10);
+    if (Date.now() - lastTime < 10000) return;
+    sessionStorage.setItem(sessionKey, Date.now().toString());
 
     try {
       const client = detectClientInfo();
@@ -159,12 +160,26 @@
         referrer: client.referrer
       };
 
-      const endpoint = `${rtdbUrl}/click_logs/${clickId}.json`;
-      await fetch(endpoint, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
+      // Save to Firebase via SDK (if available) or REST endpoint
+      if (typeof database !== "undefined" && database) {
+        try {
+          await database.ref(`click_logs/${clickId}`).set(payload);
+        } catch (sdkErr) {
+          const endpoint = `${rtdbUrl}/click_logs/${clickId}.json`;
+          await fetch(endpoint, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+        }
+      } else {
+        const endpoint = `${rtdbUrl}/click_logs/${clickId}.json`;
+        await fetch(endpoint, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+      }
     } catch (err) {
       console.warn("Telemetry note:", err);
     }

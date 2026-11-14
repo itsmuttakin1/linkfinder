@@ -31,6 +31,13 @@
         }
       }
     },
+    "click_logs": {
+      ".read": true,
+      "$clickId": {
+        ".write": "auth != null || (!data.exists() && newData.exists())",
+        ".validate": "newData.hasChildren(['id', 'targetId', 'targetType', 'timestamp', 'country', 'deviceType', 'os', 'browser'])"
+      }
+    },
     "giveaway_entries": {
       ".read": true,
       "$ticketId": {

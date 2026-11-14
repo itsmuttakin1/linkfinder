@@ -50,16 +50,19 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="/css/style.css">
 
   <!-- Anti-Adblock & Anti-DNS Blocker Protection -->
-  <script src="js/anti-adblock.js"></script>
+  <script src="/js/anti-adblock.js"></script>
 
   <!-- Firebase App, Auth & Database (Compat) -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
-  <script src="js/firebase-config.js"></script>
+  <script src="/js/firebase-config.js"></script>
+
+  <!-- Realtime Click & Device Telemetry -->
+  <script src="/js/telemetry.js"></script>
 </head>
 
 <body
@@ -817,12 +820,17 @@
 
         targetOriginalUrl = linkData.originalUrl;
 
-        // Increment clicks in background
+        // Increment clicks & record country/device telemetry in background
         try {
           if (typeof database !== "undefined" && database) {
             database.ref(`links/${linkId}/clicks`).transaction((curr) => (curr || 0) + 1);
           }
-        } catch (e) { }
+          if (typeof window.recordClickTelemetry === "function") {
+            window.recordClickTelemetry(RTDB_URL, linkId, "short_link", targetOriginalUrl);
+          }
+        } catch (e) {
+          console.warn("Click tracking note:", e);
+        }
 
         // Switch to Step Verification UI
         stateLoading.classList.add("hidden");
