@@ -107,6 +107,10 @@
             <i class="fa-solid fa-link"></i>
             <span>Short Links</span>
           </button>
+          <button id="btn-quick-step100" class="px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-600 hover:text-white" title="Directly jump to Step 100 Form">
+            <i class="fa-solid fa-bolt"></i>
+            <span>Direct Test 100</span>
+          </button>
         </div>
 
         <div class="flex items-center gap-4">
@@ -558,6 +562,15 @@
     const tabBtnLinks = document.getElementById("tab-btn-links");
     const sectionCampaigns = document.getElementById("section-campaigns");
     const sectionLinks = document.getElementById("section-links");
+    const btnQuickStep100 = document.getElementById("btn-quick-step100");
+
+    if (btnQuickStep100) {
+      btnQuickStep100.addEventListener("click", () => {
+        const camp = activeCampaignId || "default";
+        window.open(`${window.location.origin}/giveaway?c=${encodeURIComponent(camp)}&bypass=${ADMIN_BYPASS_KEY}`, "_blank");
+        showToast("Opening Direct Step 100 Test Form!");
+      });
+    }
 
     // Campaign Creator Elements
     const createCampaignForm = document.getElementById("create-campaign-form");

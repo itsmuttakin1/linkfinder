@@ -3,13 +3,17 @@
     ".read": true,
     ".write": "auth != null",
     "links": {
+      ".read": true,
       "$id": {
-        ".write": "auth != null || (!data.exists() && newData.exists()) || (data.exists() && newData.exists() && newData.child('originalUrl').val() === data.child('originalUrl').val())"
+        ".write": true
       }
     },
     "campaigns": {
+      ".read": true,
       "$campaignId": {
+        ".write": "auth != null",
         "entries": {
+          ".read": true,
           "$ticketId": {
             ".write": "!data.exists() && newData.exists()"
           }
@@ -17,6 +21,7 @@
       }
     },
     "giveaway_entries": {
+      ".read": true,
       "$ticketId": {
         ".write": "!data.exists() && newData.exists()"
       }
