@@ -225,6 +225,68 @@
             </div>
           </div>
 
+          <!-- Realtime Campaign Analytics -->
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- Metric 1: Total Clicks -->
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 shadow-xl relative overflow-hidden flex flex-col justify-between">
+              <div class="flex items-center justify-between text-slate-400 mb-2">
+                <span class="text-xs uppercase font-bold tracking-wider">Total Clicks</span>
+                <span class="w-8 h-8 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-sm">
+                  <i class="fa-solid fa-arrow-pointer"></i>
+                </span>
+              </div>
+              <div>
+                <div id="stat-active-clicks" class="text-3xl font-black text-white font-mono">0</div>
+                <p class="text-[11px] text-slate-400 mt-1">Users clicked this quest link</p>
+              </div>
+            </div>
+
+            <!-- Metric 2: Max Step Reached -->
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 shadow-xl relative overflow-hidden flex flex-col justify-between">
+              <div class="flex items-center justify-between text-slate-400 mb-2">
+                <span class="text-xs uppercase font-bold tracking-wider">Max Step Reached</span>
+                <span class="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-sm">
+                  <i class="fa-solid fa-fire"></i>
+                </span>
+              </div>
+              <div>
+                <div id="stat-active-max-step" class="text-3xl font-black text-amber-400 font-mono">Step 0</div>
+                <div class="w-full bg-slate-950 rounded-full h-1.5 mt-2 overflow-hidden border border-slate-800">
+                  <div id="stat-active-max-bar" class="h-full bg-gradient-to-r from-amber-500 to-rose-500 transition-all duration-500" style="width: 0%"></div>
+                </div>
+                <p id="stat-active-max-label" class="text-[11px] text-slate-400 mt-1">Highest level any user progressed</p>
+              </div>
+            </div>
+
+            <!-- Metric 3: Completed Entries -->
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 shadow-xl relative overflow-hidden flex flex-col justify-between">
+              <div class="flex items-center justify-between text-slate-400 mb-2">
+                <span class="text-xs uppercase font-bold tracking-wider">Submissions</span>
+                <span class="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-sm">
+                  <i class="fa-solid fa-trophy"></i>
+                </span>
+              </div>
+              <div>
+                <div id="stat-active-entries" class="text-3xl font-black text-emerald-400 font-mono">0</div>
+                <p class="text-[11px] text-slate-400 mt-1">Finished all steps & submitted</p>
+              </div>
+            </div>
+
+            <!-- Metric 4: Conversion Rate -->
+            <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 shadow-xl relative overflow-hidden flex flex-col justify-between">
+              <div class="flex items-center justify-between text-slate-400 mb-2">
+                <span class="text-xs uppercase font-bold tracking-wider">Completion Rate</span>
+                <span class="w-8 h-8 rounded-xl bg-pink-500/10 text-pink-400 flex items-center justify-center text-sm">
+                  <i class="fa-solid fa-chart-line"></i>
+                </span>
+              </div>
+              <div>
+                <div id="stat-active-rate" class="text-3xl font-black text-pink-400 font-mono">0%</div>
+                <p class="text-[11px] text-slate-400 mt-1">Entries / Clicks conversion</p>
+              </div>
+            </div>
+          </div>
+
           <!-- Telegram Post Caption Generator -->
           <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
             <div class="flex items-center justify-between mb-4">
@@ -741,6 +803,8 @@
           title: title,
           totalSteps: steps,
           timerSeconds: 10,
+          clicks: 0,
+          maxStepReached: 0,
           createdAt: Date.now(),
           createdBy: currentUser ? currentUser.email : "admin"
         };
@@ -838,9 +902,15 @@
         return `
           <div class="border-2 rounded-3xl p-6 transition-all duration-200 cursor-pointer flex flex-col justify-between ${borderStyle}" onclick="selectCampaign('${id}')">
             <div>
-              <div class="flex items-center justify-between mb-3">
+              <div class="flex flex-wrap items-center gap-1.5 mb-3">
                 <span class="px-2.5 py-0.5 rounded-full bg-pink-500/10 border border-pink-500/30 text-pink-400 font-mono text-xs font-bold">
                   ${camp.totalSteps || 100} Steps
+                </span>
+                <span class="px-2.5 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 font-mono text-xs font-bold flex items-center gap-1">
+                  <i class="fa-solid fa-arrow-pointer text-[10px]"></i> ${camp.clicks || 0} Clicks
+                </span>
+                <span class="px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 font-mono text-xs font-bold flex items-center gap-1">
+                  <i class="fa-solid fa-fire text-[10px]"></i> Max: Step ${camp.maxStepReached || 0}
                 </span>
                 <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold text-xs">
                   ${entriesCount} Entries
@@ -913,6 +983,28 @@
       activeCampaignWrapper.classList.remove("hidden");
       activeCampTitle.textContent = activeCampaignData.title;
       activeCampInfo.textContent = `${activeCampaignData.totalSteps || 100} Steps • Campaign ID: ${activeCampaignId}`;
+
+      // Populate Realtime Analytics Metrics
+      const clicks = activeCampaignData.clicks || 0;
+      const maxStep = activeCampaignData.maxStepReached || 0;
+      const totalSteps = activeCampaignData.totalSteps || 100;
+      const entriesCount = activeCampaignData.entries ? Object.keys(activeCampaignData.entries).length : 0;
+      const rate = clicks > 0 ? ((entriesCount / clicks) * 100).toFixed(1) : 0;
+      const maxPct = totalSteps > 0 ? Math.min(100, Math.round((maxStep / totalSteps) * 100)) : 0;
+
+      const statClicksEl = document.getElementById("stat-active-clicks");
+      const statMaxStepEl = document.getElementById("stat-active-max-step");
+      const statMaxBarEl = document.getElementById("stat-active-max-bar");
+      const statMaxLabelEl = document.getElementById("stat-active-max-label");
+      const statEntriesEl = document.getElementById("stat-active-entries");
+      const statRateEl = document.getElementById("stat-active-rate");
+
+      if (statClicksEl) statClicksEl.textContent = clicks.toLocaleString();
+      if (statMaxStepEl) statMaxStepEl.textContent = `Step ${maxStep} / ${totalSteps}`;
+      if (statMaxBarEl) statMaxBarEl.style.width = `${maxPct}%`;
+      if (statMaxLabelEl) statMaxLabelEl.textContent = `${maxPct}% of quest progressed by top user`;
+      if (statEntriesEl) statEntriesEl.textContent = entriesCount.toLocaleString();
+      if (statRateEl) statRateEl.textContent = `${rate}%`;
 
       const origin = window.location.origin;
       const questLink = `${origin}/giveaway?c=${encodeURIComponent(activeCampaignId)}`;

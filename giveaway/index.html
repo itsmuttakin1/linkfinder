@@ -436,6 +436,35 @@
       adWaitInterval = setInterval(tick, 500);
     }
 
+    // Analytics & Campaign Progress Tracking
+    function trackCampaignClick() {
+      if (checkAdminBypass()) return;
+      const sessionKey = "counted_click_" + campaignId;
+      if (!sessionStorage.getItem(sessionKey)) {
+        sessionStorage.setItem(sessionKey, "1");
+        try {
+          if (typeof database !== "undefined" && database) {
+            database.ref(`campaigns/${campaignId}/clicks`).transaction((curr) => (curr || 0) + 1);
+          }
+        } catch (e) {
+          console.warn("Click tracking note:", e);
+        }
+      }
+    }
+
+    function trackCampaignMaxStep(step) {
+      if (checkAdminBypass()) return;
+      try {
+        if (typeof database !== "undefined" && database) {
+          database.ref(`campaigns/${campaignId}/maxStepReached`).transaction((curr) => {
+            return Math.max(curr || 0, step);
+          });
+        }
+      } catch (e) {
+        console.warn("Max step tracking note:", e);
+      }
+    }
+
     // Render Step
     function renderStep(step) {
       currentStep = step;
@@ -446,6 +475,9 @@
       }
       sessionStorage.setItem("quest_step_" + campaignId, step.toString());
       sessionStorage.setItem("quest_token_" + campaignId, createStepToken(step));
+
+      // Record highest step reached in Realtime Database
+      trackCampaignMaxStep(step);
 
       const pct = Math.round((step / TOTAL_STEPS) * 100);
       stepBadge.textContent = `Step ${step} of ${TOTAL_STEPS}`;
@@ -469,6 +501,7 @@
       alreadySubmittedView.classList.add("hidden");
       giveawayFormView.classList.remove("hidden");
       headerStepCounter.textContent = "🏆 All Steps Completed!";
+      trackCampaignMaxStep(TOTAL_STEPS);
       if (checkAdminBypass()) {
         adminBypassNotice.classList.remove("hidden");
       }
@@ -645,6 +678,7 @@
       }
 
       // 4. Always start strictly at Step 1 on fresh load
+      trackCampaignClick();
       sessionStorage.removeItem("quest_step_" + campaignId);
       sessionStorage.removeItem("quest_token_" + campaignId);
       renderStep(1);

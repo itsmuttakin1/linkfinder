@@ -5,17 +5,28 @@
     "links": {
       ".read": true,
       "$id": {
-        ".write": true
+        ".write": "auth != null || (!data.exists() && newData.exists())",
+        ".validate": "newData.hasChildren(['id', 'originalUrl']) && newData.child('originalUrl').isString()",
+        "clicks": {
+          ".write": "auth != null || (!data.exists() && newData.val() == 1) || (data.exists() && newData.val() == data.val() + 1)"
+        }
       }
     },
     "campaigns": {
       ".read": true,
       "$campaignId": {
         ".write": "auth != null",
+        "clicks": {
+          ".write": "auth != null || (!data.exists() && newData.isNumber() && newData.val() == 1) || (data.exists() && newData.isNumber() && newData.val() == data.val() + 1)"
+        },
+        "maxStepReached": {
+          ".write": "auth != null || (newData.isNumber() && newData.val() >= 1 && newData.val() <= 100 && (!data.exists() || newData.val() >= data.val()))"
+        },
         "entries": {
           ".read": true,
           "$ticketId": {
-            ".write": "!data.exists() && newData.exists()"
+            ".write": "auth != null || (!data.exists() && newData.exists())",
+            ".validate": "newData.hasChildren(['id', 'name', 'phone', 'method', 'stepsCompleted', 'submittedAt']) && newData.child('name').isString() && newData.child('name').val().length <= 100 && newData.child('phone').isString() && newData.child('phone').val().length >= 8 && newData.child('phone').val().length <= 25"
           }
         }
       }
@@ -23,7 +34,8 @@
     "giveaway_entries": {
       ".read": true,
       "$ticketId": {
-        ".write": "!data.exists() && newData.exists()"
+        ".write": "auth != null || (!data.exists() && newData.exists())",
+        ".validate": "newData.hasChildren(['id', 'name', 'phone', 'method', 'stepsCompleted', 'submittedAt'])"
       }
     }
   }
