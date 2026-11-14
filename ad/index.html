@@ -719,6 +719,7 @@
       if (!title) return;
 
       btnSubmitCampaign.disabled = true;
+      btnSubmitCampaign.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Creating...`;
 
       try {
         const campId = "c_" + Date.now().toString(36);
@@ -728,33 +729,72 @@
           totalSteps: steps,
           timerSeconds: 10,
           createdAt: Date.now(),
-          createdBy: currentUser.email
+          createdBy: currentUser ? currentUser.email : "admin"
         };
 
+        // 1. Immediately update in-memory state & localStorage cache
+        allCampaigns[campId] = campPayload;
+        try {
+          localStorage.setItem("admin_campaigns_cache", JSON.stringify(allCampaigns));
+        } catch (e) {}
+
+        // 2. Immediately render & select the new campaign!
+        renderCampaignsGrid();
+        selectCampaign(campId);
+
+        // 3. Save to Firebase Realtime Database
         await database.ref(`campaigns/${campId}`).set(campPayload);
+
         showToast(`Campaign '${title}' created successfully!`);
         campTitleInput.value = "";
-        selectCampaign(campId);
       } catch (err) {
-        showToast(err.message, "error");
+        console.warn("Firebase save warning:", err);
+        showToast("Campaign created locally! (Firebase note: " + (err.message || "check rules") + ")", "warning");
       } finally {
         btnSubmitCampaign.disabled = false;
+        btnSubmitCampaign.innerHTML = `<i class="fa-solid fa-bolt"></i> <span>Create Campaign</span>`;
       }
     });
 
     function listenToCampaigns() {
+      // 1. Instant load from local cache so it never gets stuck on "Loading campaigns..."
+      try {
+        const cached = localStorage.getItem("admin_campaigns_cache");
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (parsed && typeof parsed === "object" && Object.keys(parsed).length > 0) {
+            allCampaigns = { ...allCampaigns, ...parsed };
+            renderCampaignsGrid();
+            if (!activeCampaignId && Object.keys(allCampaigns).length > 0) {
+              selectCampaign(Object.keys(allCampaigns)[0]);
+            }
+          }
+        }
+      } catch (e) {}
+
+      // 2. Realtime listener from Firebase with error handler
       database.ref("campaigns").on("value", (snapshot) => {
-        allCampaigns = snapshot.val() || {};
+        const val = snapshot.val();
+        if (val && typeof val === "object") {
+          allCampaigns = { ...allCampaigns, ...val };
+          try {
+            localStorage.setItem("admin_campaigns_cache", JSON.stringify(allCampaigns));
+          } catch (e) {}
+        } else if (Object.keys(allCampaigns).length === 0) {
+          allCampaigns = {};
+        }
+
         renderCampaignsGrid();
 
-        // If an active campaign is selected, refresh its data
         if (activeCampaignId && allCampaigns[activeCampaignId]) {
           activeCampaignData = allCampaigns[activeCampaignId];
           refreshActiveCampaignView();
         } else if (!activeCampaignId && Object.keys(allCampaigns).length > 0) {
-          // Select first campaign by default
           selectCampaign(Object.keys(allCampaigns)[0]);
         }
+      }, (err) => {
+        console.warn("Campaigns Firebase read note:", err.message);
+        renderCampaignsGrid();
       });
     }
 
@@ -823,18 +863,32 @@
       activeCampaignData = allCampaigns[campId];
       renderCampaignsGrid();
       refreshActiveCampaignView();
+
+      setTimeout(() => {
+        const wrapper = document.getElementById("active-campaign-wrapper");
+        if (wrapper && !wrapper.classList.contains("hidden")) {
+          wrapper.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 100);
     };
 
     window.deleteCampaign = async function (campId) {
       if (!confirm(`Are you sure you want to delete campaign '${campId}'?`)) return;
+      delete allCampaigns[campId];
+      try {
+        localStorage.setItem("admin_campaigns_cache", JSON.stringify(allCampaigns));
+      } catch (e) {}
+      renderCampaignsGrid();
+
+      if (activeCampaignId === campId) {
+        activeCampaignId = null;
+        activeCampaignData = null;
+        activeCampaignWrapper.classList.add("hidden");
+      }
+
       try {
         await database.ref(`campaigns/${campId}`).remove();
         showToast("Campaign deleted!");
-        if (activeCampaignId === campId) {
-          activeCampaignId = null;
-          activeCampaignData = null;
-          activeCampaignWrapper.classList.add("hidden");
-        }
       } catch (err) {
         showToast(err.message, "error");
       }

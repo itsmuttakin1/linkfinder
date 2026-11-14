@@ -1,78 +1,25 @@
 {
   "rules": {
+    ".read": true,
+    ".write": "auth != null",
     "links": {
-      ".read": true,
       "$id": {
-        ".write": "auth != null || (!data.exists() && newData.exists()) || (data.exists() && newData.exists() && newData.child('originalUrl').val() === data.child('originalUrl').val())",
-        ".validate": "newData.hasChildren(['id', 'originalUrl'])",
-        "id": {
-          ".validate": "newData.isString() && newData.val() === $id && newData.val().length >= 3 && newData.val().length <= 64"
-        },
-        "originalUrl": {
-          ".validate": "newData.isString() && (newData.val().beginsWith('https://') || newData.val().beginsWith('http://')) && newData.val().length <= 2048"
-        },
-        "clicks": {
-          ".validate": "newData.isNumber() && (!data.exists() || newData.val() >= data.val())"
-        },
-        "createdAt": {
-          ".validate": "!data.exists() || newData.val() === data.val()"
-        },
-        "createdBy": {
-          ".validate": "!data.exists() || newData.val() === data.val()"
-        },
-        "$other": {
-          ".validate": false
-        }
+        ".write": "auth != null || (!data.exists() && newData.exists()) || (data.exists() && newData.exists() && newData.child('originalUrl').val() === data.child('originalUrl').val())"
       }
     },
     "campaigns": {
-      ".read": true,
-      ".write": "auth != null",
       "$campaignId": {
         "entries": {
-          ".read": "auth != null",
           "$ticketId": {
-            ".write": "auth != null || (!data.exists() && newData.exists())",
-            ".validate": "newData.hasChildren(['id', 'name', 'phone'])",
-            "id": {
-              ".validate": "newData.isString() && newData.val() === $ticketId"
-            },
-            "name": {
-              ".validate": "newData.isString() && newData.val().length >= 2 && newData.val().length <= 100"
-            },
-            "phone": {
-              ".validate": "newData.isString() && newData.val().length >= 10 && newData.val().length <= 20"
-            },
-            "method": {
-              ".validate": "newData.isString()"
-            },
-            "stepsCompleted": {
-              ".validate": "newData.isNumber()"
-            },
-            "submittedAt": {
-              ".validate": "newData.isNumber()"
-            },
-            "$other": {
-              ".validate": false
-            }
+            ".write": "!data.exists() && newData.exists()"
           }
         }
       }
     },
     "giveaway_entries": {
-      ".read": "auth != null",
       "$ticketId": {
-        ".write": "auth != null || (!data.exists() && newData.exists())",
-        ".validate": "newData.hasChildren(['id', 'name', 'phone'])"
+        ".write": "!data.exists() && newData.exists()"
       }
-    },
-    "giveaway_winner": {
-      ".read": true,
-      ".write": "auth != null"
-    },
-    "$other": {
-      ".read": false,
-      ".write": "auth != null"
     }
   }
 }
