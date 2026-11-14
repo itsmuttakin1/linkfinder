@@ -10,13 +10,14 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="/css/style.css">
 
   <!-- Firebase App & Services (Compat) -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
-  <script src="../js/firebase-config.js"></script>
+  <script src="/js/firebase-config.js"></script>
+  <script src="/js/telemetry.js"></script>
 
   <!-- Canvas Confetti -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -117,6 +118,13 @@
             class="px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 text-slate-400 hover:text-white">
             <i class="fa-solid fa-link"></i>
             <span>Short Links</span>
+          </button>
+          <button id="tab-btn-analytics"
+            class="px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 text-slate-400 hover:text-white"
+            title="Realtime Clicks & Geo Stream (urlbit.pro style)">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <i class="fa-solid fa-chart-pie"></i>
+            <span>Live Click Stream</span>
           </button>
           <button id="btn-quick-step100"
             class="px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-600 hover:text-white"
@@ -645,6 +653,182 @@
         </div>
       </div>
 
+      <!-- ================= SECTION 3: REALTIME CLICK & GEO ANALYTICS (URLBIT.PRO STYLE) ================= -->
+      <div id="section-analytics" class="hidden space-y-8">
+        <!-- Top Analytics Banner -->
+        <div class="bg-gradient-to-r from-blue-950/60 via-indigo-950/40 to-slate-900 border border-blue-500/30 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs font-bold mb-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                <span>Realtime Click & Geo Stream • urlbit.pro style</span>
+              </div>
+              <h2 class="text-2xl sm:text-3xl font-black text-white">Live Click Telemetry & Analytics</h2>
+              <p class="text-xs sm:text-sm text-slate-400 mt-1">
+                রিয়েলটাইমে দেখুন কোন লিংকে ক্লিক পড়েছে, ভিজিটরের দেশ, অপারেটিং সিস্টেম, ডিভাইস ও ব্রাউজার
+              </p>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <button id="btn-refresh-analytics" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl border border-slate-700 transition flex items-center gap-2">
+                <i class="fa-solid fa-arrows-rotate"></i>
+                <span>Refresh Stream</span>
+              </button>
+              <button id="btn-clear-analytics" class="px-3.5 py-2.5 bg-red-950/40 hover:bg-red-900/60 text-red-400 text-xs font-bold rounded-xl border border-red-800/40 transition flex items-center gap-2" title="Clear click logs">
+                <i class="fa-regular fa-trash-can"></i>
+                <span class="hidden sm:inline">Clear Logs</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Top KPI Cards -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Total Clicks Streamed -->
+          <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 shadow-xl">
+            <div class="flex items-center justify-between text-slate-400 mb-2">
+              <span class="text-xs uppercase font-bold tracking-wider">Total Streamed</span>
+              <span class="w-8 h-8 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-sm">
+                <i class="fa-solid fa-bolt"></i>
+              </span>
+            </div>
+            <div id="stat-stream-total" class="text-3xl font-black text-white font-mono">0</div>
+            <p class="text-[11px] text-slate-400 mt-1">Live recorded link clicks</p>
+          </div>
+
+          <!-- Unique Countries -->
+          <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 shadow-xl">
+            <div class="flex items-center justify-between text-slate-400 mb-2">
+              <span class="text-xs uppercase font-bold tracking-wider">Countries</span>
+              <span class="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-sm">
+                <i class="fa-solid fa-earth-americas"></i>
+              </span>
+            </div>
+            <div id="stat-stream-countries" class="text-3xl font-black text-emerald-400 font-mono">0</div>
+            <p id="stat-stream-top-country" class="text-[11px] text-slate-400 mt-1">Top: None</p>
+          </div>
+
+          <!-- Mobile vs Desktop -->
+          <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 shadow-xl">
+            <div class="flex items-center justify-between text-slate-400 mb-2">
+              <span class="text-xs uppercase font-bold tracking-wider">Device Ratio</span>
+              <span class="w-8 h-8 rounded-xl bg-pink-500/10 text-pink-400 flex items-center justify-center text-sm">
+                <i class="fa-solid fa-mobile-screen"></i>
+              </span>
+            </div>
+            <div id="stat-stream-devices" class="text-3xl font-black text-pink-400 font-mono">0% Mobile</div>
+            <p id="stat-stream-device-sub" class="text-[11px] text-slate-400 mt-1">Mobile vs Desktop</p>
+          </div>
+
+          <!-- Top Referrer -->
+          <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 shadow-xl">
+            <div class="flex items-center justify-between text-slate-400 mb-2">
+              <span class="text-xs uppercase font-bold tracking-wider">Top Source</span>
+              <span class="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-sm">
+                <i class="fa-solid fa-paper-plane"></i>
+              </span>
+            </div>
+            <div id="stat-stream-referrer" class="text-2xl font-black text-amber-400 truncate">Direct</div>
+            <p id="stat-stream-ref-sub" class="text-[11px] text-slate-400 mt-1">Leading traffic source</p>
+          </div>
+        </div>
+
+        <!-- Breakdown Charts Grid: Countries + Devices + Referrers -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Card 1: Top Countries with Flags -->
+          <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-3">
+                <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                  <i class="fa-solid fa-globe text-indigo-400"></i>
+                  <span>Top Countries</span>
+                </h3>
+                <span class="text-xs text-slate-400 font-mono">By Clicks</span>
+              </div>
+              <div id="analytics-countries-list" class="space-y-3">
+                <div class="text-center py-6 text-slate-500 text-xs">No country data yet</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Devices & OS Breakdown -->
+          <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-3">
+                <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                  <i class="fa-solid fa-laptop text-pink-400"></i>
+                  <span>Device & OS</span>
+                </h3>
+                <span class="text-xs text-slate-400 font-mono">Platform</span>
+              </div>
+              <div id="analytics-devices-list" class="space-y-3">
+                <div class="text-center py-6 text-slate-500 text-xs">No device data yet</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Traffic Referrer Sources -->
+          <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-3">
+                <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                  <i class="fa-solid fa-arrow-trend-up text-amber-400"></i>
+                  <span>Traffic Sources</span>
+                </h3>
+                <span class="text-xs text-slate-400 font-mono">Referrer</span>
+              </div>
+              <div id="analytics-sources-list" class="space-y-3">
+                <div class="text-center py-6 text-slate-500 text-xs">No referrer data yet</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Recent Clicks Feed Table -->
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+            <div class="flex items-center gap-3">
+              <div class="w-3 h-3 rounded-full bg-emerald-400 animate-ping"></div>
+              <div>
+                <h3 class="text-lg font-black text-white flex items-center gap-2">
+                  <span>Recent Clicks Live Stream</span>
+                </h3>
+                <p class="text-xs text-slate-400">রিয়েলটাইম ক্লিক ফিড (সর্বশেষ ১০০টি ক্লিক)</p>
+              </div>
+            </div>
+
+            <!-- Search & Filters -->
+            <div class="flex flex-wrap items-center gap-2">
+              <select id="filter-stream-type" class="px-3 py-2 text-xs bg-slate-950 border border-slate-800 rounded-xl text-slate-200 focus:outline-none focus:border-indigo-500">
+                <option value="all">All Targets</option>
+                <option value="short_link">Short Links Only</option>
+                <option value="campaign">Campaigns Only</option>
+              </select>
+              <input type="text" id="search-stream" placeholder="Search country, slug, device..."
+                class="w-full sm:w-64 px-3 py-2 text-xs bg-slate-950 border border-slate-800 rounded-xl text-slate-100 placeholder-slate-600 focus:outline-none focus:border-indigo-500">
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="border-b border-slate-800 text-xs uppercase font-semibold text-slate-400">
+                  <th class="py-3 px-4">Time</th>
+                  <th class="py-3 px-4">Target Link / Campaign</th>
+                  <th class="py-3 px-4">Country</th>
+                  <th class="py-3 px-4">Device & OS</th>
+                  <th class="py-3 px-4">Browser</th>
+                  <th class="py-3 px-4 text-right">Referrer</th>
+                </tr>
+              </thead>
+              <tbody id="stream-table-body" class="divide-y divide-slate-800/60 text-sm">
+                <tr><td colspan="6" class="py-12 text-center text-slate-500">Waiting for live click events...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
     </main>
   </div>
 
@@ -807,23 +991,40 @@
     tabBtnLinks.addEventListener("click", () => switchTab("links"));
     tabBtnAnalytics.addEventListener("click", () => switchTab("analytics"));
 
-    // Auth Listener
-    auth.onAuthStateChanged((user) => {
-      authLoading.classList.add("hidden");
-      if (user) {
-        currentUser = user;
-        userEmailDisplay.textContent = user.email;
-        loginSection.classList.add("hidden");
-        dashboardSection.classList.remove("hidden");
-        listenToLinks();
-        listenToCampaigns();
-        listenToClickLogs();
-      } else {
-        currentUser = null;
-        loginSection.classList.remove("hidden");
-        dashboardSection.classList.add("hidden");
+    // Safety Fallback: Never leave user stuck on "Checking authentication..."
+    setTimeout(() => {
+      if (authLoading && !authLoading.classList.contains("hidden")) {
+        authLoading.classList.add("hidden");
+        if (!currentUser) {
+          loginSection.classList.remove("hidden");
+          dashboardSection.classList.add("hidden");
+        }
       }
-    });
+    }, 1500);
+
+    // Auth Listener
+    if (auth) {
+      auth.onAuthStateChanged((user) => {
+        authLoading.classList.add("hidden");
+        if (user) {
+          currentUser = user;
+          userEmailDisplay.textContent = user.email;
+          loginSection.classList.add("hidden");
+          dashboardSection.classList.remove("hidden");
+          listenToLinks();
+          listenToCampaigns();
+          listenToClickLogs();
+        } else {
+          currentUser = null;
+          loginSection.classList.remove("hidden");
+          dashboardSection.classList.add("hidden");
+        }
+      });
+    } else {
+      authLoading.classList.add("hidden");
+      loginSection.classList.remove("hidden");
+      dashboardSection.classList.add("hidden");
+    }
 
     loginForm.addEventListener("submit", async (e) => {
       e.preventDefault();
