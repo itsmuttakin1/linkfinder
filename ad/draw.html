@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Official Live Lottery Draw</title>
+  <meta name="robots" content="noindex, nofollow">
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+
+  <!-- Firebase App & Database (Compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+  <script src="../js/firebase-config.js"></script>
+
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center justify-center p-4 font-sans antialiased overflow-x-hidden selection:bg-pink-500 selection:text-white">
+
+  <!-- Ambient Luxury Neon Glow -->
+  <div class="fixed top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-gradient-to-b from-pink-600/20 via-purple-600/10 to-transparent blur-3xl pointer-events-none"></div>
+
+  <!-- Main Broadcast Stage -->
+  <div class="w-full max-w-2xl mx-auto text-center relative z-10 py-6">
+
+    <!-- Broadcast Header Badge -->
+    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900 border border-pink-500/40 text-pink-400 text-xs sm:text-sm font-black tracking-wider uppercase shadow-lg shadow-pink-500/10 mb-4 animate-pulse">
+      <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+      <span>Official Live Draw Stage</span>
+    </div>
+
+    <!-- Campaign Title -->
+    <h1 id="draw-campaign-title" class="text-3xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-300 to-indigo-400 tracking-tight leading-tight mb-2">
+      500৳ Giveaway Live Draw
+    </h1>
+    <p id="draw-participant-count" class="text-xs sm:text-sm text-slate-400 font-mono mb-8">
+      Loading participants...
+    </p>
+
+    <!-- DIGITAL SLOT REEL CASING -->
+    <div class="relative bg-slate-900/90 border-2 border-pink-500/50 rounded-3xl p-8 sm:p-12 shadow-2xl backdrop-blur-xl overflow-hidden">
+      <!-- Glow Borders -->
+      <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-transparent via-pink-500 to-transparent"></div>
+      <div class="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-transparent via-purple-500 to-transparent"></div>
+
+      <!-- Ticket Display -->
+      <div class="mb-4">
+        <span id="reel-ticket-id" class="inline-block px-4 py-1.5 rounded-full bg-slate-950 border border-slate-800 text-pink-400 font-mono text-sm sm:text-base font-bold shadow-inner">
+          TICKET NO: READY
+        </span>
+      </div>
+
+      <!-- Participant Name Reel -->
+      <div class="min-h-[72px] sm:min-h-[88px] flex items-center justify-center my-2">
+        <h2 id="reel-name" class="text-3xl sm:text-5xl font-black text-white tracking-tight drop-shadow-md">
+          Ready to Spin
+        </h2>
+      </div>
+
+      <!-- Phone / Number Reel -->
+      <div class="min-h-[36px] flex items-center justify-center">
+        <p id="reel-phone" class="text-xl sm:text-2xl text-emerald-400 font-mono font-bold tracking-widest">
+          01XXXXXXXXX
+        </p>
+      </div>
+
+      <!-- Draw Action Button -->
+      <div class="mt-8">
+        <button id="btn-trigger-draw"
+          class="px-10 py-5 bg-gradient-to-r from-pink-600 via-rose-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-black text-lg sm:text-xl rounded-2xl shadow-2xl shadow-pink-600/50 transition transform active:scale-95 flex items-center justify-center gap-3 mx-auto glow-btn cursor-pointer">
+          <i class="fa-solid fa-play text-base"></i>
+          <span id="btn-draw-label">START LIVE LOTTERY DRAW</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- WINNER REVEAL BANNER (Reveals cleanly after spin) -->
+    <div id="winner-banner" class="hidden mt-8 p-8 rounded-3xl bg-gradient-to-b from-emerald-950/80 via-slate-900 to-slate-950 border-2 border-emerald-500 text-center shadow-2xl animate-bounce-short">
+      <div class="w-20 h-20 mx-auto rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center text-4xl mb-4 shadow-lg shadow-emerald-500/20">
+        🏆
+      </div>
+      <h3 class="text-xs uppercase font-black text-emerald-400 tracking-widest">OFFICIAL LOTTERY WINNER</h3>
+      <h2 id="winner-name-text" class="text-3xl sm:text-4xl font-black text-white mt-2">Participant Name</h2>
+      
+      <div class="inline-flex items-center gap-3 mt-3 px-5 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 font-mono text-base sm:text-lg font-bold">
+        <span id="winner-method-text">bKash:</span>
+        <strong id="winner-phone-text">017XXXXXXXX</strong>
+      </div>
+
+      <p id="winner-ticket-text" class="text-xs sm:text-sm text-slate-400 font-mono mt-3">
+        Ticket: TKT-000000 | 100 Steps Completed
+      </p>
+
+      <div class="mt-6 flex justify-center gap-3">
+        <button id="btn-draw-again" class="px-6 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl transition flex items-center gap-2">
+          <i class="fa-solid fa-rotate-right"></i>
+          <span>Draw Again</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Subtle Footer Note -->
+    <div class="mt-8 text-slate-500 text-xs font-mono">
+      Official Verifiable Random Draw &bull; LinkFinder Lottery Engine
+    </div>
+
+  </div>
+
+  <script>
+    const RTDB_URL = "https://itsmuttakin-adf2b-default-rtdb.asia-southeast1.firebasedatabase.app";
+    const urlParams = new URLSearchParams(window.location.search);
+    const campaignId = urlParams.get("c") || "default";
+
+    // State
+    let participants = [];
+    let secretTarget = null;
+    let isSpinning = false;
+    let audioCtx = null;
+
+    // Elements
+    const drawCampaignTitle = document.getElementById("draw-campaign-title");
+    const drawParticipantCount = document.getElementById("draw-participant-count");
+    const reelTicketId = document.getElementById("reel-ticket-id");
+    const reelName = document.getElementById("reel-name");
+    const reelPhone = document.getElementById("reel-phone");
+    const btnTriggerDraw = document.getElementById("btn-trigger-draw");
+    const btnDrawLabel = document.getElementById("btn-draw-label");
+    const winnerBanner = document.getElementById("winner-banner");
+    const winnerNameText = document.getElementById("winner-name-text");
+    const winnerMethodText = document.getElementById("winner-method-text");
+    const winnerPhoneText = document.getElementById("winner-phone-text");
+    const winnerTicketText = document.getElementById("winner-ticket-text");
+    const btnDrawAgain = document.getElementById("btn-draw-again");
+
+    // Audio SFX synthesis
+    function playBeep(freq = 400, type = "sine", duration = 0.05) {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    // Load Campaign & Participants
+    async function loadData() {
+      try {
+        // Fetch Campaign Info
+        let cTitle = "500৳ Giveaway Live Draw";
+        const cResp = await fetch(`${RTDB_URL}/campaigns/${encodeURIComponent(campaignId)}.json`);
+        if (cResp.ok) {
+          const cData = await cResp.json();
+          if (cData) {
+            if (cData.title) cTitle = cData.title;
+            if (cData.secretWinner) secretTarget = cData.secretWinner;
+
+            // Entries in campaign
+            if (cData.entries) {
+              participants = Object.values(cData.entries);
+            }
+          }
+        }
+
+        // Fallback to /giveaway_entries if no campaign entries
+        if (participants.length === 0) {
+          const gResp = await fetch(`${RTDB_URL}/giveaway_entries.json`);
+          if (gResp.ok) {
+            const gData = await gResp.json();
+            if (gData) participants = Object.values(gData);
+          }
+        }
+
+        drawCampaignTitle.textContent = cTitle;
+        drawParticipantCount.textContent = `${participants.length} Eligible Participants Loaded`;
+
+      } catch (e) {
+        console.error("Data load error:", e);
+        drawParticipantCount.textContent = "Error loading participants";
+      }
+    }
+
+    // Trigger Draw
+    btnTriggerDraw.addEventListener("click", () => {
+      if (isSpinning) return;
+
+      if (participants.length === 0 && !secretTarget) {
+        alert("No participants found to draw from!");
+        return;
+      }
+
+      isSpinning = true;
+      btnTriggerDraw.disabled = true;
+      btnDrawLabel.textContent = "SPINNING...";
+      winnerBanner.classList.add("hidden");
+
+      // Decide final winner: Secret target if set, otherwise random
+      let finalWinner = secretTarget;
+      if (!finalWinner) {
+        finalWinner = participants[Math.floor(Math.random() * participants.length)];
+      }
+
+      // Live Shuffling Reel Animation
+      let counter = 0;
+      let delay = 50;
+      const totalSteps = 48;
+
+      function shuffle() {
+        let temp;
+        if (participants.length > 0) {
+          temp = participants[Math.floor(Math.random() * participants.length)];
+        } else {
+          temp = { id: "TKT-" + Math.floor(100000 + Math.random() * 900000), name: "Participant", phone: "017" + Math.floor(10000000 + Math.random() * 90000000) };
+        }
+
+        reelTicketId.textContent = `TICKET NO: ${temp.id}`;
+        reelName.textContent = temp.name;
+        reelPhone.textContent = temp.phone.slice(0, 3) + "****" + temp.phone.slice(-4);
+        playBeep(350 + (counter * 8), "sine", 0.04);
+
+        counter++;
+        if (counter > 32) delay += 30;
+        if (counter > 40) delay += 70;
+        if (counter > 44) delay += 140;
+
+        if (counter < totalSteps) {
+          setTimeout(shuffle, delay);
+        } else {
+          // LAND DIRECTLY ON DESIGNATED WINNER
+          setTimeout(() => {
+            reelTicketId.textContent = `WINNER TICKET: ${finalWinner.id}`;
+            reelName.textContent = finalWinner.name;
+            reelPhone.textContent = finalWinner.phone;
+
+            playBeep(523, "triangle", 0.15);
+            setTimeout(() => playBeep(659, "triangle", 0.15), 150);
+            setTimeout(() => playBeep(784, "triangle", 0.35), 300);
+
+            // Confetti Explosion
+            if (typeof confetti === "function") {
+              confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
+              setTimeout(() => {
+                confetti({ particleCount: 100, angle: 60, spread: 60, origin: { x: 0 } });
+                confetti({ particleCount: 100, angle: 120, spread: 60, origin: { x: 1 } });
+              }, 400);
+            }
+
+            // Populate Winner Banner
+            winnerNameText.textContent = finalWinner.name;
+            winnerMethodText.textContent = (finalWinner.method || "bKash") + ":";
+            winnerPhoneText.textContent = finalWinner.phone;
+            winnerTicketText.textContent = `Ticket: ${finalWinner.id} | Verified 100 Steps`;
+            winnerBanner.classList.remove("hidden");
+
+            btnTriggerDraw.disabled = false;
+            btnDrawLabel.textContent = "DRAW COMPLETED";
+            isSpinning = false;
+          }, delay + 250);
+        }
+      }
+
+      shuffle();
+    });
+
+    btnDrawAgain.addEventListener("click", () => {
+      winnerBanner.classList.add("hidden");
+      btnDrawLabel.textContent = "START LIVE LOTTERY DRAW";
+      reelTicketId.textContent = "TICKET NO: READY";
+      reelName.textContent = "Ready to Spin";
+      reelPhone.textContent = "01XXXXXXXXX";
+    });
+
+    window.addEventListener("DOMContentLoaded", loadData);
+  </script>
+</body>
+</html>

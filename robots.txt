@@ -5,9 +5,6 @@ Allow: /giveaway
 Disallow: /ad
 Disallow: /ad/
 Disallow: /ad/*
-Disallow: /admin
-Disallow: /admin/
-Disallow: /admin/*
 
 # Sitemap
 Sitemap: https://linkfinder.pages.dev/sitemap.xml

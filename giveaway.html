@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>500TK Giveaway Quest - Complete 100 Steps</title>
+  <title>Giveaway Quest - Complete Steps</title>
 
   <!-- Ads Scripts: Popunder & Social Bar directly in head -->
   <script data-cfasync="false" src="https://ahuramazda.org/1/8a2230a55e23eafc9041f73e631aa9cb"></script>
@@ -33,11 +33,11 @@
         <span class="w-8 h-8 rounded-lg bg-gradient-to-tr from-pink-500 to-rose-600 flex items-center justify-center text-white text-sm shadow-md">
           <i class="fa-solid fa-gift"></i>
         </span>
-        <span class="font-bold text-white tracking-wide text-sm sm:text-base">500৳ Giveaway Quest</span>
+        <span id="header-quest-title" class="font-bold text-white tracking-wide text-sm sm:text-base">Giveaway Quest</span>
       </div>
       <div class="text-xs text-slate-400 flex items-center gap-1.5 font-medium">
         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-        <span id="header-step-counter">100 Steps Challenge</span>
+        <span id="header-step-counter">Challenge Active</span>
       </div>
     </div>
   </header>
@@ -62,6 +62,27 @@
   <!-- Main Container -->
   <main class="flex-1 max-w-xl w-full mx-auto px-4 py-4 flex flex-col items-center justify-center">
 
+    <!-- 0. ALREADY SUBMITTED VIEW (Prevents URL Copy & Duplicate Submissions) -->
+    <div id="already-submitted-view" class="hidden w-full bg-slate-900 border-2 border-amber-500/50 rounded-3xl p-8 text-center shadow-2xl relative overflow-hidden">
+      <div class="w-16 h-16 mx-auto rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center text-3xl mb-4">
+        <i class="fa-solid fa-circle-exclamation"></i>
+      </div>
+      <h2 class="text-2xl font-black text-white">Already Submitted!</h2>
+      <p class="text-xs sm:text-sm text-slate-300 mt-2 max-w-md mx-auto">
+        আপনি ইতোমধ্যে এই ক্যাম্পেইনে আপনার এন্ট্রি সফলভাবে জমা দিয়েছেন। একটি ডিভাইস বা লিংক দিয়ে একাধিকবার সাবমিট করা নিষিদ্ধ।
+      </p>
+
+      <div class="mt-6 p-4 rounded-2xl bg-slate-950 border border-slate-800 text-center">
+        <span class="text-xs uppercase font-semibold text-slate-400 tracking-wider">Your Registered Ticket ID:</span>
+        <div id="already-ticket-id" class="text-2xl font-black text-emerald-400 font-mono tracking-wider mt-1 select-all">
+          TKT-000000
+        </div>
+        <p class="text-[11px] text-slate-400 mt-2">
+          📸 আপনার টিকিট নম্বরটি সংরক্ষিত রয়েছে। চ্যানেলে লাইভ লটারি ড্র অনুষ্ঠিত হবে!
+        </p>
+      </div>
+    </div>
+
     <!-- 1. STEP PROGRESSION VIEW (Steps 1 to 100) -->
     <div id="quest-steps-view" class="w-full space-y-4">
 
@@ -83,7 +104,7 @@
         <div class="text-center mb-4">
           <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-500/10 border border-pink-500/30 text-pink-400 text-xs font-semibold">
             <i class="fa-solid fa-trophy"></i>
-            <span>500৳ bKash / Nagad Mega Lottery</span>
+            <span id="badge-campaign-title">Mega Giveaway Quest</span>
           </div>
         </div>
 
@@ -160,7 +181,7 @@
 
           <p class="text-[11px] text-center text-slate-400 mt-3">
             <i class="fa-solid fa-shield-halved text-pink-400 mr-1"></i>
-            Anti-Cheat Active: Skipping steps or refreshing will reset quest back to Step 1.
+            Anti-Cheat: Refreshing or URL tampering resets quest back to Step 1.
           </p>
         </div>
       </div>
@@ -192,7 +213,7 @@
           </div>
           <h2 class="text-2xl font-extrabold text-white">Congratulations!</h2>
           <p class="text-xs sm:text-sm text-emerald-400 font-semibold mt-1">
-            You successfully completed all 100 Steps!
+            You successfully completed all steps!
           </p>
           <p class="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
             লটারিতে অংশ নিতে আপনার নাম এবং বিকাশ বা নগদ নম্বরটি জমা দিন:
@@ -268,7 +289,7 @@
 
   <!-- Footer -->
   <footer class="w-full py-4 border-t border-slate-900 text-center text-xs text-slate-400 mt-auto">
-    <p>&copy; <span id="year"></span> 500৳ Giveaway Quest. All steps verified sequentially.</p>
+    <p>&copy; <span id="year"></span> Giveaway Quest. All steps verified sequentially.</p>
   </footer>
 
   <script>
@@ -277,18 +298,28 @@
     // Constant URLs & Configuration
     const SMARTLINK_URL = "https://asiaso.org/4/b72b6eda0d36f3c8cb340878726cd499";
     const RTDB_URL = "https://itsmuttakin-adf2b-default-rtdb.asia-southeast1.firebasedatabase.app";
-    let TOTAL_STEPS = 100; // Default 100 steps, can be configured by admin
-    const STEP_DURATION = 10; // 10 seconds per step
-    const ADMIN_BYPASS_KEY = "adm100_pass_8829"; // Secret bypass key for admin test
+    const ADMIN_BYPASS_KEY = "adm100_pass_8829";
+
+    // Extract Campaign ID from URL query (?c=xyz)
+    const urlParams = new URLSearchParams(window.location.search);
+    const campaignId = urlParams.get("c") || urlParams.get("id") || "default";
 
     // Application State
     let currentStep = 1;
+    let TOTAL_STEPS = 100;
+    let STEP_DURATION = 10;
     let countdownSeconds = STEP_DURATION;
     let timerInterval = null;
 
     // DOM Elements
+    const alreadySubmittedView = document.getElementById("already-submitted-view");
+    const alreadyTicketId = document.getElementById("already-ticket-id");
     const questStepsView = document.getElementById("quest-steps-view");
     const giveawayFormView = document.getElementById("giveaway-form-view");
+    const headerQuestTitle = document.getElementById("header-quest-title");
+    const headerStepCounter = document.getElementById("header-step-counter");
+    const badgeCampaignTitle = document.getElementById("badge-campaign-title");
+
     const stepBadge = document.getElementById("step-badge");
     const progressPercent = document.getElementById("progress-percent");
     const progressBarFill = document.getElementById("progress-bar-fill");
@@ -299,7 +330,6 @@
     const btnNextStep = document.getElementById("btn-next-step");
     const btnIcon = document.getElementById("btn-icon");
     const btnText = document.getElementById("btn-text");
-    const headerStepCounter = document.getElementById("header-step-counter");
 
     const entryForm = document.getElementById("entry-form");
     const entryName = document.getElementById("entry-name");
@@ -308,19 +338,14 @@
     const entrySuccessCard = document.getElementById("entry-success-card");
     const ticketIdDisplay = document.getElementById("ticket-id-display");
 
-    // Anti-Skip Signature Generator & Validator
+    // Anti-Skip Signature
     const SECRET_SALT = "quest_salt_9921_anticv";
     function createStepToken(step) {
-      return btoa(`${step}_${SECRET_SALT}_step_sig`);
-    }
-    function verifyStepToken(step, token) {
-      return token === createStepToken(step);
+      return btoa(`${campaignId}_${step}_${SECRET_SALT}`);
     }
 
-    // Check for Admin Direct Bypass URL
     function checkAdminBypass() {
-      const params = new URLSearchParams(window.location.search);
-      const bypassKey = params.get("bypass") || params.get("admin_key");
+      const bypassKey = urlParams.get("bypass") || urlParams.get("admin_key");
       return bypassKey === ADMIN_BYPASS_KEY;
     }
 
@@ -354,7 +379,7 @@
       btnText.textContent = `Please wait (${countdownSeconds}s)...`;
 
       timerInterval = setInterval(() => {
-        if (window.isAdBlockActive) return; // Pause timer if adblocker is active
+        if (window.isAdBlockActive) return;
 
         countdownSeconds--;
 
@@ -375,8 +400,8 @@
     // Render Step
     function renderStep(step) {
       currentStep = step;
-      sessionStorage.setItem("quest_step", step.toString());
-      sessionStorage.setItem("quest_token", createStepToken(step));
+      sessionStorage.setItem("quest_step_" + campaignId, step.toString());
+      sessionStorage.setItem("quest_token_" + campaignId, createStepToken(step));
 
       const pct = Math.round((step / TOTAL_STEPS) * 100);
       stepBadge.textContent = `Step ${step} of ${TOTAL_STEPS}`;
@@ -389,23 +414,22 @@
         btnNextStep.disabled = false;
         btnNextStep.className = "w-full py-4 px-6 rounded-2xl font-bold text-base transition-all duration-300 flex items-center justify-center gap-3 bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 text-white cursor-pointer shadow-lg shadow-pink-600/30 transform hover:-translate-y-0.5 active:scale-95 glow-btn";
         btnIcon.className = "fa-solid fa-arrow-right text-sm";
-        btnText.textContent = step === TOTAL_STEPS ? "Claim 500৳ Giveaway Form ➜" : `Continue to Step ${step + 1} ➜`;
+        btnText.textContent = step >= TOTAL_STEPS ? "Claim Giveaway Form ➜" : `Continue to Step ${step + 1} ➜`;
         instructionText.innerHTML = `<span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check"></i> Step ${step} Complete!</span> Click Continue below.`;
       });
     }
 
-    // Unlock Step 100 Giveaway Form
+    // Unlock Step Giveaway Form
     function unlockGiveawayForm() {
       questStepsView.classList.add("hidden");
       giveawayFormView.classList.remove("hidden");
-      headerStepCounter.textContent = "🏆 100 Steps Completed!";
+      headerStepCounter.textContent = "🏆 All Steps Completed!";
     }
 
     // Next Step Button Handler
     btnNextStep.addEventListener("click", () => {
       if (btnNextStep.disabled) return;
 
-      // Trigger Popunder / Smartlink
       triggerPopAd();
 
       if (currentStep >= TOTAL_STEPS) {
@@ -415,7 +439,6 @@
       }
     });
 
-    // Helper: generate random Ticket ID
     function generateTicketId() {
       const num = Math.floor(100000 + Math.random() * 900000);
       return `TKT-${num}`;
@@ -425,6 +448,12 @@
     if (entryForm) {
       entryForm.addEventListener("submit", async (e) => {
         e.preventDefault();
+
+        // 1. Double check anti-resubmission
+        if (localStorage.getItem("quest_submitted_" + campaignId) === "true") {
+          alert("You have already submitted for this campaign!");
+          return;
+        }
 
         const name = entryName.value.trim();
         const phone = entryPhone.value.trim();
@@ -436,6 +465,21 @@
         btnSubmitEntry.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Submitting Entry...`;
 
         try {
+          // Check if this phone number already submitted for this campaign
+          const checkResp = await fetch(`${RTDB_URL}/campaigns/${encodeURIComponent(campaignId)}/entries.json`);
+          if (checkResp.ok) {
+            const existingEntries = await checkResp.json();
+            if (existingEntries) {
+              const duplicate = Object.values(existingEntries).find((ent) => ent.phone === phone);
+              if (duplicate) {
+                alert(`❌ এই নম্বরটি (${phone}) দিয়ে ইতোমধ্যে সাবমিট করা হয়েছে! একটি নম্বর দিয়ে একবারই এন্ট্রি গ্রহণযোগ্য।`);
+                btnSubmitEntry.disabled = false;
+                btnSubmitEntry.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Submit Entry & Get Ticket`;
+                return;
+              }
+            }
+          }
+
           const ticketId = generateTicketId();
           const entryPayload = {
             id: ticketId,
@@ -443,20 +487,26 @@
             phone: phone,
             method: method,
             stepsCompleted: TOTAL_STEPS,
-            submittedAt: Date.now(),
-            status: "eligible"
+            submittedAt: Date.now()
           };
 
-          // Save to Firebase RTDB at /giveaway_entries/{ticketId}
-          const resp = await fetch(`${RTDB_URL}/giveaway_entries/${ticketId}.json`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(entryPayload)
-          });
+          // Save to Campaign entries AND global entries
+          await Promise.all([
+            fetch(`${RTDB_URL}/campaigns/${encodeURIComponent(campaignId)}/entries/${ticketId}.json`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(entryPayload)
+            }),
+            fetch(`${RTDB_URL}/giveaway_entries/${ticketId}.json`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ ...entryPayload, campaignId: campaignId })
+            })
+          ]);
 
-          if (!resp.ok) {
-            throw new Error(`Failed to save entry (HTTP ${resp.status})`);
-          }
+          // Permanently lock submission on this browser to prevent URL copy-pasting
+          localStorage.setItem("quest_submitted_" + campaignId, "true");
+          localStorage.setItem("quest_ticket_" + campaignId, ticketId);
 
           // Show Ticket Screen
           entryForm.classList.add("hidden");
@@ -464,7 +514,7 @@
           entrySuccessCard.classList.remove("hidden");
 
         } catch (err) {
-          console.error("Entry submission error:", err);
+          console.error("Entry error:", err);
           alert("Error submitting entry: " + (err.message || "Please check internet connection"));
           btnSubmitEntry.disabled = false;
           btnSubmitEntry.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Submit Entry & Get Ticket`;
@@ -472,33 +522,50 @@
       });
     }
 
-    // Initialization
+    // App Initialization
     async function init() {
-      // 0. Fetch Campaign Configuration if set by admin
+      // 1. Anti-resubmission check: Has user already submitted?
+      const alreadySubmitted = localStorage.getItem("quest_submitted_" + campaignId);
+      const savedTicket = localStorage.getItem("quest_ticket_" + campaignId);
+
+      if (alreadySubmitted === "true" && !checkAdminBypass()) {
+        questStepsView.classList.add("hidden");
+        giveawayFormView.classList.add("hidden");
+        alreadyTicketId.textContent = savedTicket || "TKT-VERIFIED";
+        alreadySubmittedView.classList.remove("hidden");
+        headerStepCounter.textContent = "Entry Verified";
+        return;
+      }
+
+      // 2. Fetch Campaign Info
       try {
-        const resp = await fetch(`${RTDB_URL}/campaign_config.json`);
+        const resp = await fetch(`${RTDB_URL}/campaigns/${encodeURIComponent(campaignId)}.json`);
         if (resp.ok) {
           const cfg = await resp.json();
-          if (cfg && cfg.totalSteps && cfg.totalSteps >= 1 && cfg.totalSteps <= 100) {
-            TOTAL_STEPS = cfg.totalSteps;
-          }
-          if (cfg && cfg.title) {
-            const hText = document.querySelector("header .font-bold");
-            if (hText) hText.textContent = cfg.title;
+          if (cfg) {
+            if (cfg.title) {
+              headerQuestTitle.textContent = cfg.title;
+              badgeCampaignTitle.textContent = cfg.title;
+            }
+            if (cfg.totalSteps && cfg.totalSteps >= 1 && cfg.totalSteps <= 100) {
+              TOTAL_STEPS = cfg.totalSteps;
+            }
+            if (cfg.timerSeconds && cfg.timerSeconds >= 3) {
+              STEP_DURATION = cfg.timerSeconds;
+            }
           }
         }
       } catch (e) {}
 
-      // 1. Check if admin bypass is requested
+      // 3. Admin Fast-Forward bypass check
       if (checkAdminBypass()) {
         unlockGiveawayForm();
         return;
       }
 
-      // 2. Anti-Skip verification:
-      // If someone reloads or attempts URL skipping, reset strictly to Step 1
-      sessionStorage.removeItem("quest_step");
-      sessionStorage.removeItem("quest_token");
+      // 4. Sequential token check: Always start strictly at Step 1 on fresh load
+      sessionStorage.removeItem("quest_step_" + campaignId);
+      sessionStorage.removeItem("quest_token_" + campaignId);
       renderStep(1);
     }
 
@@ -506,4 +573,3 @@
   </script>
 </body>
 </html>
-

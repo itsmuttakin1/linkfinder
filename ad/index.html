@@ -31,7 +31,7 @@
     <p class="mt-4 text-slate-400 font-medium">Checking authentication...</p>
   </div>
 
-  <!-- 1. LOGIN SECTION (Visible when not authenticated) -->
+  <!-- 1. LOGIN SECTION -->
   <div id="login-section" class="hidden min-h-screen flex items-center justify-center p-4">
     <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl relative overflow-hidden">
       <div class="absolute -top-16 -right-16 w-36 h-36 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none"></div>
@@ -58,7 +58,7 @@
               <i class="fa-solid fa-envelope"></i>
             </span>
             <input type="email" id="login-email" required placeholder="admin@domain.com"
-              class="w-full pl-10 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition text-sm">
+              class="w-full pl-10 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500 text-sm transition">
           </div>
         </div>
 
@@ -69,7 +69,7 @@
               <i class="fa-solid fa-lock"></i>
             </span>
             <input type="password" id="login-password" required placeholder="••••••••"
-              class="w-full pl-10 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition text-sm">
+              class="w-full pl-10 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500 text-sm transition">
           </div>
         </div>
 
@@ -82,7 +82,7 @@
     </div>
   </div>
 
-  <!-- 2. ADMIN DASHBOARD (Visible when logged in) -->
+  <!-- 2. ADMIN DASHBOARD -->
   <div id="dashboard-section" class="hidden min-h-screen flex flex-col">
     <!-- Navbar -->
     <header class="bg-slate-900/80 backdrop-blur border-b border-slate-800 sticky top-0 z-40">
@@ -93,16 +93,15 @@
           </div>
           <div>
             <h1 class="font-bold text-lg text-white leading-tight">Admin Hub (/ad)</h1>
-            <p class="text-xs text-indigo-400">Control & Lottery Engine</p>
+            <p class="text-xs text-indigo-400">Campaigns & Lottery Engine</p>
           </div>
         </div>
 
         <!-- Navigation Tabs -->
         <div class="flex items-center bg-slate-950 border border-slate-800 rounded-xl p-1 gap-1">
-          <button id="tab-btn-giveaway" class="px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 bg-pink-600 text-white">
+          <button id="tab-btn-campaigns" class="px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 bg-pink-600 text-white">
             <i class="fa-solid fa-gift"></i>
-            <span>Campaign & Lottery Hub</span>
-            <span id="giveaway-tab-badge" class="px-1.5 py-0.2 rounded-full bg-slate-900 border border-pink-400 text-[10px] text-pink-300 hidden">0</span>
+            <span>Campaigns & Lottery Hub</span>
           </button>
           <button id="tab-btn-links" class="px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 text-slate-400 hover:text-white">
             <i class="fa-solid fa-link"></i>
@@ -126,302 +125,290 @@
     <!-- Main Container -->
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
 
-      <!-- ================= SECTION 1: CAMPAIGN, GIVEAWAY & LOTTERY HUB ================= -->
-      <div id="section-giveaway" class="space-y-8">
+      <!-- ================= SECTION 1: CAMPAIGNS & LOTTERY ================= -->
+      <div id="section-campaigns" class="space-y-8">
 
-        <!-- Top Banner & Quick Fast Forward -->
-        <div class="bg-gradient-to-r from-pink-900/40 via-purple-900/30 to-slate-900 border border-pink-500/30 rounded-2xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
-          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-            <div>
-              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-500/10 border border-pink-500/30 text-pink-400 text-xs font-bold mb-2">
-                <i class="fa-solid fa-trophy"></i>
-                <span>Giveaway Quest & Campaign Manager</span>
-              </div>
-              <h2 class="text-2xl font-extrabold text-white">Campaign Quest & Special Winner Control</h2>
-              <p class="text-sm text-slate-300 mt-1 max-w-xl">
-                Configure your quest (1 to 100 steps), pre-set designated lottery winners secretly, and copy promotional post captions instantly.
-              </p>
-            </div>
-
-            <!-- Fast-Forward & Links -->
-            <div class="flex flex-wrap items-center gap-3">
-              <button id="btn-bypass-step100"
-                class="px-5 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold rounded-xl shadow-lg shadow-emerald-600/30 transition transform active:scale-95 flex items-center gap-2 text-sm">
-                <i class="fa-solid fa-forward-fast"></i>
-                <span>Direct Test Step 100</span>
-              </button>
-
-              <button id="btn-copy-giveaway-url"
-                class="px-5 py-3 bg-pink-600 hover:bg-pink-500 text-white font-bold rounded-xl shadow-lg shadow-pink-600/30 transition transform active:scale-95 flex items-center gap-2 text-sm">
-                <i class="fa-regular fa-copy"></i>
-                <span>Copy Quest Link</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- 1. CAMPAIGN BUILDER (Make 1 to 100 Steps) -->
-        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+        <!-- CREATE NEW CAMPAIGN CARD -->
+        <div class="bg-gradient-to-r from-pink-900/40 via-purple-900/30 to-slate-900 border border-pink-500/30 rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
           <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-3">
             <div>
-              <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                <i class="fa-solid fa-sliders text-pink-400"></i>
-                <span>Campaign Settings & Steps Builder (1 to 100 Steps)</span>
-              </h3>
-              <p class="text-xs text-slate-400 mt-0.5">Customize your quest title, steps count, and timer</p>
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-500/10 border border-pink-500/30 text-pink-400 text-xs font-bold mb-1">
+                <i class="fa-solid fa-plus-circle"></i>
+                <span>Create New Campaign</span>
+              </div>
+              <h2 class="text-2xl font-black text-white">Campaign & Quest Creator (1 to 100 Steps)</h2>
+              <p class="text-xs text-slate-400 mt-1">
+                নতুন ক্যাম্পেইন তৈরি করুন। ক্যাম্পেইন তৈরি হলে নিচে কার্ডে ক্লিক করে পার্টিসিপেন্ট তালিকা ও লটারি ড্র দেখতে পারবেন।
+              </p>
             </div>
-            <span id="campaign-status-badge" class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-semibold">
-              Live Active
-            </span>
           </div>
 
-          <form id="campaign-config-form" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+          <form id="create-campaign-form" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
             <div class="md:col-span-2">
-              <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Campaign Quest Title</label>
-              <input type="text" id="cfg-title" required value="500৳ বিকাশ মেগা গিভওয়ে কোয়েস্ট"
+              <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Campaign Title *</label>
+              <input type="text" id="camp-title" required placeholder="e.g. 500৳ বিকাশ মেগা গিভওয়ে কোয়েস্ট"
                 class="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 text-sm focus:outline-none focus:border-pink-500">
             </div>
 
             <div>
               <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
-                Total Steps (1 - 100): <span id="cfg-steps-val" class="text-pink-400 font-bold">100</span>
+                Total Steps (1-100): <span id="camp-steps-label" class="text-pink-400 font-bold">100</span>
               </label>
-              <input type="range" id="cfg-steps-slider" min="1" max="100" value="100"
+              <input type="range" id="camp-steps" min="1" max="100" value="100"
                 class="w-full accent-pink-500 cursor-pointer h-2 bg-slate-950 rounded-lg">
             </div>
 
             <div>
-              <button type="submit" id="btn-save-campaign"
+              <button type="submit" id="btn-submit-campaign"
                 class="w-full py-2.5 px-4 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-bold rounded-xl text-sm transition shadow-lg shadow-pink-600/30 flex items-center justify-center gap-2">
-                <i class="fa-solid fa-floppy-disk"></i>
-                <span>Save Campaign</span>
+                <i class="fa-solid fa-bolt"></i>
+                <span>Create Campaign</span>
               </button>
             </div>
           </form>
         </div>
 
-        <!-- 2. PROMOTIONAL POST CAPTION GENERATOR -->
-        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+        <!-- ALL CAMPAIGNS GRID -->
+        <div>
           <div class="flex items-center justify-between mb-4">
-            <div>
-              <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                <i class="fa-solid fa-bullhorn text-pink-400"></i>
-                <span>Telegram / Social Channel Post Caption</span>
-              </h3>
-              <p class="text-xs text-slate-400 mt-0.5">Ready-to-post Bengali caption for Telegram, WhatsApp, or Facebook</p>
-            </div>
-
-            <button id="btn-copy-caption-instant"
-              class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs sm:text-sm transition flex items-center gap-2 shadow-lg shadow-emerald-600/20 active:scale-95">
-              <i class="fa-regular fa-copy"></i>
-              <span id="caption-copy-status">Copy Post Caption</span>
-            </button>
+            <h3 class="text-xl font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-layer-group text-pink-400"></i>
+              <span>All Active Campaigns</span>
+            </h3>
+            <span class="text-xs text-slate-400">Click a campaign card to open its Participants & Lottery</span>
           </div>
 
-          <textarea id="caption-preview-box" rows="7" readonly
-            class="w-full p-4 bg-slate-950 border border-slate-800 rounded-2xl text-xs sm:text-sm text-slate-200 font-sans focus:outline-none select-all leading-relaxed"></textarea>
+          <div id="campaigns-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div class="p-8 text-center text-slate-500 col-span-full">Loading campaigns...</div>
+          </div>
         </div>
 
-        <!-- 3. 👑 ADMIN SPECIAL WINNER CONTROL SYSTEM (গোপন উইনার কন্ট্রোল) -->
-        <div class="bg-gradient-to-br from-slate-900 via-slate-950 to-pink-950/40 border-2 border-pink-500/60 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
-          <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-3">
+        <!-- ACTIVE SELECTED CAMPAIGN DETAILS & LOTTERY ARENA -->
+        <div id="active-campaign-wrapper" class="hidden space-y-8 pt-4 border-t border-slate-800/80">
+
+          <!-- Active Campaign Bar -->
+          <div class="bg-slate-900 border-2 border-indigo-500/50 rounded-3xl p-6 sm:p-8 shadow-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-6">
             <div>
-              <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-pink-500/20 text-pink-400 border border-pink-500/30 text-xs font-black uppercase tracking-wider mb-1">
-                <i class="fa-solid fa-crown"></i>
-                <span>Admin Special Win System</span>
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 text-xs font-bold mb-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>Selected Campaign</span>
               </div>
-              <h3 class="text-xl font-extrabold text-white">গোপন উইনার কন্ট্রোল (Secret Winner Selector)</h3>
-              <p class="text-xs text-slate-400">
-                লটারিতে কাকে বিজয়ী করতে চান তা আগে থেকেই ফিক্স করে রাখুন। লাইভ ড্রতে এটি দেখতে ১০০% র্যান্ডম লাগবে!
-              </p>
+              <h2 id="active-camp-title" class="text-2xl sm:text-3xl font-black text-white">Campaign Title</h2>
+              <p id="active-camp-info" class="text-xs text-slate-400 mt-1 font-mono">100 Steps &bull; ID: default</p>
             </div>
 
-            <!-- Current Winner Target Badge -->
-            <div id="active-winner-status-box" class="px-4 py-2 rounded-xl bg-slate-950 border border-pink-500/40 text-right">
-              <span class="text-[10px] uppercase font-bold text-slate-400 block">Current Target Status</span>
-              <span id="active-winner-label" class="text-xs font-bold text-amber-400 flex items-center gap-1.5 justify-end">
-                <i class="fa-solid fa-dice"></i>
-                <span>Pure Random Mode (র্যান্ডম সিলেকশন)</span>
-              </span>
+            <div class="flex flex-wrap items-center gap-3">
+              <!-- Open Screen Record Studio -->
+              <button id="btn-open-record-studio"
+                class="px-5 py-3 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-500 hover:to-pink-500 text-white font-bold rounded-xl shadow-lg shadow-red-600/30 transition transform active:scale-95 flex items-center gap-2 text-sm">
+                <i class="fa-solid fa-video"></i>
+                <span>🎥 Open Video Record Screen</span>
+              </button>
+
+              <!-- Fast Forward Test -->
+              <button id="btn-test-step100"
+                class="px-5 py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold rounded-xl shadow-lg shadow-emerald-600/30 transition transform active:scale-95 flex items-center gap-2 text-sm">
+                <i class="fa-solid fa-forward-fast"></i>
+                <span>Direct Test Step 100</span>
+              </button>
+
+              <!-- Copy Link -->
+              <button id="btn-copy-active-link"
+                class="px-5 py-3 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl border border-slate-700 transition flex items-center gap-2 text-sm">
+                <i class="fa-regular fa-copy"></i>
+                <span>Copy Quest Link</span>
+              </button>
             </div>
           </div>
 
-          <!-- Secret Winner Set Forms -->
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4">
-            
-            <!-- Method A: Pick From Submitted Participants -->
-            <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800">
-              <h4 class="text-xs uppercase font-bold text-slate-300 mb-2 flex items-center gap-2">
-                <i class="fa-solid fa-users text-pink-400"></i>
-                <span>Option A: রেজিস্টার্ড পার্টিসিপেন্ট থেকে পছন্দ করুন</span>
-              </h4>
-              <div class="space-y-3">
-                <select id="select-registered-winner"
-                  class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs sm:text-sm text-slate-200 focus:outline-none focus:border-pink-500">
-                  <option value="">-- পার্টিসিপেন্ট তালিকা লোড হচ্ছে --</option>
-                </select>
-                <button type="button" id="btn-set-registered-winner"
-                  class="w-full py-2.5 px-4 bg-pink-600 hover:bg-pink-500 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2">
-                  <i class="fa-solid fa-lock"></i>
-                  <span>এই ইউজারকে উইনার হিসেবে লক করুন</span>
+          <!-- Telegram Post Caption Generator -->
+          <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                  <i class="fa-solid fa-bullhorn text-pink-400"></i>
+                  <span>Telegram / Channel Post Caption</span>
+                </h3>
+                <p class="text-xs text-slate-400 mt-0.5">এই ক্যাম্পেইনের রেডিমেড বাংলা পোস্ট কপি করুন</p>
+              </div>
+
+              <button id="btn-copy-active-caption"
+                class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs sm:text-sm transition flex items-center gap-2 shadow-lg shadow-emerald-600/20 active:scale-95">
+                <i class="fa-regular fa-copy"></i>
+                <span id="active-caption-status">Copy Post Caption</span>
+              </button>
+            </div>
+
+            <textarea id="active-caption-box" rows="7" readonly
+              class="w-full p-4 bg-slate-950 border border-slate-800 rounded-2xl text-xs sm:text-sm text-slate-200 font-sans focus:outline-none select-all leading-relaxed"></textarea>
+          </div>
+
+          <!-- 👑 SECRET ADMIN WINNER CONTROL -->
+          <div class="bg-gradient-to-br from-slate-900 via-slate-950 to-pink-950/40 border-2 border-pink-500/60 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+            <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-3">
+              <div>
+                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-pink-500/20 text-pink-400 border border-pink-500/30 text-xs font-black uppercase tracking-wider mb-1">
+                  <i class="fa-solid fa-crown"></i>
+                  <span>Secret Winner Control</span>
+                </div>
+                <h3 class="text-xl font-extrabold text-white">গোপন উইনার কন্ট্রোল (Pre-set Target Winner)</h3>
+                <p class="text-xs text-slate-400">
+                  কাকে বিজয়ী করবেন আগে থেকে ফিক্স করুন। লাইভ ভিডিওতে এটি দেখতে ১০০% র্যান্ডম লাগবে!
+                </p>
+              </div>
+
+              <div id="secret-winner-status-badge" class="px-4 py-2 rounded-xl bg-slate-950 border border-pink-500/40 text-right">
+                <span class="text-[10px] uppercase font-bold text-slate-400 block">Current Target Status</span>
+                <span id="secret-status-text" class="text-xs font-bold text-amber-400 flex items-center gap-1.5 justify-end">
+                  <i class="fa-solid fa-dice"></i>
+                  <span>Pure Random Mode</span>
+                </span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4">
+              <!-- Method A -->
+              <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800">
+                <h4 class="text-xs uppercase font-bold text-slate-300 mb-2 flex items-center gap-2">
+                  <i class="fa-solid fa-users text-pink-400"></i>
+                  <span>Option A: এই ক্যাম্পেইনের ইউজার থেকে পছন্দ করুন</span>
+                </h4>
+                <div class="space-y-3">
+                  <select id="select-active-participant"
+                    class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-800 rounded-xl text-xs sm:text-sm text-slate-200 focus:outline-none focus:border-pink-500">
+                    <option value="">-- কোনো ইউজার পাওয়া যায়নি --</option>
+                  </select>
+                  <button type="button" id="btn-lock-participant"
+                    class="w-full py-2.5 px-4 bg-pink-600 hover:bg-pink-500 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-lock"></i>
+                    <span>এই ইউজারকে উইনার হিসেবে লক করুন</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Method B -->
+              <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800">
+                <h4 class="text-xs uppercase font-bold text-slate-300 mb-2 flex items-center gap-2">
+                  <i class="fa-solid fa-user-pen text-indigo-400"></i>
+                  <span>Option B: সরাসরি কাস্টম নাম ও নম্বর দিন</span>
+                </h4>
+                <div class="space-y-2">
+                  <div class="grid grid-cols-2 gap-2">
+                    <input type="text" id="cust-win-name" placeholder="নাম (e.g. Arif)"
+                      class="px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-pink-500">
+                    <input type="text" id="cust-win-phone" placeholder="নম্বর (e.g. 017XXXXXXXX)"
+                      class="px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-pink-500">
+                  </div>
+                  <div class="flex gap-2">
+                    <select id="cust-win-method" class="px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none">
+                      <option value="bKash">bKash (বিকাশ)</option>
+                      <option value="Nagad">Nagad (নগদ)</option>
+                    </select>
+                    <button type="button" id="btn-lock-custom"
+                      class="flex-1 py-2 px-4 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2">
+                      <i class="fa-solid fa-user-check"></i>
+                      <span>কাস্টম উইনার লক করুন</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-4 flex justify-end">
+              <button type="button" id="btn-reset-random-mode"
+                class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold rounded-xl border border-slate-700 transition flex items-center gap-2">
+                <i class="fa-solid fa-arrows-rotate"></i>
+                <span>রিসেট করে Pure Random করুন</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- LIVE LOTTERY MACHINE IN ADMIN -->
+          <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden text-center">
+            <h3 class="text-2xl font-black text-white flex items-center justify-center gap-2 mb-2">
+              <i class="fa-solid fa-dice text-pink-400"></i>
+              <span>Live Lottery Machine</span>
+            </h3>
+            <p class="text-xs text-slate-400 mb-6">
+              এখানে ড্র করুন অথবা উপরে "🎥 Open Video Record Screen" চাপুন ক্লিন ফুলস্ক্রিন রেকর্ডের জন্য।
+            </p>
+
+            <div class="max-w-xl mx-auto p-8 rounded-3xl bg-slate-950 border-2 border-pink-500/40 text-center shadow-2xl relative overflow-hidden">
+              <div id="reel-box" class="py-4">
+                <span id="admin-reel-ticket" class="inline-block px-3 py-1 rounded-full bg-slate-800 text-pink-400 font-mono text-xs font-bold mb-2">
+                  TICKET NO: READY
+                </span>
+                <h2 id="admin-reel-name" class="text-3xl sm:text-4xl font-black text-white tracking-tight min-h-[48px] flex items-center justify-center">
+                  Ready to Spin
+                </h2>
+                <p id="admin-reel-phone" class="text-lg text-emerald-400 font-mono font-bold mt-2 min-h-[28px]">
+                  01XXXXXXXXX
+                </p>
+              </div>
+
+              <div class="mt-6 flex justify-center">
+                <button id="btn-admin-lottery-spin"
+                  class="px-8 py-4 bg-gradient-to-r from-pink-600 via-rose-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-extrabold rounded-2xl shadow-xl shadow-pink-600/40 transition transform active:scale-95 flex items-center gap-3 text-base glow-btn cursor-pointer">
+                  <i class="fa-solid fa-play"></i>
+                  <span id="admin-spin-btn-text">Start Live Lottery Draw</span>
                 </button>
               </div>
             </div>
 
-            <!-- Method B: Direct Custom Winner Input (ANY person) -->
-            <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800">
-              <h4 class="text-xs uppercase font-bold text-slate-300 mb-2 flex items-center gap-2">
-                <i class="fa-solid fa-user-pen text-indigo-400"></i>
-                <span>Option B: সরাসরি কাস্টম নাম ও নম্বর দিন (Custom Winner)</span>
-              </h4>
-              <div class="space-y-2">
-                <div class="grid grid-cols-2 gap-2">
-                  <input type="text" id="custom-winner-name" placeholder="নাম (e.g. Arif Hossain)"
-                    class="px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-pink-500">
-                  <input type="text" id="custom-winner-phone" placeholder="নম্বর (e.g. 017XXXXXXXX)"
-                    class="px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-pink-500">
+            <!-- Winner Box -->
+            <div id="admin-winner-box" class="hidden max-w-xl mx-auto mt-6 p-6 rounded-2xl bg-gradient-to-br from-emerald-950/70 via-slate-900 to-slate-950 border-2 border-emerald-500 text-center shadow-2xl">
+              <div class="w-16 h-16 mx-auto rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center text-3xl mb-3">
+                🏆
+              </div>
+              <h4 class="text-xs uppercase font-extrabold text-emerald-400 tracking-wider">OFFICIAL LOTTERY WINNER</h4>
+              <h3 id="adm-win-name" class="text-2xl font-black text-white mt-1">Participant</h3>
+              <div class="inline-flex items-center gap-2 mt-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 font-mono text-sm">
+                <span id="adm-win-method">bKash:</span>
+                <strong id="adm-win-phone">017XXXXXXXX</strong>
+              </div>
+              <p id="adm-win-ticket" class="text-xs text-slate-400 font-mono mt-2">Ticket: TKT-000000</p>
+            </div>
+          </div>
+
+          <!-- PARTICIPANT ENTRIES FOR ACTIVE CAMPAIGN -->
+          <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+              <div>
+                <div class="flex items-center gap-2">
+                  <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-users text-pink-400"></i>
+                    <span>Completed Participants</span>
+                  </h2>
+                  <span id="active-camp-entries-count" class="px-2.5 py-0.5 rounded-full bg-pink-500/20 text-pink-400 border border-pink-500/30 text-xs font-bold">
+                    0 Entries
+                  </span>
                 </div>
-                <div class="flex gap-2">
-                  <select id="custom-winner-method" class="px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none">
-                    <option value="bKash">bKash (বিকাশ)</option>
-                    <option value="Nagad">Nagad (নগদ)</option>
-                  </select>
-                  <button type="button" id="btn-set-custom-winner"
-                    class="flex-1 py-2 px-4 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-user-check"></i>
-                    <span>কাস্টম উইনার লক করুন</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-          <!-- Reset Button -->
-          <div class="mt-4 flex justify-end">
-            <button type="button" id="btn-reset-winner-random"
-              class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold rounded-xl border border-slate-700 transition flex items-center gap-2">
-              <i class="fa-solid fa-arrows-rotate"></i>
-              <span>রিসেট করে আবার Pure Random করুন</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- 4. LIVE LOTTERY MACHINE DRAW ARENA -->
-        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
-          <div class="text-center mb-6">
-            <h3 class="text-2xl font-black text-white flex items-center justify-center gap-2">
-              <i class="fa-solid fa-dice text-pink-400"></i>
-              <span>Live Lottery Machine</span>
-            </h3>
-            <p class="text-xs text-slate-400 mt-1">
-              Screen-record or stream live draw with realistic slot machine animation.
-            </p>
-          </div>
-
-          <!-- DIGITAL SLOT REEL DISPLAY -->
-          <div class="max-w-xl mx-auto p-8 rounded-3xl bg-slate-950 border-2 border-pink-500/40 text-center shadow-2xl relative overflow-hidden">
-            <div class="absolute inset-0 bg-gradient-to-b from-pink-500/5 via-transparent to-pink-500/5 pointer-events-none"></div>
-
-            <div id="lottery-display-box" class="py-4">
-              <span id="lottery-ticket-label" class="inline-block px-3 py-1 rounded-full bg-slate-800 text-pink-400 font-mono text-xs font-bold mb-2">
-                TICKET NO: READY
-              </span>
-              <h2 id="lottery-name-display" class="text-3xl sm:text-4xl font-black text-white tracking-tight min-h-[48px] flex items-center justify-center">
-                Click Draw Below
-              </h2>
-              <p id="lottery-phone-display" class="text-lg text-emerald-400 font-mono font-bold mt-2 min-h-[28px]">
-                01XXXXXXXXX
-              </p>
-            </div>
-
-            <div class="mt-6 flex justify-center">
-              <button id="btn-start-lottery"
-                class="px-8 py-4 bg-gradient-to-r from-pink-600 via-rose-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-extrabold rounded-2xl shadow-xl shadow-pink-600/40 transition transform active:scale-95 flex items-center gap-3 text-base glow-btn cursor-pointer">
-                <i class="fa-solid fa-play"></i>
-                <span id="lottery-btn-text">Start Live Lottery Draw</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Official Winner Announcement Card -->
-          <div id="winner-result-card" class="hidden max-w-xl mx-auto mt-6 p-6 rounded-2xl bg-gradient-to-br from-emerald-950/70 via-slate-900 to-slate-950 border-2 border-emerald-500 text-center shadow-2xl">
-            <div class="w-16 h-16 mx-auto rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center text-3xl mb-3">
-              🏆
-            </div>
-            <h4 class="text-xs uppercase font-extrabold text-emerald-400 tracking-wider">OFFICIAL LOTTERY WINNER</h4>
-            <h3 id="winner-name" class="text-2xl font-black text-white mt-1">Shakib Ahmed</h3>
-            <div class="inline-flex items-center gap-2 mt-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 font-mono text-sm">
-              <span id="winner-method">bKash:</span>
-              <strong id="winner-phone">017XXXXXXXX</strong>
-            </div>
-            <p id="winner-ticket" class="text-xs text-slate-400 font-mono mt-2">Ticket: TKT-000000</p>
-
-            <div class="mt-4 flex items-center justify-center gap-3">
-              <button id="btn-copy-winner-num" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold transition flex items-center gap-1.5">
-                <i class="fa-regular fa-copy"></i>
-                <span>Copy Number</span>
-              </button>
-              <button id="btn-save-winner" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-semibold transition flex items-center gap-1.5">
-                <i class="fa-solid fa-cloud-arrow-up"></i>
-                <span>Save to Database</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- 5. PARTICIPANT DATA ENTRIES TABLE -->
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-xl">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-            <div>
-              <div class="flex items-center gap-2">
-                <h2 class="text-xl font-bold text-white flex items-center gap-2">
-                  <i class="fa-solid fa-users text-pink-400"></i>
-                  Participant Submissions
-                </h2>
-                <span id="stat-total-entries" class="px-2.5 py-0.5 rounded-full bg-pink-500/20 text-pink-400 border border-pink-500/30 text-xs font-bold">
-                  0 Entries
-                </span>
-              </div>
-              <p class="text-xs text-slate-400 mt-1">Users who successfully completed the quest steps</p>
-            </div>
-
-            <div class="flex items-center gap-3">
-              <div class="relative w-full sm:w-64">
-                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500">
-                  <i class="fa-solid fa-magnifying-glass text-xs"></i>
-                </span>
-                <input type="text" id="search-entries" placeholder="Search name or number..."
-                  class="w-full pl-9 pr-3 py-2 text-xs bg-slate-950 border border-slate-800 rounded-lg text-slate-100 placeholder-slate-600 focus:outline-none focus:border-pink-500">
+                <p class="text-xs text-slate-400 mt-1">এই ক্যাম্পেইনের সবগুলো স্টেপ সম্পন্নকারী ইউজারদের তালিকা</p>
               </div>
 
-              <button id="btn-clear-entries" title="Clear All Entries"
-                class="px-3 py-2 bg-red-950/60 hover:bg-red-800 text-red-300 rounded-lg text-xs font-semibold border border-red-800/60 transition flex items-center gap-1.5">
-                <i class="fa-regular fa-trash-can"></i>
-                <span class="hidden sm:inline">Reset</span>
-              </button>
+              <input type="text" id="search-active-entries" placeholder="Search name or phone..."
+                class="w-full sm:w-64 pl-3 py-2 text-xs bg-slate-950 border border-slate-800 rounded-lg text-slate-100 placeholder-slate-600 focus:outline-none focus:border-pink-500">
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="border-b border-slate-800 text-xs uppercase font-semibold text-slate-400">
+                    <th class="py-3 px-4">Ticket ID</th>
+                    <th class="py-3 px-4">Participant Name</th>
+                    <th class="py-3 px-4">bKash / Nagad Number</th>
+                    <th class="py-3 px-4 text-center">Method</th>
+                    <th class="py-3 px-4">Date</th>
+                    <th class="py-3 px-4 text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="active-entries-table-body" class="divide-y divide-slate-800/60 text-sm">
+                  <tr><td colspan="6" class="py-8 text-center text-slate-500">No participants yet for this campaign</td></tr>
+                </tbody>
+              </table>
             </div>
           </div>
 
-          <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
-              <thead>
-                <tr class="border-b border-slate-800 text-xs uppercase font-semibold text-slate-400">
-                  <th class="py-3 px-4">Ticket ID</th>
-                  <th class="py-3 px-4">Participant Name</th>
-                  <th class="py-3 px-4">bKash / Nagad Number</th>
-                  <th class="py-3 px-4 text-center">Method</th>
-                  <th class="py-3 px-4">Completed Date</th>
-                  <th class="py-3 px-4 text-right">Action</th>
-                </tr>
-              </thead>
-              <tbody id="entries-table-body" class="divide-y divide-slate-800/60 text-sm">
-                <tr>
-                  <td colspan="6" class="py-8 text-center text-slate-500">Loading entries...</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
         </div>
 
       </div>
@@ -547,10 +534,12 @@
     // State
     let currentUser = null;
     let allLinks = {};
-    let allEntries = {};
+    let allCampaigns = {};
+    let activeCampaignId = null;
+    let activeCampaignData = null;
+    let activeEntries = {};
     let isDrawing = false;
     let audioCtx = null;
-    let lockedSecretWinner = null; // Secret pre-set winner
 
     const ADMIN_BYPASS_KEY = "adm100_pass_8829";
 
@@ -565,56 +554,59 @@
     const userEmailDisplay = document.getElementById("user-email-display");
 
     // Tabs
-    const tabBtnGiveaway = document.getElementById("tab-btn-giveaway");
+    const tabBtnCampaigns = document.getElementById("tab-btn-campaigns");
     const tabBtnLinks = document.getElementById("tab-btn-links");
-    const sectionGiveaway = document.getElementById("section-giveaway");
+    const sectionCampaigns = document.getElementById("section-campaigns");
     const sectionLinks = document.getElementById("section-links");
-    const giveawayTabBadge = document.getElementById("giveaway-tab-badge");
 
-    // Campaign Builder Elements
-    const campaignConfigForm = document.getElementById("campaign-config-form");
-    const cfgTitle = document.getElementById("cfg-title");
-    const cfgStepsSlider = document.getElementById("cfg-steps-slider");
-    const cfgStepsVal = document.getElementById("cfg-steps-val");
-    const btnSaveCampaign = document.getElementById("btn-save-campaign");
+    // Campaign Creator Elements
+    const createCampaignForm = document.getElementById("create-campaign-form");
+    const campTitleInput = document.getElementById("camp-title");
+    const campStepsInput = document.getElementById("camp-steps");
+    const campStepsLabel = document.getElementById("camp-steps-label");
+    const btnSubmitCampaign = document.getElementById("btn-submit-campaign");
+    const campaignsGrid = document.getElementById("campaigns-grid");
 
-    // Caption Elements
-    const captionPreviewBox = document.getElementById("caption-preview-box");
-    const btnCopyCaptionInstant = document.getElementById("btn-copy-caption-instant");
-    const captionCopyStatus = document.getElementById("caption-copy-status");
+    // Active Campaign Elements
+    const activeCampaignWrapper = document.getElementById("active-campaign-wrapper");
+    const activeCampTitle = document.getElementById("active-camp-title");
+    const activeCampInfo = document.getElementById("active-camp-info");
+    const btnOpenRecordStudio = document.getElementById("btn-open-record-studio");
+    const btnTestStep100 = document.getElementById("btn-test-step100");
+    const btnCopyActiveLink = document.getElementById("btn-copy-active-link");
 
-    // Special Winner Elements
-    const activeWinnerLabel = document.getElementById("active-winner-label");
-    const selectRegisteredWinner = document.getElementById("select-registered-winner");
-    const btnSetRegisteredWinner = document.getElementById("btn-set-registered-winner");
-    const customWinnerName = document.getElementById("custom-winner-name");
-    const customWinnerPhone = document.getElementById("custom-winner-phone");
-    const customWinnerMethod = document.getElementById("custom-winner-method");
-    const btnSetCustomWinner = document.getElementById("btn-set-custom-winner");
-    const btnResetWinnerRandom = document.getElementById("btn-reset-winner-random");
+    // Active Caption Elements
+    const activeCaptionBox = document.getElementById("active-caption-box");
+    const btnCopyActiveCaption = document.getElementById("btn-copy-active-caption");
+    const activeCaptionStatus = document.getElementById("active-caption-status");
 
-    // Lottery Reel Elements
-    const btnStartLottery = document.getElementById("btn-start-lottery");
-    const lotteryBtnText = document.getElementById("lottery-btn-text");
-    const lotteryTicketLabel = document.getElementById("lottery-ticket-label");
-    const lotteryNameDisplay = document.getElementById("lottery-name-display");
-    const lotteryPhoneDisplay = document.getElementById("lottery-phone-display");
+    // Active Secret Winner Elements
+    const secretStatusText = document.getElementById("secret-status-text");
+    const selectActiveParticipant = document.getElementById("select-active-participant");
+    const btnLockParticipant = document.getElementById("btn-lock-participant");
+    const custWinName = document.getElementById("cust-win-name");
+    const custWinPhone = document.getElementById("cust-win-phone");
+    const custWinMethod = document.getElementById("cust-win-method");
+    const btnLockCustom = document.getElementById("btn-lock-custom");
+    const btnResetRandomMode = document.getElementById("btn-reset-random-mode");
 
-    const winnerResultCard = document.getElementById("winner-result-card");
-    const winnerName = document.getElementById("winner-name");
-    const winnerMethod = document.getElementById("winner-method");
-    const winnerPhone = document.getElementById("winner-phone");
-    const winnerTicket = document.getElementById("winner-ticket");
-    const btnCopyWinnerNum = document.getElementById("btn-copy-winner-num");
-    const btnSaveWinner = document.getElementById("btn-save-winner");
+    // Active Lottery Spin Reel
+    const btnAdminLotterySpin = document.getElementById("btn-admin-lottery-spin");
+    const adminSpinBtnText = document.getElementById("admin-spin-btn-text");
+    const adminReelTicket = document.getElementById("admin-reel-ticket");
+    const adminReelName = document.getElementById("admin-reel-name");
+    const adminReelPhone = document.getElementById("admin-reel-phone");
 
-    // Giveaway Action Elements
-    const btnBypassStep100 = document.getElementById("btn-bypass-step100");
-    const btnCopyGiveawayUrl = document.getElementById("btn-copy-giveaway-url");
-    const statTotalEntries = document.getElementById("stat-total-entries");
-    const entriesTableBody = document.getElementById("entries-table-body");
-    const searchEntriesInput = document.getElementById("search-entries");
-    const btnClearEntries = document.getElementById("btn-clear-entries");
+    const adminWinnerBox = document.getElementById("admin-winner-box");
+    const admWinName = document.getElementById("adm-win-name");
+    const admWinMethod = document.getElementById("adm-win-method");
+    const admWinPhone = document.getElementById("adm-win-phone");
+    const admWinTicket = document.getElementById("adm-win-ticket");
+
+    // Active Entries Table
+    const activeCampEntriesCount = document.getElementById("active-camp-entries-count");
+    const activeEntriesTableBody = document.getElementById("active-entries-table-body");
+    const searchActiveEntries = document.getElementById("search-active-entries");
 
     // Links Elements
     const generateForm = document.getElementById("generate-form");
@@ -628,7 +620,6 @@
     const statTotalLinks = document.getElementById("stat-total-links");
     const statTotalClicks = document.getElementById("stat-total-clicks");
 
-    // SFX Sound synthesis
     function playBeep(freq = 400, type = "sine", duration = 0.05) {
       try {
         if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -661,21 +652,21 @@
     }
 
     // Tabs
-    tabBtnGiveaway.addEventListener("click", () => {
-      tabBtnGiveaway.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 bg-pink-600 text-white";
+    tabBtnCampaigns.addEventListener("click", () => {
+      tabBtnCampaigns.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 bg-pink-600 text-white";
       tabBtnLinks.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 text-slate-400 hover:text-white";
-      sectionGiveaway.classList.remove("hidden");
+      sectionCampaigns.classList.remove("hidden");
       sectionLinks.classList.add("hidden");
     });
 
     tabBtnLinks.addEventListener("click", () => {
       tabBtnLinks.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 bg-indigo-600 text-white";
-      tabBtnGiveaway.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 text-slate-400 hover:text-white";
+      tabBtnCampaigns.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 text-slate-400 hover:text-white";
       sectionLinks.classList.remove("hidden");
-      sectionGiveaway.classList.add("hidden");
+      sectionCampaigns.classList.add("hidden");
     });
 
-    // Auth State Listener
+    // Auth Listener
     auth.onAuthStateChanged((user) => {
       authLoading.classList.add("hidden");
       if (user) {
@@ -684,8 +675,7 @@
         loginSection.classList.add("hidden");
         dashboardSection.classList.remove("hidden");
         listenToLinks();
-        listenToGiveawayEntries();
-        loadCampaignConfig();
+        listenToCampaigns();
       } else {
         currentUser = null;
         loginSection.classList.remove("hidden");
@@ -693,14 +683,12 @@
       }
     });
 
-    // Login Form Submit
     loginForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       loginError.classList.add("hidden");
       const email = document.getElementById("login-email").value.trim();
       const password = document.getElementById("login-password").value;
       const btn = document.getElementById("btn-login");
-      btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Signing in...`;
       btn.disabled = true;
 
       try {
@@ -710,7 +698,6 @@
         loginErrorText.textContent = err.message || "Failed to sign in";
         loginError.classList.remove("hidden");
       } finally {
-        btn.innerHTML = `<span>Sign In</span> <i class="fa-solid fa-arrow-right"></i>`;
         btn.disabled = false;
       }
     });
@@ -720,29 +707,170 @@
       showToast("Logged out");
     });
 
-    // ================= CAMPAIGN BUILDER & CAPTION =================
-    cfgStepsSlider.addEventListener("input", (e) => {
-      cfgStepsVal.textContent = e.target.value;
-      updateLiveCaption();
+    // ================= CAMPAIGN CREATION & MANAGEMENT =================
+    campStepsInput.addEventListener("input", (e) => {
+      campStepsLabel.textContent = e.target.value;
     });
 
-    cfgTitle.addEventListener("input", () => updateLiveCaption());
+    createCampaignForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const title = campTitleInput.value.trim();
+      const steps = parseInt(campStepsInput.value, 10);
+      if (!title) return;
 
-    function updateLiveCaption() {
-      const title = cfgTitle.value || "৫০০৳ মেগা বিকাশ / নগদ গিভওয়ে কোয়েস্ট";
-      const steps = cfgStepsSlider.value || "100";
-      const questUrl = `${window.location.origin}/giveaway`;
+      btnSubmitCampaign.disabled = true;
 
-      const caption = `🔥 ${title}! 🎁
+      try {
+        const campId = "c_" + Date.now().toString(36);
+        const campPayload = {
+          id: campId,
+          title: title,
+          totalSteps: steps,
+          timerSeconds: 10,
+          createdAt: Date.now(),
+          createdBy: currentUser.email
+        };
 
-${steps}টি সহজ স্টেপ সফলভাবে শেষ করে জিতে নিন আকর্ষণীয় প্রাইজ! 💸
+        await database.ref(`campaigns/${campId}`).set(campPayload);
+        showToast(`Campaign '${title}' created successfully!`);
+        campTitleInput.value = "";
+        selectCampaign(campId);
+      } catch (err) {
+        showToast(err.message, "error");
+      } finally {
+        btnSubmitCampaign.disabled = false;
+      }
+    });
+
+    function listenToCampaigns() {
+      database.ref("campaigns").on("value", (snapshot) => {
+        allCampaigns = snapshot.val() || {};
+        renderCampaignsGrid();
+
+        // If an active campaign is selected, refresh its data
+        if (activeCampaignId && allCampaigns[activeCampaignId]) {
+          activeCampaignData = allCampaigns[activeCampaignId];
+          refreshActiveCampaignView();
+        } else if (!activeCampaignId && Object.keys(allCampaigns).length > 0) {
+          // Select first campaign by default
+          selectCampaign(Object.keys(allCampaigns)[0]);
+        }
+      });
+    }
+
+    function renderCampaignsGrid() {
+      const keys = Object.keys(allCampaigns);
+
+      if (keys.length === 0) {
+        campaignsGrid.innerHTML = `
+          <div class="p-8 text-center text-slate-500 col-span-full bg-slate-900 border border-slate-800 rounded-3xl">
+            No campaigns created yet. Create your first campaign above!
+          </div>
+        `;
+        return;
+      }
+
+      // Sort newest first
+      keys.sort((a, b) => (allCampaigns[b].createdAt || 0) - (allCampaigns[a].createdAt || 0));
+
+      const origin = window.location.origin;
+
+      campaignsGrid.innerHTML = keys.map((id) => {
+        const camp = allCampaigns[id];
+        const entriesCount = camp.entries ? Object.keys(camp.entries).length : 0;
+        const questLink = `${origin}/giveaway?c=${encodeURIComponent(id)}`;
+        const isSelected = id === activeCampaignId;
+        const borderStyle = isSelected ? "border-pink-500 shadow-pink-500/20 bg-pink-950/20" : "border-slate-800 bg-slate-900 hover:border-slate-700";
+
+        return `
+          <div class="border-2 rounded-3xl p-6 transition-all duration-200 cursor-pointer flex flex-col justify-between ${borderStyle}" onclick="selectCampaign('${id}')">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="px-2.5 py-0.5 rounded-full bg-pink-500/10 border border-pink-500/30 text-pink-400 font-mono text-xs font-bold">
+                  ${camp.totalSteps || 100} Steps
+                </span>
+                <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold text-xs">
+                  ${entriesCount} Entries
+                </span>
+              </div>
+
+              <h4 class="text-lg font-bold text-white tracking-tight line-clamp-2">${camp.title}</h4>
+              <p class="text-xs text-slate-400 font-mono mt-1">ID: ${id}</p>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
+              <button onclick="event.stopPropagation(); copyToClipboard('${questLink}')" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 transition">
+                <i class="fa-regular fa-copy"></i>
+                <span>Copy Link</span>
+              </button>
+
+              <div class="flex items-center gap-1.5">
+                <button onclick="event.stopPropagation(); selectCampaign('${id}')" class="px-3 py-1.5 ${isSelected ? 'bg-pink-600 text-white' : 'bg-slate-800 text-pink-400'} rounded-lg text-xs font-bold transition">
+                  ${isSelected ? 'Active ✓' : 'Open Entries'}
+                </button>
+                <button onclick="event.stopPropagation(); deleteCampaign('${id}')" class="p-1.5 text-red-400 hover:text-white bg-slate-800 hover:bg-red-600 rounded-lg transition" title="Delete Campaign">
+                  <i class="fa-regular fa-trash-can text-xs"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    window.selectCampaign = function (campId) {
+      activeCampaignId = campId;
+      activeCampaignData = allCampaigns[campId];
+      renderCampaignsGrid();
+      refreshActiveCampaignView();
+    };
+
+    window.deleteCampaign = async function (campId) {
+      if (!confirm(`Are you sure you want to delete campaign '${campId}'?`)) return;
+      try {
+        await database.ref(`campaigns/${campId}`).remove();
+        showToast("Campaign deleted!");
+        if (activeCampaignId === campId) {
+          activeCampaignId = null;
+          activeCampaignData = null;
+          activeCampaignWrapper.classList.add("hidden");
+        }
+      } catch (err) {
+        showToast(err.message, "error");
+      }
+    };
+
+    function refreshActiveCampaignView() {
+      if (!activeCampaignData) return;
+
+      activeCampaignWrapper.classList.remove("hidden");
+      activeCampTitle.textContent = activeCampaignData.title;
+      activeCampInfo.textContent = `${activeCampaignData.totalSteps || 100} Steps • Campaign ID: ${activeCampaignId}`;
+
+      const origin = window.location.origin;
+      const questLink = `${origin}/giveaway?c=${encodeURIComponent(activeCampaignId)}`;
+
+      // Setup Buttons
+      btnCopyActiveLink.onclick = () => copyToClipboard(questLink);
+      btnTestStep100.onclick = () => {
+        window.open(`${questLink}&bypass=${ADMIN_BYPASS_KEY}`, "_blank");
+        showToast("Opened Step 100 Test for this campaign!");
+      };
+      btnOpenRecordStudio.onclick = () => {
+        window.open(`${origin}/ad/draw.html?c=${encodeURIComponent(activeCampaignId)}`, "_blank");
+      };
+
+      // Caption
+      const captionText = `🔥 ${activeCampaignData.title}! 🎁
+
+${activeCampaignData.totalSteps || 100}টি সহজ স্টেপ সফলভাবে শেষ করে জিতে নিন আকর্ষণীয় প্রাইজ! 💸
 
 👉 অংশ নেওয়ার সহজ নিয়ম:
 ১️⃣ নিচের অফিশিয়াল লিংকে ক্লিক করুন:
-🔗 ${questUrl}
+🔗 ${questLink}
 
 ২️⃣ প্রতিটি স্টেপে ১০ সেকেন্ড অপেক্ষা করে 'Next Step' চাপুন।
-৩️⃣ সম্পূর্ণ ${steps}টি স্টেপ শেষ হলে আপনার নাম এবং বিকাশ বা নগদ নম্বর দিন।
+৩️⃣ সম্পূর্ণ ${activeCampaignData.totalSteps || 100}টি স্টেপ শেষ হলে আপনার নাম এবং বিকাশ বা নগদ নম্বর দিন।
 ৪️⃣ সাবমিট শেষে আপনার ডিজিটাল লটারি টিকিট (Ticket ID) স্ক্রিনশট দিয়ে রাখুন!
 
 ⚠️ নিয়মাবলী:
@@ -751,220 +879,26 @@ ${steps}টি সহজ স্টেপ সফলভাবে শেষ কর�
 
 লাইভ লটারি ড্র-এর মাধ্যমে বিজয়ী নির্বাচন করা হবে! শুভকামনা সবাইকে 🚀✨`;
 
-      captionPreviewBox.value = caption;
-    }
-
-    async function loadCampaignConfig() {
-      try {
-        const snap = await database.ref("campaign_config").once("value");
-        if (snap.exists()) {
-          const cfg = snap.val();
-          if (cfg.title) cfgTitle.value = cfg.title;
-          if (cfg.totalSteps) {
-            cfgStepsSlider.value = cfg.totalSteps;
-            cfgStepsVal.textContent = cfg.totalSteps;
-          }
-        }
-      } catch (e) {}
-      updateLiveCaption();
-    }
-
-    campaignConfigForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      btnSaveCampaign.disabled = true;
-      btnSaveCampaign.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Saving...`;
-
-      try {
-        await database.ref("campaign_config").set({
-          title: cfgTitle.value.trim(),
-          totalSteps: parseInt(cfgStepsSlider.value, 10),
-          updatedAt: Date.now()
-        });
-        showToast("Campaign updated! Steps are now active on /giveaway");
-      } catch (err) {
-        showToast(err.message, "error");
-      } finally {
-        btnSaveCampaign.disabled = false;
-        btnSaveCampaign.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> <span>Save Campaign</span>`;
-      }
-    });
-
-    btnCopyCaptionInstant.addEventListener("click", () => {
-      copyToClipboard(captionPreviewBox.value);
-      captionCopyStatus.textContent = "Copied to Clipboard! ✓";
-      setTimeout(() => captionCopyStatus.textContent = "Copy Post Caption", 2000);
-    });
-
-    // ================= 👑 ADMIN SPECIAL WINNER SYSTEM =================
-    function updateWinnerStatusUI() {
-      if (!lockedSecretWinner) {
-        activeWinnerLabel.innerHTML = `<i class="fa-solid fa-dice"></i> <span>Pure Random Mode (র্যান্ডম সিলেকশন)</span>`;
-        activeWinnerLabel.className = "text-xs font-bold text-amber-400 flex items-center gap-1.5 justify-end";
-      } else {
-        activeWinnerLabel.innerHTML = `<i class="fa-solid fa-crown text-pink-400"></i> <span>LOCKED: ${lockedSecretWinner.name} (${lockedSecretWinner.phone})</span>`;
-        activeWinnerLabel.className = "text-xs font-bold text-emerald-400 flex items-center gap-1.5 justify-end";
-      }
-    }
-
-    // Method A: Set Registered Winner
-    btnSetRegisteredWinner.addEventListener("click", () => {
-      const selectedId = selectRegisteredWinner.value;
-      if (!selectedId || !allEntries[selectedId]) {
-        alert("Please select a valid participant from the dropdown!");
-        return;
-      }
-      lockedSecretWinner = allEntries[selectedId];
-      updateWinnerStatusUI();
-      showToast(`Special Winner locked: ${lockedSecretWinner.name}!`);
-    });
-
-    // Method B: Set Direct Custom Winner
-    btnSetCustomWinner.addEventListener("click", () => {
-      const name = customWinnerName.value.trim();
-      const phone = customWinnerPhone.value.trim();
-      const method = customWinnerMethod.value;
-
-      if (!name || !phone) {
-        alert("Please enter Name and Phone number for the special winner!");
-        return;
-      }
-
-      lockedSecretWinner = {
-        id: `TKT-${Math.floor(100000 + Math.random() * 900000)}`,
-        name: name,
-        phone: phone,
-        method: method,
-        submittedAt: Date.now()
+      activeCaptionBox.value = captionText;
+      btnCopyActiveCaption.onclick = () => {
+        copyToClipboard(captionText);
+        activeCaptionStatus.textContent = "Copied to Clipboard! ✓";
+        setTimeout(() => activeCaptionStatus.textContent = "Copy Post Caption", 2000);
       };
 
-      updateWinnerStatusUI();
-      showToast(`Custom Winner locked: ${name} (${phone})!`);
-      customWinnerName.value = "";
-      customWinnerPhone.value = "";
-    });
-
-    // Reset to Pure Random
-    btnResetWinnerRandom.addEventListener("click", () => {
-      lockedSecretWinner = null;
-      updateWinnerStatusUI();
-      showToast("Reset to Pure Random mode.");
-    });
-
-    // ================= LIVE LOTTERY ENGINE =================
-    btnStartLottery.addEventListener("click", () => {
-      if (isDrawing) return;
-      const keys = Object.keys(allEntries);
-
-      if (keys.length === 0 && !lockedSecretWinner) {
-        alert("No participant entries found to draw from! Please test or wait for entries.");
-        return;
-      }
-
-      isDrawing = true;
-      btnStartLottery.disabled = true;
-      lotteryBtnText.textContent = "Drawing Winner in Live Motion...";
-      winnerResultCard.classList.add("hidden");
-
-      // Determine Winner:
-      // If admin locked a special winner, use that! Otherwise pick random entry.
-      let winningEntry = lockedSecretWinner;
-      if (!winningEntry) {
-        const randomKey = keys[Math.floor(Math.random() * keys.length)];
-        winningEntry = allEntries[randomKey];
-      }
-
-      // Live Shuffling Reel Animation
-      let counter = 0;
-      let delay = 60;
-      const totalSteps = 45;
-
-      function shuffleStep() {
-        let tempEntry;
-        if (keys.length > 0) {
-          const tempKey = keys[Math.floor(Math.random() * keys.length)];
-          tempEntry = allEntries[tempKey];
-        } else {
-          tempEntry = { id: "TKT-" + Math.floor(100000 + Math.random() * 900000), name: "Participant", phone: "017" + Math.floor(10000000 + Math.random() * 90000000) };
-        }
-
-        lotteryTicketLabel.textContent = `TICKET NO: ${tempEntry.id}`;
-        lotteryNameDisplay.textContent = tempEntry.name;
-        lotteryPhoneDisplay.textContent = tempEntry.phone.slice(0, 3) + "****" + tempEntry.phone.slice(-4);
-        playBeep(350 + (counter * 8), "sine", 0.04);
-
-        counter++;
-        if (counter > 30) delay += 30;
-        if (counter > 38) delay += 80;
-        if (counter > 42) delay += 150;
-
-        if (counter < totalSteps) {
-          setTimeout(shuffleStep, delay);
-        } else {
-          // LAND DIRECTLY ON DESIGNATED WINNER
-          setTimeout(() => {
-            lotteryTicketLabel.textContent = `WINNER TICKET: ${winningEntry.id}`;
-            lotteryNameDisplay.textContent = winningEntry.name;
-            lotteryPhoneDisplay.textContent = winningEntry.phone;
-
-            playBeep(523, "triangle", 0.15);
-            setTimeout(() => playBeep(659, "triangle", 0.15), 150);
-            setTimeout(() => playBeep(784, "triangle", 0.3), 300);
-
-            if (typeof confetti === "function") {
-              confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
-              setTimeout(() => {
-                confetti({ particleCount: 80, angle: 60, spread: 60, origin: { x: 0 } });
-                confetti({ particleCount: 80, angle: 120, spread: 60, origin: { x: 1 } });
-              }, 400);
-            }
-
-            winnerName.textContent = winningEntry.name;
-            winnerMethod.textContent = (winningEntry.method || "bKash") + ":";
-            winnerPhone.textContent = winningEntry.phone;
-            winnerTicket.textContent = `Ticket: ${winningEntry.id}`;
-            winnerResultCard.classList.remove("hidden");
-
-            btnStartLottery.disabled = false;
-            lotteryBtnText.textContent = "Draw Another Winner";
-            isDrawing = false;
-
-            btnCopyWinnerNum.onclick = () => copyToClipboard(winningEntry.phone);
-            btnSaveWinner.onclick = async () => {
-              try {
-                await database.ref("giveaway_winner").set({
-                  ...winningEntry,
-                  drawnAt: Date.now()
-                });
-                showToast("Winner record saved to database!");
-              } catch (e) {
-                showToast(e.message, "error");
-              }
-            };
-
-          }, delay + 200);
-        }
-      }
-
-      shuffleStep();
-    });
-
-    // ================= DATA ENTRIES & PARTICIPANTS =================
-    function listenToGiveawayEntries() {
-      database.ref("giveaway_entries").on("value", (snapshot) => {
-        allEntries = snapshot.val() || {};
-        renderGiveawayEntries();
-        populateRegisteredWinnerDropdown();
-      });
+      // Refresh entries
+      activeEntries = activeCampaignData.entries || {};
+      renderActiveEntries();
+      populateActiveParticipantDropdown();
+      updateSecretStatusUI();
     }
 
-    function renderGiveawayEntries(filter = "") {
-      const keys = Object.keys(allEntries);
-      statTotalEntries.textContent = `${keys.length} Entries`;
-      giveawayTabBadge.textContent = keys.length;
-      giveawayTabBadge.classList.toggle("hidden", keys.length === 0);
+    function renderActiveEntries(filter = "") {
+      const keys = Object.keys(activeEntries);
+      activeCampEntriesCount.textContent = `${keys.length} Entries`;
 
       const filteredKeys = keys.filter((key) => {
-        const item = allEntries[key];
+        const item = activeEntries[key];
         const term = filter.toLowerCase();
         return key.toLowerCase().includes(term) ||
                (item.name && item.name.toLowerCase().includes(term)) ||
@@ -972,20 +906,20 @@ ${steps}টি সহজ স্টেপ সফলভাবে শেষ কর�
       });
 
       if (filteredKeys.length === 0) {
-        entriesTableBody.innerHTML = `
+        activeEntriesTableBody.innerHTML = `
           <tr>
             <td colspan="6" class="py-8 text-center text-slate-500">
-              ${keys.length === 0 ? "No participants have submitted yet." : "No participants match your search."}
+              ${keys.length === 0 ? "No participants have completed this campaign yet." : "No participants match your search."}
             </td>
           </tr>
         `;
         return;
       }
 
-      filteredKeys.sort((a, b) => (allEntries[b].submittedAt || 0) - (allEntries[a].submittedAt || 0));
+      filteredKeys.sort((a, b) => (activeEntries[b].submittedAt || 0) - (activeEntries[a].submittedAt || 0));
 
-      entriesTableBody.innerHTML = filteredKeys.map((id) => {
-        const item = allEntries[id];
+      activeEntriesTableBody.innerHTML = filteredKeys.map((id) => {
+        const item = activeEntries[id];
         const dateStr = item.submittedAt ? new Date(item.submittedAt).toLocaleString() : "-";
         const isBkash = item.method === "bKash";
         const badgeColor = isBkash ? "bg-pink-500/10 text-pink-400 border-pink-500/30" : "bg-orange-500/10 text-orange-400 border-orange-500/30";
@@ -1006,7 +940,7 @@ ${steps}টি সহজ স্টেপ সফলভাবে শেষ কর�
                 <button onclick="copyToClipboard('${item.phone}')" class="p-2 text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition" title="Copy Number">
                   <i class="fa-regular fa-copy text-xs"></i>
                 </button>
-                <button onclick="deleteEntry('${id}')" class="p-2 text-red-400 hover:text-white bg-slate-800 hover:bg-red-600 rounded-lg transition" title="Delete Entry">
+                <button onclick="deleteActiveEntry('${id}')" class="p-2 text-red-400 hover:text-white bg-slate-800 hover:bg-red-600 rounded-lg transition" title="Delete Entry">
                   <i class="fa-regular fa-trash-can text-xs"></i>
                 </button>
               </div>
@@ -1016,55 +950,170 @@ ${steps}টি সহজ স্টেপ সফলভাবে শেষ কর�
       }).join("");
     }
 
-    searchEntriesInput.addEventListener("input", (e) => renderGiveawayEntries(e.target.value));
+    searchActiveEntries.addEventListener("input", (e) => renderActiveEntries(e.target.value));
 
-    function populateRegisteredWinnerDropdown() {
-      const keys = Object.keys(allEntries);
-      if (keys.length === 0) {
-        selectRegisteredWinner.innerHTML = `<option value="">(No submitted entries yet)</option>`;
-        return;
-      }
-
-      let html = `<option value="">-- Choose a Participant to Win --</option>`;
-      keys.forEach((id) => {
-        const item = allEntries[id];
-        html += `<option value="${id}">${item.name} (${item.phone}) — [${id}]</option>`;
-      });
-      selectRegisteredWinner.innerHTML = html;
-    }
-
-    // Direct Bypass Step 100 Button
-    btnBypassStep100.addEventListener("click", () => {
-      const bypassUrl = `${window.location.origin}/giveaway?bypass=${ADMIN_BYPASS_KEY}`;
-      window.open(bypassUrl, "_blank");
-      showToast("Opened Step 100 Form Test!");
-    });
-
-    // Copy Giveaway Quest URL
-    btnCopyGiveawayUrl.addEventListener("click", () => {
-      copyToClipboard(`${window.location.origin}/giveaway`);
-    });
-
-    window.deleteEntry = async function (id) {
-      if (!confirm(`Delete ticket '${id}'?`)) return;
+    window.deleteActiveEntry = async function (ticketId) {
+      if (!confirm(`Delete ticket '${ticketId}'?`)) return;
       try {
-        await database.ref(`giveaway_entries/${id}`).remove();
-        showToast("Entry removed");
+        await database.ref(`campaigns/${activeCampaignId}/entries/${ticketId}`).remove();
+        showToast("Entry deleted!");
       } catch (err) {
         showToast(err.message, "error");
       }
     };
 
-    btnClearEntries.addEventListener("click", async () => {
-      const count = Object.keys(allEntries).length;
-      if (count === 0) return;
-      if (!confirm(`Delete ALL ${count} entries?`)) return;
+    function populateActiveParticipantDropdown() {
+      const keys = Object.keys(activeEntries);
+      if (keys.length === 0) {
+        selectActiveParticipant.innerHTML = `<option value="">(No participants in this campaign yet)</option>`;
+        return;
+      }
+
+      let html = `<option value="">-- Choose a Participant to Win --</option>`;
+      keys.forEach((id) => {
+        const item = activeEntries[id];
+        html += `<option value="${id}">${item.name} (${item.phone}) — [${id}]</option>`;
+      });
+      selectActiveParticipant.innerHTML = html;
+    }
+
+    // ================= SECRET TARGET WINNER =================
+    function updateSecretStatusUI() {
+      const secret = activeCampaignData ? activeCampaignData.secretWinner : null;
+      if (!secret) {
+        secretStatusText.innerHTML = `<i class="fa-solid fa-dice"></i> <span>Pure Random Mode</span>`;
+        secretStatusText.className = "text-xs font-bold text-amber-400 flex items-center gap-1.5 justify-end";
+      } else {
+        secretStatusText.innerHTML = `<i class="fa-solid fa-crown text-pink-400"></i> <span>LOCKED: ${secret.name} (${secret.phone})</span>`;
+        secretStatusText.className = "text-xs font-bold text-emerald-400 flex items-center gap-1.5 justify-end";
+      }
+    }
+
+    btnLockParticipant.addEventListener("click", async () => {
+      const selectedId = selectActiveParticipant.value;
+      if (!selectedId || !activeEntries[selectedId]) {
+        alert("Please select a participant from the dropdown!");
+        return;
+      }
       try {
-        await database.ref("giveaway_entries").remove();
-        showToast("All entries cleared");
+        await database.ref(`campaigns/${activeCampaignId}/secretWinner`).set(activeEntries[selectedId]);
+        showToast(`Special Winner locked: ${activeEntries[selectedId].name}!`);
       } catch (err) {
         showToast(err.message, "error");
       }
+    });
+
+    btnLockCustom.addEventListener("click", async () => {
+      const name = custWinName.value.trim();
+      const phone = custWinPhone.value.trim();
+      const method = custWinMethod.value;
+
+      if (!name || !phone) {
+        alert("Please enter Name and Phone number!");
+        return;
+      }
+
+      const customWinner = {
+        id: `TKT-${Math.floor(100000 + Math.random() * 900000)}`,
+        name: name,
+        phone: phone,
+        method: method,
+        submittedAt: Date.now()
+      };
+
+      try {
+        await database.ref(`campaigns/${activeCampaignId}/secretWinner`).set(customWinner);
+        showToast(`Custom Winner locked: ${name} (${phone})!`);
+        custWinName.value = "";
+        custWinPhone.value = "";
+      } catch (err) {
+        showToast(err.message, "error");
+      }
+    });
+
+    btnResetRandomMode.addEventListener("click", async () => {
+      try {
+        await database.ref(`campaigns/${activeCampaignId}/secretWinner`).remove();
+        showToast("Reset to Pure Random Mode");
+      } catch (err) {
+        showToast(err.message, "error");
+      }
+    });
+
+    // ================= ADMIN LOTTERY SPIN =================
+    btnAdminLotterySpin.addEventListener("click", () => {
+      if (isDrawing) return;
+      const keys = Object.keys(activeEntries);
+      const secret = activeCampaignData ? activeCampaignData.secretWinner : null;
+
+      if (keys.length === 0 && !secret) {
+        alert("No participants found in this campaign to draw from!");
+        return;
+      }
+
+      isDrawing = true;
+      btnAdminLotterySpin.disabled = true;
+      adminSpinBtnText.textContent = "Spinning...";
+      adminWinnerBox.classList.add("hidden");
+
+      let winningEntry = secret;
+      if (!winningEntry) {
+        const randomKey = keys[Math.floor(Math.random() * keys.length)];
+        winningEntry = activeEntries[randomKey];
+      }
+
+      let counter = 0;
+      let delay = 50;
+      const totalSteps = 45;
+
+      function shuffle() {
+        let temp;
+        if (keys.length > 0) {
+          temp = activeEntries[keys[Math.floor(Math.random() * keys.length)]];
+        } else {
+          temp = { id: "TKT-" + Math.floor(100000 + Math.random() * 900000), name: "Participant", phone: "017" + Math.floor(10000000 + Math.random() * 90000000) };
+        }
+
+        adminReelTicket.textContent = `TICKET NO: ${temp.id}`;
+        adminReelName.textContent = temp.name;
+        adminReelPhone.textContent = temp.phone.slice(0, 3) + "****" + temp.phone.slice(-4);
+        playBeep(350 + (counter * 8), "sine", 0.04);
+
+        counter++;
+        if (counter > 30) delay += 30;
+        if (counter > 38) delay += 80;
+        if (counter > 42) delay += 150;
+
+        if (counter < totalSteps) {
+          setTimeout(shuffle, delay);
+        } else {
+          setTimeout(() => {
+            adminReelTicket.textContent = `WINNER TICKET: ${winningEntry.id}`;
+            adminReelName.textContent = winningEntry.name;
+            adminReelPhone.textContent = winningEntry.phone;
+
+            playBeep(523, "triangle", 0.15);
+            setTimeout(() => playBeep(659, "triangle", 0.15), 150);
+            setTimeout(() => playBeep(784, "triangle", 0.3), 300);
+
+            if (typeof confetti === "function") {
+              confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+            }
+
+            admWinName.textContent = winningEntry.name;
+            admWinMethod.textContent = (winningEntry.method || "bKash") + ":";
+            admWinPhone.textContent = winningEntry.phone;
+            admWinTicket.textContent = `Ticket: ${winningEntry.id}`;
+            adminWinnerBox.classList.remove("hidden");
+
+            btnAdminLotterySpin.disabled = false;
+            adminSpinBtnText.textContent = "Draw Again";
+            isDrawing = false;
+          }, delay + 200);
+        }
+      }
+
+      shuffle();
     });
 
     // ================= LINKS MANAGER =================

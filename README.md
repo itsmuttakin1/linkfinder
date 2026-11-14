@@ -7,26 +7,30 @@ A high-performance link monetization and 100-Step Giveaway platform built with F
 ## 🚀 Key Features
 
 1. **Admin Panel (`/ad`)**:
-   - Accessed at **`/ad`** (renamed from `/admin`).
+   - Accessed exclusively at **`/ad`** (`/admin` completely deleted).
    - Protected by **Firebase Authentication** (Email & Password).
-   - **Tab 1: Campaign & Lottery Hub**:
-     - **Campaign Builder**: Customize quest title, steps count (1 to 100 steps), and timer.
-     - **Promotional Post Caption Generator**: Ready-to-copy Bengali post formatted for Telegram/Facebook channels with instant 1-click copy.
-     - **👑 Admin Special Secret Winner System**: Lock any registered participant OR enter a custom Name & bKash/Nagad number to secretly win the live draw without viewers knowing!
-     - **Live Slot Machine Lottery**: Realistic spinning reel with synthesized audio and confetti burst.
-     - **Fast-Forward Test**: Direct 1-click test to jump straight to Step 100 form.
-     - **Participant Data Table**: View, search, and manage all submitted users.
-   - **Tab 2: Short Links Manager**: Create and manage 4-step monetized redirect links with analytics.
+   - **Multi-Campaign Creator & Manager**:
+     - Create independent campaigns with custom titles and steps (1 to 100 steps).
+     - Each campaign has its own unique link (`/giveaway?c=campaignId`).
+     - Click any campaign card to view its completed participants table and lottery draw!
+   - **🎬 Clean Screen Recording Studio (`/ad/draw.html`)**:
+     - Dedicated fullscreen video recording stage for your Telegram/YouTube channel.
+     - Contains NO secret admin buttons or target indicators — only a glowing slot drum and a clean spin button.
+     - Plays authentic audio and confetti on draw.
+   - **👑 Secret Target Winner Selection**:
+     - Lock any submitted participant or type a custom Name & Phone number. The draw looks 100% natural and random to video viewers!
+   - **Anti-Duplicate Submission Protection**:
+     - Once a user completes the quest and submits, their submission is permanently locked in their browser and verified against duplicate phone numbers.
+     - Copying and pasting the URL will NOT allow re-submitting!
+   - **Promotional Post Caption Generator**: 1-click ready Bengali caption for Telegram channels.
 
 2. **100-Step Giveaway Quest (`/giveaway`)**:
-   - 100 sequential steps with real-time countdown timer and progress indicator.
+   - Dynamic steps (1 to 100 steps as set in the campaign).
    - Heavy ads placed on every step (Native banner, 320x50 banners, Social Bar, Popunder, Smartlink).
-   - **Anti-Cheat & Anti-Skip Protection**: Cryptographic sequential step token in memory. Users cannot skip steps by modifying URL or storage. Reloading restarts the quest at Step 1.
-   - **Step 100 Unlock**: Unlocks the official participant submission form for Full Name and bKash / Nagad number. Generates a unique digital Lottery Ticket ID.
+   - Anti-Cheat & Anti-Skip sequential token verification.
 
 3. **Public Monetized Link Generator (`/`)**:
-   - Public visitors can generate short links directly from homepage.
-   - Enforces a 1-link-per-minute rate limit with live cooldown timer.
+   - 1-link-per-minute rate limit.
 
 4. **Anti-AdBlocker & Anti-DNS Blocker**:
    - Blocks access until AdGuard DNS, NextDNS, Brave Shield, or ad block extensions are disabled.
