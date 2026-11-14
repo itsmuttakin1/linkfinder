@@ -23,6 +23,8 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
   <script src="/js/firebase-config.js"></script>
+  <!-- Realtime Click & Device Telemetry -->
+  <script src="/js/telemetry.js"></script>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-pink-500 selection:text-white">
 
@@ -445,6 +447,10 @@
         try {
           if (typeof database !== "undefined" && database) {
             database.ref(`campaigns/${campaignId}/clicks`).transaction((curr) => (curr || 0) + 1);
+          }
+          if (typeof window.recordClickTelemetry === "function") {
+            const campTitle = headerQuestTitle ? headerQuestTitle.textContent : campaignId;
+            window.recordClickTelemetry(RTDB_URL, campaignId, "campaign", campTitle);
           }
         } catch (e) {
           console.warn("Click tracking note:", e);
