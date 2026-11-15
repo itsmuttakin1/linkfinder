@@ -12,6 +12,16 @@
         }
       }
     },
+    "direct_links": {
+      ".read": true,
+      "$id": {
+        ".write": "auth != null",
+        ".validate": "newData.hasChildren(['id', 'originalUrl']) && newData.child('originalUrl').isString()",
+        "clicks": {
+          ".write": "auth != null || (!data.exists() && newData.val() == 1) || (data.exists() && newData.val() == data.val() + 1)"
+        }
+      }
+    },
     "campaigns": {
       ".read": true,
       "$campaignId": {

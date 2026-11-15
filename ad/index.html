@@ -119,6 +119,12 @@
             <i class="fa-solid fa-link"></i>
             <span>Short Links</span>
           </button>
+          <button id="tab-btn-direct"
+            class="px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 text-slate-400 hover:text-white"
+            title="Instant 1-Click Redirect Links with Country Analytics">
+            <i class="fa-solid fa-bolt-lightning text-amber-400"></i>
+            <span>Direct Links</span>
+          </button>
           <button id="tab-btn-analytics"
             class="px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 text-slate-400 hover:text-white"
             title="Realtime Clicks & Geo Stream (urlbit.pro style)">
@@ -585,7 +591,12 @@
           </h2>
           <form id="generate-form" class="space-y-4">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div class="md:col-span-2">
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Link Title (Shown Above Steps)</label>
+                <input type="text" id="link-title" placeholder="e.g. Free Fire Mod APK 2026"
+                  class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 placeholder-slate-600 focus:outline-none focus:border-indigo-500 text-sm">
+              </div>
+              <div>
                 <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Original
                   Destination URL *</label>
                 <input type="url" id="dest-url" required placeholder="https://example.com/target"
@@ -637,7 +648,7 @@
               <thead>
                 <tr class="border-b border-slate-800 text-xs uppercase font-semibold text-slate-400">
                   <th class="py-3 px-4">Slug</th>
-                  <th class="py-3 px-4">Destination Link</th>
+                  <th class="py-3 px-4">Title & Destination Link</th>
                   <th class="py-3 px-4 text-center">Clicks</th>
                   <th class="py-3 px-4">Date</th>
                   <th class="py-3 px-4 text-right">Actions</th>
@@ -649,6 +660,160 @@
                 </tr>
               </tbody>
             </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= SECTION 4: DIRECT LINKS (INSTANT REDIRECT & COUNTRY STATS) ================= -->
+      <div id="section-direct" class="hidden space-y-8">
+
+        <!-- Direct Links KPI Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 relative overflow-hidden">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-xs uppercase font-semibold text-slate-400 tracking-wider">Total Direct Links</p>
+                <h3 id="stat-direct-links" class="text-3xl font-bold text-white mt-1">0</h3>
+              </div>
+              <div
+                class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center text-xl">
+                <i class="fa-solid fa-bolt-lightning"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 relative overflow-hidden">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-xs uppercase font-semibold text-slate-400 tracking-wider">Total Direct Clicks</p>
+                <h3 id="stat-direct-clicks" class="text-3xl font-bold text-white mt-1">0</h3>
+              </div>
+              <div
+                class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl">
+                <i class="fa-solid fa-eye"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 relative overflow-hidden">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-xs uppercase font-semibold text-slate-400 tracking-wider">Direct Target Mode</p>
+                <h3 class="text-lg font-bold text-emerald-400 mt-1 flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                  Instant 1-Click
+                </h3>
+              </div>
+              <div
+                class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center text-xl">
+                <i class="fa-solid fa-gauge-high"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Direct Link Generator Card -->
+        <div
+          class="bg-gradient-to-r from-amber-950/40 via-purple-950/30 to-slate-900 border border-amber-500/30 rounded-3xl p-6 sm:p-8 relative shadow-xl">
+          <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-3">
+            <div>
+              <div
+                class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-bold mb-1">
+                <i class="fa-solid fa-bolt"></i>
+                <span>Instant Direct Redirect</span>
+              </div>
+              <h2 class="text-2xl font-black text-white">Direct Link Generator (No Steps, Direct Target)</h2>
+              <p class="text-xs text-slate-400 mt-1">
+                এখানে লিংক জেনারেট করলে ভিজিটর কোনো স্টেপ ছাড়াই সরাসরি আপনার টার্গেট লিংকে চলে যাবে এবং কান্ট্রি/ডিভাইস ট্র্যাকিং হবে।
+              </p>
+            </div>
+          </div>
+
+          <form id="direct-generate-form" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Title (Optional)</label>
+                <input type="text" id="direct-link-title" placeholder="e.g. Official YouTube Channel / App"
+                  class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 placeholder-slate-600 focus:outline-none focus:border-amber-500 text-sm">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Target Destination URL *</label>
+                <input type="url" id="direct-dest-url" required placeholder="https://example.com/target-link"
+                  class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 placeholder-slate-600 focus:outline-none focus:border-amber-500 text-sm">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Custom Slug (Optional)</label>
+                <input type="text" id="direct-custom-slug" placeholder="e.g. yt-main" pattern="[a-zA-Z0-9-_]+"
+                  class="w-full px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 placeholder-slate-600 focus:outline-none focus:border-amber-500 text-sm">
+              </div>
+            </div>
+
+            <div class="flex items-center justify-end">
+              <button type="submit" id="btn-generate-direct"
+                class="px-6 py-3 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white font-semibold rounded-xl text-sm transition flex items-center gap-2 shadow-lg shadow-amber-600/20">
+                <i class="fa-solid fa-bolt"></i>
+                <span>Create Direct Link</span>
+              </button>
+            </div>
+          </form>
+
+          <div id="direct-result-box" class="hidden mt-6 p-4 rounded-xl bg-slate-950 border border-amber-500/40">
+            <p class="text-xs font-semibold text-amber-400 uppercase tracking-wider mb-2">Shareable Direct Link (Instant Redirect):</p>
+            <div class="flex flex-col sm:flex-row items-center gap-3">
+              <input type="text" id="direct-generated-link-input" readonly
+                class="w-full py-2.5 px-3 bg-slate-900 border border-slate-800 rounded-lg text-amber-400 font-mono text-sm focus:outline-none select-all">
+              <button id="btn-copy-direct-generated"
+                class="w-full sm:w-auto px-5 py-2.5 bg-amber-600 hover:bg-amber-500 text-white font-medium rounded-lg text-sm transition flex items-center justify-center gap-2 flex-shrink-0">
+                <i class="fa-regular fa-copy"></i>
+                <span>Copy</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Direct Links Table & Country Breakdown Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-xl">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+              <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-list-check text-amber-400"></i>
+                All Direct Links
+              </h2>
+              <input type="text" id="search-direct-links" placeholder="Search slug, title, or URL..."
+                class="w-full sm:w-64 pl-3 py-2 text-xs bg-slate-950 border border-slate-800 rounded-lg text-slate-100 placeholder-slate-600 focus:outline-none focus:border-amber-500">
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="border-b border-slate-800 text-xs uppercase font-semibold text-slate-400">
+                    <th class="py-3 px-4">Slug</th>
+                    <th class="py-3 px-4">Title & Destination</th>
+                    <th class="py-3 px-4 text-center">Clicks</th>
+                    <th class="py-3 px-4">Date</th>
+                    <th class="py-3 px-4 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="direct-links-table-body" class="divide-y divide-slate-800/60 text-sm">
+                  <tr>
+                    <td colspan="5" class="py-8 text-center text-slate-500">Loading direct links...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col">
+            <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-3">
+              <h3 class="text-base font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-earth-americas text-emerald-400"></i>
+                Direct Link Country Clicks
+              </h3>
+              <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Live</span>
+            </div>
+            <div id="direct-countries-list" class="space-y-3 flex-1 overflow-y-auto max-h-[420px] pr-1">
+              <div class="text-center py-8 text-slate-500 text-xs">No direct clicks recorded yet</div>
+            </div>
           </div>
         </div>
       </div>
@@ -829,6 +994,92 @@
         </div>
       </div>
 
+      <!-- Edit Short Link Modal -->
+      <div id="modal-edit-link"
+        class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-pen-to-square text-amber-400"></i>
+              <span>Edit Short Link</span>
+            </h3>
+            <button onclick="closeEditShortLinkModal()" class="text-slate-400 hover:text-white p-1">
+              <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+          </div>
+          <form id="form-edit-short-link" class="space-y-4">
+            <input type="hidden" id="edit-link-id">
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Slug (ID)</label>
+              <input type="text" id="edit-link-slug" readonly
+                class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-400 font-mono text-xs cursor-not-allowed">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Link Title (Shown Above Steps)</label>
+              <input type="text" id="edit-link-title" placeholder="e.g. Free Fire Mod APK 2026"
+                class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 text-sm focus:outline-none focus:border-indigo-500">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Destination Target URL *</label>
+              <input type="url" id="edit-link-url" required placeholder="https://example.com/target"
+                class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 text-sm focus:outline-none focus:border-indigo-500">
+            </div>
+            <div class="flex items-center justify-end gap-2 pt-2">
+              <button type="button" onclick="closeEditShortLinkModal()"
+                class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-semibold">Cancel</button>
+              <button type="submit"
+                class="px-5 py-2 bg-amber-600 hover:bg-amber-500 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-amber-600/20">
+                <i class="fa-solid fa-check"></i>
+                <span>Save Changes</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Edit Direct Link Modal -->
+      <div id="modal-edit-direct-link"
+        class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-pen-to-square text-amber-400"></i>
+              <span>Edit Direct Link</span>
+            </h3>
+            <button onclick="closeEditDirectLinkModal()" class="text-slate-400 hover:text-white p-1">
+              <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+          </div>
+          <form id="form-edit-direct-link" class="space-y-4">
+            <input type="hidden" id="edit-direct-id">
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Direct Slug (ID)</label>
+              <input type="text" id="edit-direct-slug" readonly
+                class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-400 font-mono text-xs cursor-not-allowed">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Direct Link Title</label>
+              <input type="text" id="edit-direct-title" placeholder="e.g. Official YouTube Channel"
+                class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 text-sm focus:outline-none focus:border-amber-500">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">Target Destination URL *</label>
+              <input type="url" id="edit-direct-url" required placeholder="https://example.com/target"
+                class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 text-sm focus:outline-none focus:border-amber-500">
+            </div>
+            <div class="flex items-center justify-end gap-2 pt-2">
+              <button type="button" onclick="closeEditDirectLinkModal()"
+                class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-semibold">Cancel</button>
+              <button type="submit"
+                class="px-5 py-2 bg-amber-600 hover:bg-amber-500 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-amber-600/20">
+                <i class="fa-solid fa-check"></i>
+                <span>Save Changes</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
     </main>
   </div>
 
@@ -858,9 +1109,11 @@
     // Tabs
     const tabBtnCampaigns = document.getElementById("tab-btn-campaigns");
     const tabBtnLinks = document.getElementById("tab-btn-links");
+    const tabBtnDirect = document.getElementById("tab-btn-direct");
     const tabBtnAnalytics = document.getElementById("tab-btn-analytics");
     const sectionCampaigns = document.getElementById("section-campaigns");
     const sectionLinks = document.getElementById("section-links");
+    const sectionDirect = document.getElementById("section-direct");
     const sectionAnalytics = document.getElementById("section-analytics");
     const btnQuickStep100 = document.getElementById("btn-quick-step100");
 
@@ -921,8 +1174,9 @@
     const activeEntriesTableBody = document.getElementById("active-entries-table-body");
     const searchActiveEntries = document.getElementById("search-active-entries");
 
-    // Links Elements
+    // Short Links Elements
     const generateForm = document.getElementById("generate-form");
+    const linkTitleInput = document.getElementById("link-title");
     const destUrlInput = document.getElementById("dest-url");
     const customSlugInput = document.getElementById("custom-slug");
     const resultBox = document.getElementById("result-box");
@@ -932,6 +1186,31 @@
     const searchLinksInput = document.getElementById("search-links");
     const statTotalLinks = document.getElementById("stat-total-links");
     const statTotalClicks = document.getElementById("stat-total-clicks");
+
+    // Direct Links Elements & State
+    let allDirectLinks = {};
+    const statDirectLinks = document.getElementById("stat-direct-links");
+    const statDirectClicks = document.getElementById("stat-direct-clicks");
+    const directGenerateForm = document.getElementById("direct-generate-form");
+    const directLinkTitleInput = document.getElementById("direct-link-title");
+    const directDestUrlInput = document.getElementById("direct-dest-url");
+    const directCustomSlugInput = document.getElementById("direct-custom-slug");
+    const directResultBox = document.getElementById("direct-result-box");
+    const directGeneratedLinkInput = document.getElementById("direct-generated-link-input");
+    const btnCopyDirectGenerated = document.getElementById("btn-copy-direct-generated");
+    const directLinksTableBody = document.getElementById("direct-links-table-body");
+    const searchDirectLinksInput = document.getElementById("search-direct-links");
+    const directCountriesList = document.getElementById("direct-countries-list");
+
+    function escapeHtml(str) {
+      if (!str) return "";
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
 
     function playBeep(freq = 400, type = "sine", duration = 0.05) {
       try {
@@ -968,10 +1247,12 @@
     function switchTab(targetTab) {
       tabBtnCampaigns.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 text-slate-400 hover:text-white";
       tabBtnLinks.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 text-slate-400 hover:text-white";
+      tabBtnDirect.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 text-slate-400 hover:text-white";
       tabBtnAnalytics.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 text-slate-400 hover:text-white";
 
       sectionCampaigns.classList.add("hidden");
       sectionLinks.classList.add("hidden");
+      sectionDirect.classList.add("hidden");
       sectionAnalytics.classList.add("hidden");
 
       if (targetTab === "campaigns") {
@@ -980,15 +1261,22 @@
       } else if (targetTab === "links") {
         tabBtnLinks.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 bg-indigo-600 text-white";
         sectionLinks.classList.remove("hidden");
+      } else if (targetTab === "direct") {
+        tabBtnDirect.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 bg-amber-600 text-white";
+        sectionDirect.classList.remove("hidden");
+        renderDirectLinks(searchDirectLinksInput ? searchDirectLinksInput.value : "");
+        renderDirectCountryAnalytics();
       } else if (targetTab === "analytics") {
         tabBtnAnalytics.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 bg-blue-600 text-white";
         sectionAnalytics.classList.remove("hidden");
         renderClickAnalytics();
+        renderDirectCountryAnalytics();
       }
     }
 
     tabBtnCampaigns.addEventListener("click", () => switchTab("campaigns"));
     tabBtnLinks.addEventListener("click", () => switchTab("links"));
+    tabBtnDirect.addEventListener("click", () => switchTab("direct"));
     tabBtnAnalytics.addEventListener("click", () => switchTab("analytics"));
 
     // Safety Fallback: Never leave user stuck on "Checking authentication..."
@@ -1012,6 +1300,7 @@
           loginSection.classList.add("hidden");
           dashboardSection.classList.remove("hidden");
           listenToLinks();
+          listenToDirectLinks();
           listenToCampaigns();
           listenToClickLogs();
         } else {
@@ -1543,26 +1832,28 @@ ${activeCampaignData.totalSteps || 100}টি সহজ স্টেপ সফ�
       shuffle();
     });
 
-    // ================= LINKS MANAGER =================
+    // ================= SHORT LINKS MANAGER =================
     function listenToLinks() {
       database.ref("links").on("value", (snapshot) => {
         allLinks = snapshot.val() || {};
-        renderLinks();
+        renderLinks(searchLinksInput ? searchLinksInput.value : "");
       });
     }
 
     function renderLinks(filter = "") {
       const keys = Object.keys(allLinks);
       let totalClicks = 0;
-      keys.forEach((k) => totalClicks += allLinks[k].clicks || 0);
+      keys.forEach((k) => totalClicks += (allLinks[k] && allLinks[k].clicks) || 0);
 
       statTotalLinks.textContent = keys.length;
       statTotalClicks.textContent = totalClicks;
 
       const filteredKeys = keys.filter((key) => {
-        const item = allLinks[key];
+        const item = allLinks[key] || {};
         const term = filter.toLowerCase();
-        return key.toLowerCase().includes(term) || (item.originalUrl && item.originalUrl.toLowerCase().includes(term));
+        return key.toLowerCase().includes(term) ||
+          (item.title && item.title.toLowerCase().includes(term)) ||
+          (item.originalUrl && item.originalUrl.toLowerCase().includes(term));
       });
 
       if (filteredKeys.length === 0) {
@@ -1574,15 +1865,17 @@ ${activeCampaignData.totalSteps || 100}টি সহজ স্টেপ সফ�
 
       const origin = window.location.origin;
       linksTableBody.innerHTML = filteredKeys.map((id) => {
-        const item = allLinks[id];
+        const item = allLinks[id] || {};
         const shareUrl = `${origin}/?id=${encodeURIComponent(id)}`;
         const dateStr = item.createdAt ? new Date(item.createdAt).toLocaleDateString() : "-";
+        const titleHtml = item.title ? `<div class="font-bold text-white text-xs truncate max-w-xs mb-0.5"><i class="fa-solid fa-tag text-indigo-400 mr-1"></i>${escapeHtml(item.title)}</div>` : '';
 
         return `
           <tr class="hover:bg-slate-800/40 transition">
             <td class="py-3 px-4 font-mono font-semibold text-indigo-400">${id}</td>
-            <td class="py-3 px-4 max-w-xs truncate text-slate-300">
-              <a href="${item.originalUrl}" target="_blank" class="hover:text-indigo-400 hover:underline">${item.originalUrl}</a>
+            <td class="py-3 px-4 max-w-xs text-slate-300">
+              ${titleHtml}
+              <a href="${item.originalUrl}" target="_blank" class="hover:text-indigo-400 hover:underline text-xs text-slate-400 truncate block">${item.originalUrl}</a>
             </td>
             <td class="py-3 px-4 text-center">
               <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">${item.clicks || 0}</span>
@@ -1590,9 +1883,10 @@ ${activeCampaignData.totalSteps || 100}টি সহজ স্টেপ সফ�
             <td class="py-3 px-4 text-xs text-slate-500">${dateStr}</td>
             <td class="py-3 px-4 text-right">
               <div class="inline-flex items-center gap-1.5">
-                <button onclick="copyToClipboard('${shareUrl}')" class="p-2 text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition"><i class="fa-regular fa-copy text-xs"></i></button>
-                <a href="${shareUrl}" target="_blank" class="p-2 text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition"><i class="fa-solid fa-arrow-up-right-from-square text-xs"></i></a>
-                <button onclick="deleteLink('${id}')" class="p-2 text-red-400 hover:text-white bg-slate-800 hover:bg-red-600 rounded-lg transition"><i class="fa-regular fa-trash-can text-xs"></i></button>
+                <button onclick="openEditShortLinkModal('${id}')" class="p-2 text-amber-400 hover:text-white bg-slate-800 hover:bg-amber-600 rounded-lg transition" title="Edit Title & URL"><i class="fa-regular fa-pen-to-square text-xs"></i></button>
+                <button onclick="copyToClipboard('${shareUrl}')" class="p-2 text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition" title="Copy Share Link"><i class="fa-regular fa-copy text-xs"></i></button>
+                <a href="${shareUrl}" target="_blank" class="p-2 text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition" title="Open Link"><i class="fa-solid fa-arrow-up-right-from-square text-xs"></i></a>
+                <button onclick="deleteLink('${id}')" class="p-2 text-red-400 hover:text-white bg-slate-800 hover:bg-red-600 rounded-lg transition" title="Delete Link"><i class="fa-regular fa-trash-can text-xs"></i></button>
               </div>
             </td>
           </tr>
@@ -1605,6 +1899,7 @@ ${activeCampaignData.totalSteps || 100}টি সহজ স্টেপ সফ�
     generateForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       const originalUrl = destUrlInput.value.trim();
+      const title = linkTitleInput ? linkTitleInput.value.trim() : "";
       let slug = customSlugInput.value.trim();
       if (!originalUrl) return;
       if (!slug) {
@@ -1615,6 +1910,7 @@ ${activeCampaignData.totalSteps || 100}টি সহজ স্টেপ সফ�
       try {
         await database.ref(`links/${slug}`).set({
           id: slug,
+          title: title || "",
           originalUrl: originalUrl,
           createdAt: Date.now(),
           clicks: 0,
@@ -1623,9 +1919,10 @@ ${activeCampaignData.totalSteps || 100}টি সহজ স্টেপ সফ�
 
         generatedLinkInput.value = `${window.location.origin}/?id=${encodeURIComponent(slug)}`;
         resultBox.classList.remove("hidden");
-        showToast("Link created!");
+        showToast("Monetized link created!");
         destUrlInput.value = "";
         customSlugInput.value = "";
+        if (linkTitleInput) linkTitleInput.value = "";
       } catch (err) {
         showToast(err.message, "error");
       }
@@ -1642,6 +1939,243 @@ ${activeCampaignData.totalSteps || 100}টি সহজ স্টেপ সফ�
         showToast(err.message, "error");
       }
     };
+
+    window.openEditShortLinkModal = function (id) {
+      const item = allLinks[id];
+      if (!item) return;
+      document.getElementById("edit-link-id").value = id;
+      document.getElementById("edit-link-slug").value = id;
+      document.getElementById("edit-link-title").value = item.title || "";
+      document.getElementById("edit-link-url").value = item.originalUrl || "";
+      document.getElementById("modal-edit-link").classList.remove("hidden");
+    };
+
+    window.closeEditShortLinkModal = function () {
+      document.getElementById("modal-edit-link").classList.add("hidden");
+    };
+
+    const formEditShortLink = document.getElementById("form-edit-short-link");
+    if (formEditShortLink) {
+      formEditShortLink.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const id = document.getElementById("edit-link-id").value.trim();
+        const title = document.getElementById("edit-link-title").value.trim();
+        const originalUrl = document.getElementById("edit-link-url").value.trim();
+        if (!id || !originalUrl) return;
+
+        try {
+          await database.ref(`links/${id}`).update({
+            title: title,
+            originalUrl: originalUrl
+          });
+          if (allLinks[id]) {
+            allLinks[id].title = title;
+            allLinks[id].originalUrl = originalUrl;
+          }
+          renderLinks(searchLinksInput ? searchLinksInput.value : "");
+          closeEditShortLinkModal();
+          showToast("Link updated successfully!");
+        } catch (err) {
+          showToast(err.message, "error");
+        }
+      });
+    }
+
+    // ================= DIRECT LINKS (INSTANT REDIRECT) MANAGER =================
+    function listenToDirectLinks() {
+      database.ref("direct_links").on("value", (snapshot) => {
+        allDirectLinks = snapshot.val() || {};
+        renderDirectLinks(searchDirectLinksInput ? searchDirectLinksInput.value : "");
+        renderDirectCountryAnalytics();
+      }, (err) => {
+        console.warn("Direct links read note:", err.message);
+      });
+    }
+
+    function renderDirectLinks(filter = "") {
+      if (!directLinksTableBody) return;
+      const keys = Object.keys(allDirectLinks);
+      let totalClicks = 0;
+      keys.forEach((k) => totalClicks += (allDirectLinks[k] && allDirectLinks[k].clicks) || 0);
+
+      if (statDirectLinks) statDirectLinks.textContent = keys.length;
+      if (statDirectClicks) statDirectClicks.textContent = totalClicks;
+
+      const filteredKeys = keys.filter((key) => {
+        const item = allDirectLinks[key] || {};
+        const term = filter.toLowerCase();
+        return key.toLowerCase().includes(term) ||
+          (item.title && item.title.toLowerCase().includes(term)) ||
+          (item.originalUrl && item.originalUrl.toLowerCase().includes(term));
+      });
+
+      if (filteredKeys.length === 0) {
+        directLinksTableBody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-slate-500">No direct links found</td></tr>`;
+        return;
+      }
+
+      filteredKeys.sort((a, b) => (allDirectLinks[b].createdAt || 0) - (allDirectLinks[a].createdAt || 0));
+
+      const origin = window.location.origin;
+      directLinksTableBody.innerHTML = filteredKeys.map((id) => {
+        const item = allDirectLinks[id] || {};
+        const shareUrl = `${origin}/d/${encodeURIComponent(id)}`;
+        const dateStr = item.createdAt ? new Date(item.createdAt).toLocaleDateString() : "-";
+        const titleHtml = item.title ? `<div class="font-bold text-white text-xs truncate max-w-xs mb-0.5"><i class="fa-solid fa-bolt text-amber-400 mr-1"></i>${escapeHtml(item.title)}</div>` : '';
+
+        return `
+          <tr class="hover:bg-slate-800/40 transition">
+            <td class="py-3 px-4 font-mono font-semibold text-amber-400">${id}</td>
+            <td class="py-3 px-4 max-w-xs text-slate-300">
+              ${titleHtml}
+              <a href="${item.originalUrl}" target="_blank" class="hover:text-amber-400 hover:underline text-xs text-slate-400 truncate block">${item.originalUrl}</a>
+            </td>
+            <td class="py-3 px-4 text-center">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">${item.clicks || 0}</span>
+            </td>
+            <td class="py-3 px-4 text-xs text-slate-500">${dateStr}</td>
+            <td class="py-3 px-4 text-right">
+              <div class="inline-flex items-center gap-1.5">
+                <button onclick="openEditDirectLinkModal('${id}')" class="p-2 text-amber-400 hover:text-white bg-slate-800 hover:bg-amber-600 rounded-lg transition" title="Edit Direct Link"><i class="fa-regular fa-pen-to-square text-xs"></i></button>
+                <button onclick="copyToClipboard('${shareUrl}')" class="p-2 text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition" title="Copy Direct Share Link"><i class="fa-regular fa-copy text-xs"></i></button>
+                <a href="${shareUrl}" target="_blank" class="p-2 text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition" title="Test Direct Redirect"><i class="fa-solid fa-arrow-up-right-from-square text-xs"></i></a>
+                <button onclick="deleteDirectLink('${id}')" class="p-2 text-red-400 hover:text-white bg-slate-800 hover:bg-red-600 rounded-lg transition" title="Delete Direct Link"><i class="fa-regular fa-trash-can text-xs"></i></button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    if (searchDirectLinksInput) {
+      searchDirectLinksInput.addEventListener("input", (e) => renderDirectLinks(e.target.value));
+    }
+
+    if (directGenerateForm) {
+      directGenerateForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const originalUrl = directDestUrlInput.value.trim();
+        const title = directLinkTitleInput ? directLinkTitleInput.value.trim() : "";
+        let slug = directCustomSlugInput.value.trim();
+        if (!originalUrl) return;
+        if (!slug) {
+          const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+          for (let i = 0; i < 6; i++) slug += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+
+        try {
+          await database.ref(`direct_links/${slug}`).set({
+            id: slug,
+            title: title || "",
+            originalUrl: originalUrl,
+            createdAt: Date.now(),
+            clicks: 0,
+            createdBy: currentUser.email
+          });
+
+          const directShareUrl = `${window.location.origin}/d/${encodeURIComponent(slug)}`;
+          directGeneratedLinkInput.value = directShareUrl;
+          directResultBox.classList.remove("hidden");
+          showToast("Direct redirect link created!");
+          directDestUrlInput.value = "";
+          if (directLinkTitleInput) directLinkTitleInput.value = "";
+          directCustomSlugInput.value = "";
+        } catch (err) {
+          showToast(err.message, "error");
+        }
+      });
+    }
+
+    if (btnCopyDirectGenerated) {
+      btnCopyDirectGenerated.addEventListener("click", () => copyToClipboard(directGeneratedLinkInput.value));
+    }
+
+    window.deleteDirectLink = async function (id) {
+      if (!confirm(`Delete direct link '${id}'?`)) return;
+      try {
+        await database.ref(`direct_links/${id}`).remove();
+        showToast("Direct link deleted!");
+      } catch (err) {
+        showToast(err.message, "error");
+      }
+    };
+
+    window.openEditDirectLinkModal = function (id) {
+      const item = allDirectLinks[id];
+      if (!item) return;
+      document.getElementById("edit-direct-id").value = id;
+      document.getElementById("edit-direct-slug").value = id;
+      document.getElementById("edit-direct-title").value = item.title || "";
+      document.getElementById("edit-direct-url").value = item.originalUrl || "";
+      document.getElementById("modal-edit-direct-link").classList.remove("hidden");
+    };
+
+    window.closeEditDirectLinkModal = function () {
+      document.getElementById("modal-edit-direct-link").classList.add("hidden");
+    };
+
+    const formEditDirectLink = document.getElementById("form-edit-direct-link");
+    if (formEditDirectLink) {
+      formEditDirectLink.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const id = document.getElementById("edit-direct-id").value.trim();
+        const title = document.getElementById("edit-direct-title").value.trim();
+        const originalUrl = document.getElementById("edit-direct-url").value.trim();
+        if (!id || !originalUrl) return;
+
+        try {
+          await database.ref(`direct_links/${id}`).update({
+            title: title,
+            originalUrl: originalUrl
+          });
+          if (allDirectLinks[id]) {
+            allDirectLinks[id].title = title;
+            allDirectLinks[id].originalUrl = originalUrl;
+          }
+          renderDirectLinks(searchDirectLinksInput ? searchDirectLinksInput.value : "");
+          closeEditDirectLinkModal();
+          showToast("Direct link updated successfully!");
+        } catch (err) {
+          showToast(err.message, "error");
+        }
+      });
+    }
+
+    function renderDirectCountryAnalytics() {
+      if (!directCountriesList) return;
+      const directLogs = allClickLogs.filter((c) => c.targetType === "direct_link");
+      if (directLogs.length === 0) {
+        directCountriesList.innerHTML = `<div class="text-center py-8 text-slate-500 text-xs">No direct clicks recorded yet</div>`;
+        return;
+      }
+
+      const countryCounts = {};
+      directLogs.forEach((c) => {
+        const cName = c.country || "Unknown";
+        const cFlag = c.flag || "🌐";
+        const cKey = `${cFlag} ${cName}`;
+        countryCounts[cKey] = (countryCounts[cKey] || 0) + 1;
+      });
+
+      const sortedCountries = Object.keys(countryCounts).sort((a, b) => countryCounts[b] - countryCounts[a]);
+      const total = directLogs.length;
+
+      directCountriesList.innerHTML = sortedCountries.map((cName) => {
+        const count = countryCounts[cName];
+        const pct = Math.round((count / total) * 100);
+        return `
+          <div>
+            <div class="flex items-center justify-between text-xs mb-1">
+              <span class="font-medium text-slate-300">${cName}</span>
+              <span class="font-mono text-amber-400 font-bold">${count} (${pct}%)</span>
+            </div>
+            <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+              <div class="h-full bg-gradient-to-r from-amber-500 to-orange-500 rounded-full" style="width: ${pct}%"></div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
 
     window.copyToClipboard = function (text) {
       navigator.clipboard.writeText(text).then(() => showToast("Copied to clipboard!")).catch(() => showToast("Failed to copy", "error"));
@@ -1660,6 +2194,7 @@ ${activeCampaignData.totalSteps || 100}টি সহজ স্টেপ সফ�
           allClickLogs = [];
         }
         renderClickAnalytics();
+        renderDirectCountryAnalytics();
       }, (err) => {
         console.warn("Click logs read note:", err.message);
       });
@@ -1934,6 +2469,7 @@ ${activeCampaignData.totalSteps || 100}টি সহজ স্টেপ সফ�
     if (btnRefreshAnalytics) {
       btnRefreshAnalytics.addEventListener("click", () => {
         renderClickAnalytics();
+        renderDirectCountryAnalytics();
         showToast("Stream refreshed!");
       });
     }

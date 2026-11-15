@@ -1,5 +1,5 @@
 // URLbit.pro Style Realtime Telemetry & Click Analytics Engine
-(function() {
+(function () {
   const COUNTRY_NAMES = {
     BD: "Bangladesh", IN: "India", PK: "Pakistan", US: "United States", GB: "United Kingdom",
     AE: "United Arab Emirates", SA: "Saudi Arabia", MY: "Malaysia", SG: "Singapore",
@@ -90,7 +90,7 @@
   async function detectUserCountry() {
     const cached = sessionStorage.getItem("geo_loc_cache");
     if (cached) {
-      try { return JSON.parse(cached); } catch (e) {}
+      try { return JSON.parse(cached); } catch (e) { }
     }
 
     let code = "Unknown";
@@ -106,7 +106,7 @@
           code = m[1];
         }
       }
-    } catch (e) {}
+    } catch (e) { }
 
     if (code === "Unknown") {
       try {
@@ -116,7 +116,7 @@
           const d = await r.json();
           if (d && d.country) code = d.country;
         }
-      } catch (e) {}
+      } catch (e) { }
     }
 
     name = COUNTRY_NAMES[code] || (code !== "Unknown" ? code : "International");
@@ -126,12 +126,12 @@
       flag: getFlagEmoji(code)
     };
 
-    try { sessionStorage.setItem("geo_loc_cache", JSON.stringify(result)); } catch (e) {}
+    try { sessionStorage.setItem("geo_loc_cache", JSON.stringify(result)); } catch (e) { }
     return result;
   }
 
   // Global telemetry function
-  window.recordClickTelemetry = async function(rtdbUrl, targetId, targetType, title) {
+  window.recordClickTelemetry = async function (rtdbUrl, targetId, targetType, title) {
     if (!rtdbUrl || !targetId) return;
 
     // Prevent rapid duplicate clicks (10s cooldown per target)

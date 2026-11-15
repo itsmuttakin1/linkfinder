@@ -1,3 +1,6 @@
 # Block old /admin route permanently
 /admin    /    301
 /admin/*  /    301
+
+# Direct link path rewrite
+/d/*      /index.html   200

@@ -128,6 +128,21 @@
       </a>
     </div>
 
+    <!-- Direct Link Instant Redirecting State -->
+    <div id="state-direct"
+      class="hidden w-full bg-slate-900 border border-amber-500/30 rounded-3xl p-8 text-center shadow-2xl relative overflow-hidden">
+      <div class="absolute -top-12 -right-12 w-32 h-32 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div
+        class="w-16 h-16 mx-auto rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-3xl mb-4">
+        <i class="fa-solid fa-bolt-lightning animate-bounce"></i>
+      </div>
+      <h3 id="direct-title" class="text-xl font-bold text-white">Redirecting to Destination...</h3>
+      <p id="direct-subtitle" class="text-xs text-slate-400 mt-2">Connecting to direct destination gateway</p>
+      <div class="w-48 mx-auto bg-slate-800 h-1.5 rounded-full mt-5 overflow-hidden">
+        <div class="w-full h-full bg-gradient-to-r from-amber-500 via-orange-500 to-emerald-500 animate-pulse"></div>
+      </div>
+    </div>
+
     <!-- 1. PUBLIC LANDING & LINK GENERATOR STATE (When no ?id= is given) -->
     <div id="state-landing" class="hidden w-full space-y-4">
 
@@ -222,6 +237,18 @@
 
     <!-- 2. ACTIVE VERIFICATION STATE: 4 Steps with heavy ads & Social Bar -->
     <div id="state-verification" class="hidden w-full space-y-4">
+
+      <!-- Dynamic Link Title Banner (Only shown if link has a title) -->
+      <div id="link-title-banner"
+        class="hidden w-full bg-gradient-to-r from-indigo-950/70 via-purple-950/50 to-slate-900 border border-indigo-500/40 rounded-2xl p-4 sm:p-5 shadow-xl text-center relative overflow-hidden">
+        <div
+          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 text-xs font-bold mb-2">
+          <i class="fa-solid fa-file-arrow-down"></i>
+          <span id="title-banner-badge">Protected Destination</span>
+        </div>
+        <h2 id="link-title-text" class="text-base sm:text-lg font-extrabold text-white leading-snug"></h2>
+        <p id="link-title-instruction" class="text-xs text-slate-300 mt-1.5 font-medium"></p>
+      </div>
 
       <!-- STEP AD SLOT 1: Native Banner Above Card -->
       <div class="ad-slot-box w-full">
@@ -368,11 +395,20 @@
     // DOM Elements
     const stateLoading = document.getElementById("state-loading");
     const stateError = document.getElementById("state-error");
+    const stateDirect = document.getElementById("state-direct");
+    const directTitle = document.getElementById("direct-title");
+    const directSubtitle = document.getElementById("direct-subtitle");
     const stateLanding = document.getElementById("state-landing");
     const stateVerification = document.getElementById("state-verification");
     const errorMessage = document.getElementById("error-message");
     const portalForm = document.getElementById("portal-form");
     const portalIdInput = document.getElementById("portal-id-input");
+
+    // Title Banner Elements
+    const linkTitleBanner = document.getElementById("link-title-banner");
+    const linkTitleText = document.getElementById("link-title-text");
+    const linkTitleInstruction = document.getElementById("link-title-instruction");
+    const titleBannerBadge = document.getElementById("title-banner-badge");
 
     // Public Generator Elements
     const publicGenForm = document.getElementById("public-gen-form");
@@ -562,6 +598,102 @@
       }
     }
 
+    // Multi-Language Localization Engine (Default: EN, Bangladesh: BN, Indonesia: ID)
+    const I18N = {
+      EN: {
+        titleBadge: "Protected Destination",
+        titleInstruction: "Complete all 4 verification steps below to unlock your destination link:",
+        stepOf: (cur) => `Step ${cur} of 4`,
+        stepOfFinal: "Step 4 of 4 (Final)",
+        status1: "Step 1: Security Handshake",
+        status2: "Step 2: Bot Verification",
+        status3: "Step 3: Access Token Generator",
+        status4: "Step 4: Final Link Unlock",
+        waitInstruction1: (s) => `Please wait <strong class="text-indigo-400">${s} seconds</strong> for security check...`,
+        waitInstruction2: (s) => `Please wait <strong class="text-purple-400">${s} seconds</strong> for human check...`,
+        waitInstruction3: (s) => `Please wait <strong class="text-pink-400">${s} seconds</strong> to generate token...`,
+        waitInstruction4: (s) => `Please wait <strong class="text-emerald-400">${s} seconds</strong> to unlock destination link...`,
+        btnWait: (s) => `Please wait (${s}s)...`,
+        secondsLabel: "Seconds",
+        stepCompleteNotice: (step, cur) => `<span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check"></i> Step ${step} Complete!</span> Click below to visit sponsor (${cur}/3).`,
+        step4CompleteNotice: (cur) => `<span class="text-emerald-400 font-semibold">Verification Complete!</span> Click below to visit sponsor (${cur}/3).`,
+        btnVerifySponsor: (cur) => `Click to Verify Sponsor (${cur}/3) ➜`,
+        btnVerifyFinalSponsor: "Click to Verify Final Sponsor (3/3) ➜",
+        verifyingSponsorBtn: (rem, cur) => `Verifying Sponsor Tab (${rem}s) [${cur}/3]...`,
+        verifyingSponsorText: (rem, cur) => `<span class="text-amber-400 font-bold"><i class="fa-solid fa-clock"></i> Please stay ${rem}s on sponsor tab</span> before returning (${cur}/3)!`,
+        sponsorVerifiedNotice: (cur, next) => `<span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check"></i> Sponsor ${cur}/3 Verified!</span> Click below to visit sponsor (${next}/3).`,
+        redirectingBtn: "Redirecting to Destination...",
+        antiReload: "Do not refresh the page. Refreshing will reset verification back to Step 1."
+      },
+      BN: {
+        titleBadge: "সুরক্ষিত ফাইল / লিংক",
+        titleInstruction: "নিচের ১ থেকে ৪ পর্যন্ত ধাপগুলো সম্পন্ন করলেই আপনার গন্তব্য লিংকটি পেয়ে যাবেন:",
+        stepOf: (cur) => `ধাপ ${cur} / ৪`,
+        stepOfFinal: "ধাপ ৪ / ৪ (চূড়ান্ত)",
+        status1: "ধাপ ১: সিকিউরিটি যাচাইকরণ",
+        status2: "ধাপ ২: বট প্রতিরোধ চেক",
+        status3: "ধাপ ৩: এক্সেস টোকেন জেনারেটর",
+        status4: "ধাপ ৪: ফাইনাল লিংক আনলক",
+        waitInstruction1: (s) => `অনুগ্রহ করে সিকিউরিটি চেকের জন্য <strong class="text-indigo-400">${s} সেকেন্ড</strong> অপেক্ষা করুন...`,
+        waitInstruction2: (s) => `অনুগ্রহ করে হিউম্যান ভেরিফিকেশনের জন্য <strong class="text-purple-400">${s} সেকেন্ড</strong> অপেক্ষা করুন...`,
+        waitInstruction3: (s) => `এক্সেস টোকেন জেনারেট হতে <strong class="text-pink-400">${s} সেকেন্ড</strong> অপেক্ষা করুন...`,
+        waitInstruction4: (s) => `গন্তব্য লিংক আনলক হতে <strong class="text-emerald-400">${s} সেকেন্ড</strong> অপেক্ষা করুন...`,
+        btnWait: (s) => `অপেক্ষা করুন (${s} সেকেন্ড)...`,
+        secondsLabel: "সেকেন্ড",
+        stepCompleteNotice: (step, cur) => `<span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check"></i> ধাপ ${step} সম্পন্ন হয়েছে!</span> স্পন্সর ভিজিট করতে নিচে ক্লিক করুন (${cur}/৩)।`,
+        step4CompleteNotice: (cur) => `<span class="text-emerald-400 font-semibold">যাচাইকরণ সম্পন্ন হয়েছে!</span> স্পন্সর ভিজিট করতে নিচে ক্লিক করুন (${cur}/৩)।`,
+        btnVerifySponsor: (cur) => `স্পন্সর যাচাই করতে ক্লিক করুন (${cur}/৩) ➜`,
+        btnVerifyFinalSponsor: "চূড়ান্ত স্পন্সর যাচাই করতে ক্লিক করুন (৩/৩) ➜",
+        verifyingSponsorBtn: (rem, cur) => `স্পন্সর পেজ যাচাই হচ্ছে (${rem} সেকেন্ড) [${cur}/৩]...`,
+        verifyingSponsorText: (rem, cur) => `<span class="text-amber-400 font-bold"><i class="fa-solid fa-clock"></i> অনুগ্রহ করে ফিরে আসার আগে স্পন্সর পেজে ${rem} সেকেন্ড থাকুন</span> (${cur}/৩)!`,
+        sponsorVerifiedNotice: (cur, next) => `<span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check"></i> স্পন্সর ${cur}/৩ যাচাই সম্পন্ন!</span> পরবর্তী স্পন্সর ভিজিট করতে ক্লিক করুন (${next}/৩)।`,
+        redirectingBtn: "গন্তব্য লিংকে নিয়ে যাওয়া হচ্ছে...",
+        antiReload: "পেজ রিফ্রেশ করবেন না। রিফ্রেশ করলে আবার ধাপ ১ থেকে শুরু হবে।"
+      },
+      ID: {
+        titleBadge: "Tautan Terlindungi",
+        titleInstruction: "Selesaikan 4 langkah verifikasi di bawah ini untuk membuka tautan tujuan Anda:",
+        stepOf: (cur) => `Langkah ${cur} dari 4`,
+        stepOfFinal: "Langkah 4 dari 4 (Final)",
+        status1: "Langkah 1: Pemeriksaan Keamanan",
+        status2: "Langkah 2: Verifikasi Bot / Manusia",
+        status3: "Langkah 3: Pembuat Token Akses",
+        status4: "Langkah 4: Buka Kunci Tautan Tujuan",
+        waitInstruction1: (s) => `Harap tunggu <strong class="text-indigo-400">${s} detik</strong> untuk pemeriksaan keamanan...`,
+        waitInstruction2: (s) => `Harap tunggu <strong class="text-purple-400">${s} detik</strong> untuk verifikasi manusia...`,
+        waitInstruction3: (s) => `Harap tunggu <strong class="text-pink-400">${s} detik</strong> untuk menghasilkan token...`,
+        waitInstruction4: (s) => `Harap tunggu <strong class="text-emerald-400">${s} detik</strong> untuk membuka tautan tujuan...`,
+        btnWait: (s) => `Harap tunggu (${s} detik)...`,
+        secondsLabel: "Detik",
+        stepCompleteNotice: (step, cur) => `<span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check"></i> Langkah ${step} Selesai!</span> Klik di bawah untuk mengunjungi sponsor (${cur}/3).`,
+        step4CompleteNotice: (cur) => `<span class="text-emerald-400 font-semibold">Verifikasi Selesai!</span> Klik di bawah untuk mengunjungi sponsor (${cur}/3).`,
+        btnVerifySponsor: (cur) => `Klik untuk Verifikasi Sponsor (${cur}/3) ➜`,
+        btnVerifyFinalSponsor: "Klik untuk Verifikasi Sponsor Terakhir (3/3) ➜",
+        verifyingSponsorBtn: (rem, cur) => `Memverifikasi Tab Sponsor (${rem}s) [${cur}/3]...`,
+        verifyingSponsorText: (rem, cur) => `<span class="text-amber-400 font-bold"><i class="fa-solid fa-clock"></i> Harap tetap di tab sponsor selama ${rem} detik</span> sebelum kembali (${cur}/3)!`,
+        sponsorVerifiedNotice: (cur, next) => `<span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check"></i> Sponsor ${cur}/3 Terverifikasi!</span> Klik di bawah untuk verifikasi berikutnya (${next}/3).`,
+        redirectingBtn: "Mengalihkan ke Tautan Tujuan...",
+        antiReload: "Jangan segarkan halaman. Menyegarkan akan mereset verifikasi ke Langkah 1."
+      }
+    };
+
+    let activeLang = "EN";
+    let t = I18N.EN;
+
+    // Helper: Detect Direct Link Slug from ?d=, ?direct=, or /d/<slug>
+    function getDirectSlugFromUrl() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const q = urlParams.get("d") || urlParams.get("direct");
+      if (q) return q.trim();
+
+      const path = window.location.pathname;
+      if (path.startsWith("/d/")) {
+        const slug = path.replace("/d/", "").split("/")[0].split("?")[0].trim();
+        if (slug) return slug;
+      }
+      return null;
+    }
+
     // Countdown Timer Engine (10 seconds)
     function startCountdown(duration, onComplete) {
       if (timerInterval) clearInterval(timerInterval);
@@ -569,13 +701,13 @@
       const totalCircumference = 283;
 
       countdownNumber.textContent = countdownSeconds;
-      secondsRemainingLabel.textContent = `${countdownSeconds} seconds`;
+      secondsRemainingLabel.textContent = `${countdownSeconds} ${t.secondsLabel}`;
       timerCircleProgress.style.strokeDashoffset = "0";
 
       btnNextStep.disabled = true;
       btnNextStep.className = "w-full py-4 px-6 rounded-2xl font-bold text-base transition-all duration-300 flex items-center justify-center gap-3 bg-slate-800 text-slate-500 cursor-not-allowed";
       btnIcon.className = "fa-solid fa-lock text-sm";
-      btnText.textContent = `Please wait (${countdownSeconds}s)...`;
+      btnText.textContent = t.btnWait(countdownSeconds);
 
       timerInterval = setInterval(() => {
         if (window.isAdBlockActive) {
@@ -586,7 +718,7 @@
 
         if (countdownSeconds >= 0) {
           countdownNumber.textContent = countdownSeconds;
-          secondsRemainingLabel.textContent = `${countdownSeconds} seconds`;
+          secondsRemainingLabel.textContent = `${countdownSeconds} ${t.secondsLabel}`;
           const offset = totalCircumference - (countdownSeconds / duration) * totalCircumference;
           timerCircleProgress.style.strokeDashoffset = offset;
         }
@@ -617,8 +749,8 @@
         const remaining = Math.max(0, Math.ceil((targetDurationMs - elapsed) / 1000));
 
         if (remaining > 0) {
-          btnText.textContent = `Verifying Sponsor Tab (${remaining}s) [${currentAdNum}/${totalAdsNum}]...`;
-          instructionText.innerHTML = `<span class="text-amber-400 font-bold"><i class="fa-solid fa-clock"></i> Please stay ${remaining}s on sponsor tab</span> before returning (${currentAdNum}/${totalAdsNum})!`;
+          btnText.textContent = t.verifyingSponsorBtn(remaining, currentAdNum);
+          instructionText.innerHTML = t.verifyingSponsorText(remaining, currentAdNum);
         } else {
           clearInterval(adWaitInterval);
           adWaitInterval = null;
@@ -635,18 +767,18 @@
       currentStep = 1;
       stepAdClicks = 0;
       if (adWaitInterval) { clearInterval(adWaitInterval); adWaitInterval = null; }
-      stepBadge.textContent = "Step 1 of 4";
+      stepBadge.textContent = t.stepOf(1);
       stepBadge.className = "px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-400 border border-indigo-500/30";
-      stepStatusText.textContent = "Step 1: Security Handshake";
+      stepStatusText.textContent = t.status1;
       progressBarFill.style.width = "25%";
-      instructionText.innerHTML = `Please wait <strong id="seconds-remaining-label" class="text-indigo-400">10 seconds</strong> for security check...`;
+      instructionText.innerHTML = t.waitInstruction1(10);
 
       startCountdown(10, () => {
         btnNextStep.disabled = false;
         btnNextStep.className = "w-full py-4 px-6 rounded-2xl font-bold text-base transition-all duration-300 flex items-center justify-center gap-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white cursor-pointer shadow-lg shadow-indigo-600/30 transform hover:-translate-y-0.5 active:scale-95 glow-btn";
         btnIcon.className = "fa-solid fa-arrow-right text-sm";
-        btnText.textContent = "Click to Verify Sponsor (1/3) ➜";
-        instructionText.innerHTML = `<span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check"></i> Step 1 Complete!</span> Click below to visit sponsor (1/3).`;
+        btnText.textContent = t.btnVerifySponsor(1);
+        instructionText.innerHTML = t.stepCompleteNotice(1, 1);
       });
     }
 
@@ -655,18 +787,18 @@
       currentStep = 2;
       stepAdClicks = 0;
       if (adWaitInterval) { clearInterval(adWaitInterval); adWaitInterval = null; }
-      stepBadge.textContent = "Step 2 of 4";
+      stepBadge.textContent = t.stepOf(2);
       stepBadge.className = "px-3 py-1 rounded-full bg-purple-500/20 text-purple-400 border border-purple-500/30";
-      stepStatusText.textContent = "Step 2: Bot Verification";
+      stepStatusText.textContent = t.status2;
       progressBarFill.style.width = "50%";
-      instructionText.innerHTML = `Please wait <strong id="seconds-remaining-label" class="text-purple-400">10 seconds</strong> for human check...`;
+      instructionText.innerHTML = t.waitInstruction2(10);
 
       startCountdown(10, () => {
         btnNextStep.disabled = false;
         btnNextStep.className = "w-full py-4 px-6 rounded-2xl font-bold text-base transition-all duration-300 flex items-center justify-center gap-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white cursor-pointer shadow-lg shadow-purple-600/30 transform hover:-translate-y-0.5 active:scale-95 glow-btn";
         btnIcon.className = "fa-solid fa-arrow-right text-sm";
-        btnText.textContent = "Click to Verify Sponsor (1/3) ➜";
-        instructionText.innerHTML = `<span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check"></i> Step 2 Complete!</span> Click below to visit sponsor (1/3).`;
+        btnText.textContent = t.btnVerifySponsor(1);
+        instructionText.innerHTML = t.stepCompleteNotice(2, 1);
       });
     }
 
@@ -675,18 +807,18 @@
       currentStep = 3;
       stepAdClicks = 0;
       if (adWaitInterval) { clearInterval(adWaitInterval); adWaitInterval = null; }
-      stepBadge.textContent = "Step 3 of 4";
+      stepBadge.textContent = t.stepOf(3);
       stepBadge.className = "px-3 py-1 rounded-full bg-pink-500/20 text-pink-400 border border-pink-500/30";
-      stepStatusText.textContent = "Step 3: Access Token Generator";
+      stepStatusText.textContent = t.status3;
       progressBarFill.style.width = "75%";
-      instructionText.innerHTML = `Please wait <strong id="seconds-remaining-label" class="text-pink-400">10 seconds</strong> to generate token...`;
+      instructionText.innerHTML = t.waitInstruction3(10);
 
       startCountdown(10, () => {
         btnNextStep.disabled = false;
         btnNextStep.className = "w-full py-4 px-6 rounded-2xl font-bold text-base transition-all duration-300 flex items-center justify-center gap-3 bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 text-white cursor-pointer shadow-lg shadow-pink-600/30 transform hover:-translate-y-0.5 active:scale-95 glow-btn";
         btnIcon.className = "fa-solid fa-arrow-right text-sm";
-        btnText.textContent = "Click to Verify Sponsor (1/3) ➜";
-        instructionText.innerHTML = `<span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check"></i> Step 3 Complete!</span> Click below to visit sponsor (1/3).`;
+        btnText.textContent = t.btnVerifySponsor(1);
+        instructionText.innerHTML = t.stepCompleteNotice(3, 1);
       });
     }
 
@@ -695,18 +827,18 @@
       currentStep = 4;
       stepAdClicks = 0;
       if (adWaitInterval) { clearInterval(adWaitInterval); adWaitInterval = null; }
-      stepBadge.textContent = "Step 4 of 4 (Final)";
+      stepBadge.textContent = t.stepOfFinal;
       stepBadge.className = "px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
-      stepStatusText.textContent = "Step 4: Final Link Unlock";
+      stepStatusText.textContent = t.status4;
       progressBarFill.style.width = "100%";
-      instructionText.innerHTML = `Please wait <strong id="seconds-remaining-label" class="text-emerald-400">10 seconds</strong> to unlock destination link...`;
+      instructionText.innerHTML = t.waitInstruction4(10);
 
       startCountdown(10, () => {
         btnNextStep.disabled = false;
         btnNextStep.className = "w-full py-4 px-6 rounded-2xl font-bold text-base transition-all duration-300 flex items-center justify-center gap-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white cursor-pointer shadow-lg shadow-emerald-600/30 transform hover:-translate-y-0.5 active:scale-95 glow-btn";
         btnIcon.className = "fa-solid fa-unlock-keyhole text-sm";
-        btnText.textContent = "Click to Verify Sponsor (1/3) ➜";
-        instructionText.innerHTML = `<span class="text-emerald-400 font-semibold">Verification Complete!</span> Click below to visit sponsor (1/3).`;
+        btnText.textContent = t.btnVerifySponsor(1);
+        instructionText.innerHTML = t.step4CompleteNotice(1);
       });
     }
 
@@ -720,8 +852,8 @@
           btnNextStep.disabled = false;
           btnNextStep.className = "w-full py-4 px-6 rounded-2xl font-bold text-base transition-all duration-300 flex items-center justify-center gap-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white cursor-pointer shadow-lg shadow-indigo-600/30 transform hover:-translate-y-0.5 active:scale-95 glow-btn";
           btnIcon.className = "fa-solid fa-arrow-right text-sm";
-          btnText.textContent = "Click to Verify Sponsor (2/3) ➜";
-          instructionText.innerHTML = `<span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check"></i> Sponsor 1/3 Verified!</span> Click below to visit sponsor (2/3).`;
+          btnText.textContent = t.btnVerifySponsor(2);
+          instructionText.innerHTML = t.sponsorVerifiedNotice(1, 2);
         });
       } else if (stepAdClicks === 1) {
         // Pop 2
@@ -731,8 +863,8 @@
           btnNextStep.disabled = false;
           btnNextStep.className = "w-full py-4 px-6 rounded-2xl font-bold text-base transition-all duration-300 flex items-center justify-center gap-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white cursor-pointer shadow-lg shadow-indigo-600/30 transform hover:-translate-y-0.5 active:scale-95 glow-btn";
           btnIcon.className = "fa-solid fa-arrow-right text-sm";
-          btnText.textContent = "Click to Verify Final Sponsor (3/3) ➜";
-          instructionText.innerHTML = `<span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check"></i> Sponsor 2/3 Verified!</span> Click below to visit final sponsor (3/3).`;
+          btnText.textContent = t.btnVerifyFinalSponsor;
+          instructionText.innerHTML = t.sponsorVerifiedNotice(2, 3);
         });
       } else if (stepAdClicks === 2) {
         // Pop 3
@@ -757,7 +889,7 @@
         handleAdSteps(() => initStep4());
       } else if (currentStep === 4) {
         handleAdSteps(() => {
-          btnText.textContent = "Redirecting to Destination...";
+          btnText.textContent = t.redirectingBtn;
           btnNextStep.disabled = true;
           setTimeout(() => {
             window.location.href = targetOriginalUrl;
@@ -799,6 +931,79 @@
 
     // Main App Initialization
     async function init() {
+      // 1. Check for Instant 1-Click Direct Link (?d=slug or /d/slug)
+      const directSlug = getDirectSlugFromUrl();
+      if (directSlug) {
+        stateLoading.classList.add("hidden");
+        stateLanding.classList.add("hidden");
+        stateVerification.classList.add("hidden");
+        stateError.classList.add("hidden");
+        stateDirect.classList.remove("hidden");
+
+        // Localize direct message based on country
+        let directLang = "EN";
+        try {
+          if (window.telemetryHelpers && window.telemetryHelpers.detectUserCountry) {
+            const geo = await window.telemetryHelpers.detectUserCountry();
+            if (geo && geo.code === "BD") directLang = "BN";
+            else if (geo && geo.code === "ID") directLang = "ID";
+          }
+        } catch (e) {}
+
+        if (directLang === "BN") {
+          directTitle.textContent = "সরাসরি আপনার গন্তব্যে নেওয়া হচ্ছে...";
+          directSubtitle.textContent = "সুরক্ষিত ডিরেক্ট লিংক গেটওয়ে • গন্তব্যে নিয়ে যাওয়া হচ্ছে";
+        } else if (directLang === "ID") {
+          directTitle.textContent = "Mengalihkan ke Tautan Tujuan...";
+          directSubtitle.textContent = "Gateway tautan langsung aman • Mengalihkan ke halaman tujuan";
+        }
+
+        try {
+          let directData = null;
+          if (typeof database !== "undefined" && database) {
+            try {
+              const snap = await database.ref(`direct_links/${directSlug}`).once("value");
+              if (snap.exists()) directData = snap.val();
+            } catch (e) {}
+          }
+          if (!directData) {
+            const resp = await fetch(`${RTDB_URL}/direct_links/${encodeURIComponent(directSlug)}.json`);
+            if (resp.ok) directData = await resp.json();
+          }
+
+          if (!directData || !directData.originalUrl) {
+            stateDirect.classList.add("hidden");
+            errorMessage.textContent = `Direct link '${directSlug}' was not found or has expired.`;
+            stateError.classList.remove("hidden");
+            return;
+          }
+
+          // Increment clicks and record telemetry in background
+          try {
+            if (typeof database !== "undefined" && database) {
+              database.ref(`direct_links/${directSlug}/clicks`).transaction((curr) => (curr || 0) + 1);
+            }
+            if (typeof window.recordClickTelemetry === "function") {
+              window.recordClickTelemetry(RTDB_URL, directSlug, "direct_link", directData.title || directData.originalUrl);
+            }
+          } catch (e) {}
+
+          // Instant redirect
+          setTimeout(() => {
+            window.location.replace(directData.originalUrl);
+          }, 350);
+          return;
+
+        } catch (err) {
+          console.error("Direct link error:", err);
+          stateDirect.classList.add("hidden");
+          errorMessage.textContent = "Direct link connection failed. Please try again.";
+          stateError.classList.remove("hidden");
+          return;
+        }
+      }
+
+      // 2. Standard 4-Step Short Link Flow
       const linkId = getLinkIdFromUrl();
 
       if (!linkId) {
@@ -809,6 +1014,30 @@
       }
 
       try {
+        // Detect Geo for Multi-Language (EN: Default, BD: Bengali, ID: Indonesian)
+        try {
+          if (window.telemetryHelpers && window.telemetryHelpers.detectUserCountry) {
+            const geo = await window.telemetryHelpers.detectUserCountry();
+            if (geo && geo.code === "BD") {
+              activeLang = "BN";
+            } else if (geo && geo.code === "ID") {
+              activeLang = "ID";
+            } else {
+              activeLang = "EN";
+            }
+          }
+        } catch (geoErr) {
+          console.warn("Geo detect note:", geoErr);
+        }
+
+        t = I18N[activeLang] || I18N.EN;
+
+        // Apply static localized strings
+        const antiReloadWarning = document.getElementById("anti-reload-warning");
+        if (antiReloadWarning) {
+          antiReloadWarning.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-amber-500 mr-1"></i> ${t.antiReload}`;
+        }
+
         const linkData = await fetchLink(linkId);
 
         if (!linkData || !linkData.originalUrl) {
@@ -820,13 +1049,23 @@
 
         targetOriginalUrl = linkData.originalUrl;
 
+        // Dynamic Title Banner (Only if linkData.title is provided, otherwise remains strictly hidden)
+        if (linkData.title && linkData.title.trim()) {
+          titleBannerBadge.textContent = t.titleBadge;
+          linkTitleText.textContent = linkData.title.trim();
+          linkTitleInstruction.textContent = t.titleInstruction;
+          linkTitleBanner.classList.remove("hidden");
+        } else {
+          linkTitleBanner.classList.add("hidden");
+        }
+
         // Increment clicks & record country/device telemetry in background
         try {
           if (typeof database !== "undefined" && database) {
             database.ref(`links/${linkId}/clicks`).transaction((curr) => (curr || 0) + 1);
           }
           if (typeof window.recordClickTelemetry === "function") {
-            window.recordClickTelemetry(RTDB_URL, linkId, "short_link", targetOriginalUrl);
+            window.recordClickTelemetry(RTDB_URL, linkId, "short_link", linkData.title || targetOriginalUrl);
           }
         } catch (e) {
           console.warn("Click tracking note:", e);
