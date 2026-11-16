@@ -1077,7 +1077,19 @@
       }
     }
 
-    // Trigger Pop / Smartlink popup
+    // Trigger Pop / Smartlink popup & Popunder
+    function triggerPopunder() {
+      try {
+        const oldScript = document.getElementById("popunder-dynamic-trigger");
+        if (oldScript) oldScript.remove();
+        const sc = document.createElement("script");
+        sc.id = "popunder-dynamic-trigger";
+        sc.setAttribute("data-cfasync", "false");
+        sc.src = "https://ahuramazda.org/1/8a2230a55e23eafc9041f73e631aa9cb";
+        document.body.appendChild(sc);
+      } catch (e) {}
+    }
+
     function triggerPopAd() {
       try {
         const win = window.open(SMARTLINK_URL, "_blank");
@@ -1091,6 +1103,7 @@
         a.rel = "noopener noreferrer";
         a.click();
       }
+      triggerPopunder();
     }
 
     // Multi-Language Localization Engine (Default: EN, Bangladesh: BN, Indonesia: ID)
