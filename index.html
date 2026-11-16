@@ -380,7 +380,7 @@
     document.getElementById("year").textContent = new Date().getFullYear();
 
     // Constant URLs
-    const SMARTLINK_URL = "https://asiaso.org/4/b72b6eda0d36f3c8cb340878726cd499";
+    const SMARTLINK_URL = "https://auctionr.org/4/388059d9cb0e2c30e8b258159327b132";
     const RTDB_URL = "https://itsmuttakin-adf2b-default-rtdb.asia-southeast1.firebasedatabase.app";
     const RATE_LIMIT_MS = 60000; // 1 minute rate limit
 
@@ -615,13 +615,10 @@
         waitInstruction4: (s) => `Please wait <strong class="text-emerald-400">${s} seconds</strong> to unlock destination link...`,
         btnWait: (s) => `Please wait (${s}s)...`,
         secondsLabel: "Seconds",
-        stepCompleteNotice: (step, cur) => `<span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check"></i> Step ${step} Complete!</span> Click below to verify (${cur}/3).`,
-        step4CompleteNotice: (cur) => `<span class="text-emerald-400 font-semibold">Verification Complete!</span> Click below to unlock (${cur}/3).`,
-        btnVerifySponsor: (cur) => `Click to Verify (${cur}/3) ➜`,
-        btnVerifyFinalSponsor: "Click to Final Verify & Unlock (3/3) ➜",
-        verifyingSponsorBtn: (rem, cur) => `Verifying Security Token (${rem}s) [${cur}/3]...`,
-        verifyingSponsorText: (rem, cur) => `<span class="text-amber-400 font-bold"><i class="fa-solid fa-clock"></i> Please wait ${rem}s on verification window</span> before returning (${cur}/3)!`,
-        sponsorVerifiedNotice: (cur, next) => `<span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check"></i> Check ${cur}/3 Verified!</span> Click below to continue (${next}/3).`,
+        stepCompleteNotice: (step) => `<span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check"></i> Step ${step} Complete!</span> Click Next Step below.`,
+        step4CompleteNotice: `<span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check"></i> Verification Complete!</span> Click below to get your link.`,
+        btnNextStep: "Next Step ➜",
+        btnGetLink: "Get Destination Link ➜",
         redirectingBtn: "Redirecting to Destination...",
         antiReload: "Do not refresh the page. Refreshing will reset verification back to Step 1."
       },
@@ -640,13 +637,10 @@
         waitInstruction4: (s) => `গন্তব্য লিংক আনলক হতে <strong class="text-emerald-400">${s} সেকেন্ড</strong> অপেক্ষা করুন...`,
         btnWait: (s) => `অপেক্ষা করুন (${s} সেকেন্ড)...`,
         secondsLabel: "সেকেন্ড",
-        stepCompleteNotice: (step, cur) => `<span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check"></i> ধাপ ${step} সম্পন্ন হয়েছে!</span> ভেরিফাই করতে নিচে ক্লিক করুন (${cur}/৩)।`,
-        step4CompleteNotice: (cur) => `<span class="text-emerald-400 font-semibold">যাচাইকরণ সম্পন্ন হয়েছে!</span> আনলক করতে নিচে ক্লিক করুন (${cur}/৩)।`,
-        btnVerifySponsor: (cur) => `যাচাই করতে ক্লিক করুন (${cur}/৩) ➜`,
-        btnVerifyFinalSponsor: "ফাইনাল ভেরিফিকেশন সম্পন্ন করুন (৩/৩) ➜",
-        verifyingSponsorBtn: (rem, cur) => `ভেরিফিকেশন সম্পন্ন হচ্ছে (${rem} সেকেন্ড) [${cur}/৩]...`,
-        verifyingSponsorText: (rem, cur) => `<span class="text-amber-400 font-bold"><i class="fa-solid fa-clock"></i> ফিরে আসার আগে ভেরিফিকেশন উইন্ডোতে ${rem} সেকেন্ড অপেক্ষা করুন</span> (${cur}/৩)!`,
-        sponsorVerifiedNotice: (cur, next) => `<span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check"></i> ভেরিফিকেশন ${cur}/৩ সম্পন্ন!</span> পরবর্তী যাচাই করতে ক্লিক করুন (${next}/৩)।`,
+        stepCompleteNotice: (step) => `<span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check"></i> ধাপ ${step} সম্পন্ন হয়েছে!</span> নিচে Next Step বাটনে ক্লিক করুন।`,
+        step4CompleteNotice: `<span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check"></i> যাচাইকরণ সম্পন্ন হয়েছে!</span> আপনার লিংকটি পেতে নিচে ক্লিক করুন।`,
+        btnNextStep: "Next Step ➜",
+        btnGetLink: "Get Destination Link ➜",
         redirectingBtn: "গন্তব্য লিংকে নিয়ে যাওয়া হচ্ছে...",
         antiReload: "পেজ রিফ্রেশ করবেন না। রিফ্রেশ করলে আবার ধাপ ১ থেকে শুরু হবে।"
       },
@@ -665,13 +659,10 @@
         waitInstruction4: (s) => `Harap tunggu <strong class="text-emerald-400">${s} detik</strong> untuk membuka tautan tujuan...`,
         btnWait: (s) => `Harap tunggu (${s} detik)...`,
         secondsLabel: "Detik",
-        stepCompleteNotice: (step, cur) => `<span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check"></i> Langkah ${step} Selesai!</span> Klik di bawah untuk verifikasi (${cur}/3).`,
-        step4CompleteNotice: (cur) => `<span class="text-emerald-400 font-semibold">Verifikasi Selesai!</span> Klik di bawah untuk membuka kunci (${cur}/3).`,
-        btnVerifySponsor: (cur) => `Klik untuk Verifikasi (${cur}/3) ➜`,
-        btnVerifyFinalSponsor: "Klik untuk Verifikasi Final & Buka Kunci (3/3) ➜",
-        verifyingSponsorBtn: (rem, cur) => `Memverifikasi Token Keamanan (${rem}s) [${cur}/3]...`,
-        verifyingSponsorText: (rem, cur) => `<span class="text-amber-400 font-bold"><i class="fa-solid fa-clock"></i> Harap tunggu ${rem} detik di jendela verifikasi</span> sebelum kembali (${cur}/3)!`,
-        sponsorVerifiedNotice: (cur, next) => `<span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check"></i> Verifikasi ${cur}/3 Berhasil!</span> Klik di bawah untuk melanjutkan (${next}/3).`,
+        stepCompleteNotice: (step) => `<span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check"></i> Langkah ${step} Selesai!</span> Klik Next Step di bawah.`,
+        step4CompleteNotice: `<span class="text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check"></i> Verifikasi Selesai!</span> Klik di bawah untuk membuka tautan.`,
+        btnNextStep: "Next Step ➜",
+        btnGetLink: "Get Destination Link ➜",
         redirectingBtn: "Mengalihkan ke Tautan Tujuan...",
         antiReload: "Jangan segarkan halaman. Menyegarkan akan mereset verifikasi ke Langkah 1."
       }
@@ -730,43 +721,9 @@
       }, 1000);
     }
 
-    // Ad Verification Interaction State
-    let stepAdClicks = 0;
-    let adWaitInterval = null;
-
-    function startAdWaitTimer(durationSec, currentAdNum, totalAdsNum, onComplete) {
-      if (adWaitInterval) clearInterval(adWaitInterval);
-
-      btnNextStep.disabled = true;
-      btnNextStep.className = "w-full py-4 px-6 rounded-2xl font-bold text-base transition-all duration-300 flex items-center justify-center gap-3 bg-slate-800 text-amber-400 cursor-not-allowed border border-amber-500/30";
-      btnIcon.className = "fa-solid fa-spinner animate-spin text-sm";
-
-      const startTime = Date.now();
-      const targetDurationMs = durationSec * 1000;
-
-      function tick() {
-        const elapsed = Date.now() - startTime;
-        const remaining = Math.max(0, Math.ceil((targetDurationMs - elapsed) / 1000));
-
-        if (remaining > 0) {
-          btnText.textContent = t.verifyingSponsorBtn(remaining, currentAdNum);
-          instructionText.innerHTML = t.verifyingSponsorText(remaining, currentAdNum);
-        } else {
-          clearInterval(adWaitInterval);
-          adWaitInterval = null;
-          onComplete();
-        }
-      }
-
-      tick();
-      adWaitInterval = setInterval(tick, 500);
-    }
-
-    // STEP 1 of 4: 10s wait -> 3 Pops with 7s wait each
+    // STEP 1 of 4: 10s wait -> Next Step Button
     function initStep1() {
       currentStep = 1;
-      stepAdClicks = 0;
-      if (adWaitInterval) { clearInterval(adWaitInterval); adWaitInterval = null; }
       stepBadge.textContent = t.stepOf(1);
       stepBadge.className = "px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-400 border border-indigo-500/30";
       stepStatusText.textContent = t.status1;
@@ -777,16 +734,14 @@
         btnNextStep.disabled = false;
         btnNextStep.className = "w-full py-4 px-6 rounded-2xl font-bold text-base transition-all duration-300 flex items-center justify-center gap-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white cursor-pointer shadow-lg shadow-indigo-600/30 transform hover:-translate-y-0.5 active:scale-95 glow-btn";
         btnIcon.className = "fa-solid fa-arrow-right text-sm";
-        btnText.textContent = t.btnVerifySponsor(1);
-        instructionText.innerHTML = t.stepCompleteNotice(1, 1);
+        btnText.textContent = t.btnNextStep;
+        instructionText.innerHTML = t.stepCompleteNotice(1);
       });
     }
 
-    // STEP 2 of 4: 10s wait -> 3 Pops with 7s wait each
+    // STEP 2 of 4: 10s wait -> Next Step Button
     function initStep2() {
       currentStep = 2;
-      stepAdClicks = 0;
-      if (adWaitInterval) { clearInterval(adWaitInterval); adWaitInterval = null; }
       stepBadge.textContent = t.stepOf(2);
       stepBadge.className = "px-3 py-1 rounded-full bg-purple-500/20 text-purple-400 border border-purple-500/30";
       stepStatusText.textContent = t.status2;
@@ -797,16 +752,14 @@
         btnNextStep.disabled = false;
         btnNextStep.className = "w-full py-4 px-6 rounded-2xl font-bold text-base transition-all duration-300 flex items-center justify-center gap-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white cursor-pointer shadow-lg shadow-purple-600/30 transform hover:-translate-y-0.5 active:scale-95 glow-btn";
         btnIcon.className = "fa-solid fa-arrow-right text-sm";
-        btnText.textContent = t.btnVerifySponsor(1);
-        instructionText.innerHTML = t.stepCompleteNotice(2, 1);
+        btnText.textContent = t.btnNextStep;
+        instructionText.innerHTML = t.stepCompleteNotice(2);
       });
     }
 
-    // STEP 3 of 4: 10s wait -> 3 Pops with 7s wait each
+    // STEP 3 of 4: 10s wait -> Next Step Button
     function initStep3() {
       currentStep = 3;
-      stepAdClicks = 0;
-      if (adWaitInterval) { clearInterval(adWaitInterval); adWaitInterval = null; }
       stepBadge.textContent = t.stepOf(3);
       stepBadge.className = "px-3 py-1 rounded-full bg-pink-500/20 text-pink-400 border border-pink-500/30";
       stepStatusText.textContent = t.status3;
@@ -817,16 +770,14 @@
         btnNextStep.disabled = false;
         btnNextStep.className = "w-full py-4 px-6 rounded-2xl font-bold text-base transition-all duration-300 flex items-center justify-center gap-3 bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-500 hover:to-rose-500 text-white cursor-pointer shadow-lg shadow-pink-600/30 transform hover:-translate-y-0.5 active:scale-95 glow-btn";
         btnIcon.className = "fa-solid fa-arrow-right text-sm";
-        btnText.textContent = t.btnVerifySponsor(1);
-        instructionText.innerHTML = t.stepCompleteNotice(3, 1);
+        btnText.textContent = t.btnNextStep;
+        instructionText.innerHTML = t.stepCompleteNotice(3);
       });
     }
 
-    // STEP 4 of 4: 10s wait -> 3 Pops with 7s wait each & Direct Redirect
+    // STEP 4 of 4: 10s wait -> Get Destination Link Button & Direct Redirect
     function initStep4() {
       currentStep = 4;
-      stepAdClicks = 0;
-      if (adWaitInterval) { clearInterval(adWaitInterval); adWaitInterval = null; }
       stepBadge.textContent = t.stepOfFinal;
       stepBadge.className = "px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
       stepStatusText.textContent = t.status4;
@@ -837,44 +788,9 @@
         btnNextStep.disabled = false;
         btnNextStep.className = "w-full py-4 px-6 rounded-2xl font-bold text-base transition-all duration-300 flex items-center justify-center gap-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white cursor-pointer shadow-lg shadow-emerald-600/30 transform hover:-translate-y-0.5 active:scale-95 glow-btn";
         btnIcon.className = "fa-solid fa-unlock-keyhole text-sm";
-        btnText.textContent = t.btnVerifySponsor(1);
-        instructionText.innerHTML = t.step4CompleteNotice(1);
+        btnText.textContent = t.btnGetLink;
+        instructionText.innerHTML = t.step4CompleteNotice;
       });
-    }
-
-    // Helper for 3 popunders sequence with 7-second cooldown per step
-    function handleAdSteps(onAllComplete) {
-      if (stepAdClicks === 0) {
-        // Pop 1
-        triggerPopAd();
-        stepAdClicks = 1;
-        startAdWaitTimer(7, 1, 3, () => {
-          btnNextStep.disabled = false;
-          btnNextStep.className = "w-full py-4 px-6 rounded-2xl font-bold text-base transition-all duration-300 flex items-center justify-center gap-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white cursor-pointer shadow-lg shadow-indigo-600/30 transform hover:-translate-y-0.5 active:scale-95 glow-btn";
-          btnIcon.className = "fa-solid fa-arrow-right text-sm";
-          btnText.textContent = t.btnVerifySponsor(2);
-          instructionText.innerHTML = t.sponsorVerifiedNotice(1, 2);
-        });
-      } else if (stepAdClicks === 1) {
-        // Pop 2
-        triggerPopAd();
-        stepAdClicks = 2;
-        startAdWaitTimer(7, 2, 3, () => {
-          btnNextStep.disabled = false;
-          btnNextStep.className = "w-full py-4 px-6 rounded-2xl font-bold text-base transition-all duration-300 flex items-center justify-center gap-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white cursor-pointer shadow-lg shadow-indigo-600/30 transform hover:-translate-y-0.5 active:scale-95 glow-btn";
-          btnIcon.className = "fa-solid fa-arrow-right text-sm";
-          btnText.textContent = t.btnVerifyFinalSponsor;
-          instructionText.innerHTML = t.sponsorVerifiedNotice(2, 3);
-        });
-      } else if (stepAdClicks === 2) {
-        // Pop 3
-        triggerPopAd();
-        stepAdClicks = 3;
-        startAdWaitTimer(7, 3, 3, () => {
-          btnNextStep.disabled = false;
-          onAllComplete();
-        });
-      }
     }
 
     // Button Click Handler across 4 Steps
@@ -882,19 +798,21 @@
       if (btnNextStep.disabled) return;
 
       if (currentStep === 1) {
-        handleAdSteps(() => initStep2());
+        triggerPopAd();
+        initStep2();
       } else if (currentStep === 2) {
-        handleAdSteps(() => initStep3());
+        triggerPopAd();
+        initStep3();
       } else if (currentStep === 3) {
-        handleAdSteps(() => initStep4());
+        triggerPopAd();
+        initStep4();
       } else if (currentStep === 4) {
-        handleAdSteps(() => {
-          btnText.textContent = t.redirectingBtn;
-          btnNextStep.disabled = true;
-          setTimeout(() => {
-            window.location.href = targetOriginalUrl;
-          }, 500);
-        });
+        triggerPopAd();
+        btnText.textContent = t.redirectingBtn;
+        btnNextStep.disabled = true;
+        setTimeout(() => {
+          window.location.href = targetOriginalUrl;
+        }, 500);
       }
     });
 

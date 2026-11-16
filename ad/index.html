@@ -1120,7 +1120,7 @@
     if (btnQuickStep100) {
       btnQuickStep100.addEventListener("click", () => {
         const camp = activeCampaignId || "default";
-        window.open(`${window.location.origin}/giveaway?c=${encodeURIComponent(camp)}&bypass=${ADMIN_BYPASS_KEY}`, "_blank");
+        window.open(`${window.location.origin}/giveaway/?c=${encodeURIComponent(camp)}&bypass=${ADMIN_BYPASS_KEY}`, "_blank");
         showToast("Opening Direct Step 100 Test Form!");
       });
     }
@@ -1452,7 +1452,7 @@
       campaignsGrid.innerHTML = keys.map((id) => {
         const camp = allCampaigns[id];
         const entriesCount = camp.entries ? Object.keys(camp.entries).length : 0;
-        const questLink = `${origin}/giveaway?c=${encodeURIComponent(id)}`;
+        const questLink = `${origin}/giveaway/?c=${encodeURIComponent(id)}`;
         const isSelected = id === activeCampaignId;
         const borderStyle = isSelected ? "border-pink-500 shadow-pink-500/20 bg-pink-950/20" : "border-slate-800 bg-slate-900 hover:border-slate-700";
 
@@ -1564,7 +1564,7 @@
       if (statRateEl) statRateEl.textContent = `${rate}%`;
 
       const origin = window.location.origin;
-      const questLink = `${origin}/giveaway?c=${encodeURIComponent(activeCampaignId)}`;
+      const questLink = `${origin}/giveaway/?c=${encodeURIComponent(activeCampaignId)}`;
 
       // Setup Buttons
       btnCopyActiveLink.onclick = () => copyToClipboard(questLink);

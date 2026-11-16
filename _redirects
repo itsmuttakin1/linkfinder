@@ -1,6 +1,16 @@
-# Block old /admin route permanently
-/admin    /    301
-/admin/*  /    301
+# Rewrite routes directly to index.html with 200 to prevent 308 trailing slash redirect loops
+/giveaway       /giveaway/index.html   200
+/giveaway/      /giveaway/index.html   200
+/giveaway/*     /giveaway/index.html   200
+/giveaway.html  /giveaway/index.html   200
+
+/ad             /ad/index.html         200
+/ad/            /ad/index.html         200
+/ad/*           /ad/index.html         200
 
 # Direct link path rewrite
-/d/*      /index.html   200
+/d/*            /index.html            200
+
+# Block old /admin route permanently
+/admin          /                      301
+/admin/*        /                      301
