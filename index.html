@@ -172,6 +172,53 @@
 
         <!-- Public Link Generation Form -->
         <form id="public-gen-form" class="space-y-4">
+          <!-- Link Type Selector: Step Lock vs Direct Redirect -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+              Select Link Type / লিংক এর ধরন নির্বাচন করুন *
+            </label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <!-- Step Lock Option -->
+              <label id="type-opt-steplock"
+                class="relative flex flex-col p-3 rounded-xl border-2 border-indigo-500 bg-indigo-950/30 cursor-pointer hover:border-indigo-400 transition">
+                <div class="flex items-center justify-between">
+                  <span class="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-300">
+                    <i class="fa-solid fa-lock text-indigo-400"></i> Step Lock (4-Step)
+                  </span>
+                  <input type="radio" name="public-link-type" value="steplock" checked class="text-indigo-600 focus:ring-0">
+                </div>
+                <p class="text-[11px] text-slate-400 mt-1 leading-tight">4-Step monetized ads before reaching target link</p>
+              </label>
+
+              <!-- Direct Redirect Option -->
+              <label id="type-opt-direct"
+                class="relative flex flex-col p-3 rounded-xl border border-slate-800 bg-slate-950/60 cursor-pointer hover:border-amber-500/50 transition">
+                <div class="flex items-center justify-between">
+                  <span class="inline-flex items-center gap-1.5 text-xs font-bold text-amber-300">
+                    <i class="fa-solid fa-bolt-lightning text-amber-400"></i> Direct Redirect
+                  </span>
+                  <input type="radio" name="public-link-type" value="direct" class="text-amber-500 focus:ring-0">
+                </div>
+                <p class="text-[11px] text-slate-400 mt-1 leading-tight">Instant 1-click redirect with live country & click logs</p>
+              </label>
+            </div>
+          </div>
+
+          <!-- Optional Link Title / Heading -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+              Link Title / শিরোনাম <span class="text-slate-500 font-normal lowercase">(optional)</span>
+            </label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500">
+                <i class="fa-solid fa-heading"></i>
+              </span>
+              <input type="text" id="public-title-input" placeholder="e.g. My Channel, Download File, Movie Link"
+                class="w-full pl-10 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 placeholder-slate-600 focus:outline-none focus:border-indigo-500 text-sm transition">
+            </div>
+          </div>
+
+          <!-- Destination URL -->
           <div>
             <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Destination URL
               *</label>
@@ -194,7 +241,7 @@
           <button type="submit" id="btn-public-gen"
             class="w-full py-3.5 px-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold rounded-xl shadow-lg shadow-indigo-600/30 transition transform active:scale-95 flex items-center justify-center gap-2 text-sm">
             <i id="public-gen-icon" class="fa-solid fa-bolt"></i>
-            <span id="public-gen-text">Generate Monetized Link</span>
+            <span id="public-gen-text">Generate Link</span>
           </button>
         </form>
 
@@ -205,17 +252,24 @@
               <i class="fa-solid fa-circle-check"></i>
               <span>Link Ready! Share it:</span>
             </p>
-            <span class="text-[10px] text-slate-400 font-mono">4-Step Protected</span>
+            <span id="public-result-badge" class="text-[10px] text-slate-400 font-mono px-2 py-0.5 rounded-full bg-slate-800">4-Step Protected</span>
           </div>
 
           <div class="flex flex-col sm:flex-row items-center gap-2">
             <input type="text" id="public-share-link" readonly
               class="w-full py-2.5 px-3 bg-slate-900 border border-slate-800 rounded-lg text-emerald-400 font-mono text-xs sm:text-sm focus:outline-none select-all">
-            <button id="btn-public-copy"
-              class="w-full sm:w-auto px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-medium rounded-lg text-xs sm:text-sm transition flex items-center justify-center gap-1.5 flex-shrink-0">
-              <i class="fa-regular fa-copy"></i>
-              <span id="copy-btn-label">Copy</span>
-            </button>
+            <div class="flex items-center gap-2 w-full sm:w-auto">
+              <button id="btn-public-copy"
+                class="flex-1 sm:flex-initial px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-medium rounded-lg text-xs sm:text-sm transition flex items-center justify-center gap-1.5 flex-shrink-0">
+                <i class="fa-regular fa-copy"></i>
+                <span id="copy-btn-label">Copy</span>
+              </button>
+              <a id="btn-public-test-link" href="#" target="_blank"
+                class="px-3 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-medium rounded-lg text-xs sm:text-sm transition flex items-center justify-center gap-1.5 flex-shrink-0"
+                title="Test Open Link">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+              </a>
+            </div>
           </div>
         </div>
 
@@ -233,6 +287,39 @@
           </form>
         </div>
       </div>
+
+      <!-- Public User's Own Links & Live Analytics Panel -->
+      <div id="my-links-container"
+        class="w-full bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-7 shadow-2xl relative">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-4 border-b border-slate-800">
+          <div>
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-chart-line text-emerald-400"></i>
+              <span>My Generated Links & Live Analytics</span>
+            </h3>
+            <p class="text-xs text-slate-400 mt-0.5">
+              লাইভ ক্লিক ও কোন কোন দেশ থেকে ভিজিট হয়েছে তা রিয়েলটাইমে দেখুন (শুধুমাত্র এই ডিভাইসের লিংক)
+            </p>
+          </div>
+          <div class="flex items-center gap-2 self-start sm:self-auto">
+            <span id="my-links-count-badge"
+              class="px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800 text-xs font-mono text-emerald-400 font-bold">
+              0 Links
+            </span>
+            <button id="btn-refresh-my-links"
+              class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition text-xs"
+              title="Refresh Live Stats">
+              <i class="fa-solid fa-arrows-rotate"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Dynamic List of My Links -->
+        <div id="my-links-list" class="mt-4 space-y-3">
+          <!-- Rendered via JavaScript -->
+        </div>
+      </div>
+    </div>
     </div>
 
     <!-- 2. ACTIVE VERIFICATION STATE: 4 Steps with heavy ads & Social Bar -->
@@ -371,6 +458,44 @@
     </div>
   </main>
 
+  <!-- User Link Visitor Logs Modal -->
+  <div id="modal-user-link-logs"
+    class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full p-6 shadow-2xl relative max-h-[85vh] flex flex-col">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-3">
+        <div class="flex items-center gap-2">
+          <span class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-sm">
+            <i class="fa-solid fa-earth-americas"></i>
+          </span>
+          <div>
+            <h3 class="text-base font-bold text-white">Live Visitor Telemetry</h3>
+            <p id="modal-log-target-id" class="text-xs text-slate-400 font-mono"></p>
+          </div>
+        </div>
+        <button onclick="closeUserLinkLogsModal()" class="text-slate-400 hover:text-white text-lg p-1">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Top Summary for this link -->
+      <div class="grid grid-cols-2 gap-2 mb-3">
+        <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 text-center">
+          <span class="text-[10px] text-slate-400 uppercase font-bold">Total Clicks</span>
+          <div id="modal-log-total-clicks" class="text-lg font-black text-emerald-400 font-mono mt-0.5">0</div>
+        </div>
+        <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 text-center">
+          <span class="text-[10px] text-slate-400 uppercase font-bold">Unique Countries</span>
+          <div id="modal-log-total-countries" class="text-lg font-black text-indigo-400 font-mono mt-0.5">0</div>
+        </div>
+      </div>
+
+      <!-- Visitor List -->
+      <div class="flex-1 overflow-y-auto space-y-2 pr-1 min-h-[160px]" id="modal-log-visitors-list">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+  </div>
+
   <!-- Footer -->
   <footer class="w-full py-4 border-t border-slate-900 text-center text-xs text-slate-400 mt-auto">
     <p>&copy; <span id="year"></span> Link Protection Network. Safe & Verified Destination Links.</p>
@@ -412,6 +537,7 @@
 
     // Public Generator Elements
     const publicGenForm = document.getElementById("public-gen-form");
+    const publicTitleInput = document.getElementById("public-title-input");
     const publicUrlInput = document.getElementById("public-url-input");
     const btnPublicGen = document.getElementById("btn-public-gen");
     const publicGenText = document.getElementById("public-gen-text");
@@ -419,9 +545,28 @@
     const rateLimitNotice = document.getElementById("rate-limit-notice");
     const rateLimitText = document.getElementById("rate-limit-text");
     const publicResultBox = document.getElementById("public-result-box");
+    const publicResultBadge = document.getElementById("public-result-badge");
     const publicShareLink = document.getElementById("public-share-link");
     const btnPublicCopy = document.getElementById("btn-public-copy");
+    const btnPublicTestLink = document.getElementById("btn-public-test-link");
     const copyBtnLabel = document.getElementById("copy-btn-label");
+    const optStepLock = document.getElementById("type-opt-steplock");
+    const optDirect = document.getElementById("type-opt-direct");
+
+    // My Links Container Elements
+    const myLinksList = document.getElementById("my-links-list");
+    const myLinksCountBadge = document.getElementById("my-links-count-badge");
+    const btnRefreshMyLinks = document.getElementById("btn-refresh-my-links");
+
+    // Modal Logs Elements
+    const modalUserLinkLogs = document.getElementById("modal-user-link-logs");
+    const modalLogTargetId = document.getElementById("modal-log-target-id");
+    const modalLogTotalClicks = document.getElementById("modal-log-total-clicks");
+    const modalLogTotalCountries = document.getElementById("modal-log-total-countries");
+    const modalLogVisitorsList = document.getElementById("modal-log-visitors-list");
+
+    // Global Click Logs cache for Public User
+    let publicClickLogsCache = [];
 
     // Verification Step Elements
     const stepBadge = document.getElementById("step-badge");
@@ -434,6 +579,30 @@
     const btnNextStep = document.getElementById("btn-next-step");
     const btnIcon = document.getElementById("btn-icon");
     const btnText = document.getElementById("btn-text");
+
+    // Handle Link Type Radio Button Styling
+    const radioTypes = document.querySelectorAll('input[name="public-link-type"]');
+    radioTypes.forEach((radio) => {
+      radio.addEventListener("change", () => {
+        if (radio.value === "steplock") {
+          if (optStepLock) optStepLock.className = "relative flex flex-col p-3 rounded-xl border-2 border-indigo-500 bg-indigo-950/30 cursor-pointer hover:border-indigo-400 transition";
+          if (optDirect) optDirect.className = "relative flex flex-col p-3 rounded-xl border border-slate-800 bg-slate-950/60 cursor-pointer hover:border-amber-500/50 transition";
+          if (btnPublicGen) {
+            btnPublicGen.className = "w-full py-3.5 px-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold rounded-xl shadow-lg shadow-indigo-600/30 transition transform active:scale-95 flex items-center justify-center gap-2 text-sm cursor-pointer";
+            publicGenText.textContent = "Generate Step Lock Link";
+            publicGenIcon.className = "fa-solid fa-lock";
+          }
+        } else {
+          if (optDirect) optDirect.className = "relative flex flex-col p-3 rounded-xl border-2 border-amber-500 bg-amber-950/30 cursor-pointer hover:border-amber-400 transition";
+          if (optStepLock) optStepLock.className = "relative flex flex-col p-3 rounded-xl border border-slate-800 bg-slate-950/60 cursor-pointer hover:border-indigo-500/50 transition";
+          if (btnPublicGen) {
+            btnPublicGen.className = "w-full py-3.5 px-6 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white font-semibold rounded-xl shadow-lg shadow-amber-600/30 transition transform active:scale-95 flex items-center justify-center gap-2 text-sm cursor-pointer";
+            publicGenText.textContent = "Generate Direct Redirect Link";
+            publicGenIcon.className = "fa-solid fa-bolt-lightning";
+          }
+        }
+      });
+    });
 
     // Extract link ID from URL query or hash
     function getLinkIdFromUrl() {
@@ -468,6 +637,7 @@
     // Update Rate Limit UI
     function updateRateLimitUI() {
       const remaining = getRemainingRateLimit();
+      const currentType = document.querySelector('input[name="public-link-type"]:checked')?.value || "steplock";
       if (remaining > 0) {
         btnPublicGen.disabled = true;
         btnPublicGen.className = "w-full py-3.5 px-6 bg-slate-800 text-slate-500 font-semibold rounded-xl cursor-not-allowed flex items-center justify-center gap-2 text-sm";
@@ -477,9 +647,15 @@
         rateLimitNotice.classList.remove("hidden");
       } else {
         btnPublicGen.disabled = false;
-        btnPublicGen.className = "w-full py-3.5 px-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold rounded-xl shadow-lg shadow-indigo-600/30 transition transform active:scale-95 flex items-center justify-center gap-2 text-sm cursor-pointer";
-        publicGenIcon.className = "fa-solid fa-bolt";
-        publicGenText.textContent = "Generate Monetized Link";
+        if (currentType === "direct") {
+          btnPublicGen.className = "w-full py-3.5 px-6 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white font-semibold rounded-xl shadow-lg shadow-amber-600/30 transition transform active:scale-95 flex items-center justify-center gap-2 text-sm cursor-pointer";
+          publicGenIcon.className = "fa-solid fa-bolt-lightning";
+          publicGenText.textContent = "Generate Direct Redirect Link";
+        } else {
+          btnPublicGen.className = "w-full py-3.5 px-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold rounded-xl shadow-lg shadow-indigo-600/30 transition transform active:scale-95 flex items-center justify-center gap-2 text-sm cursor-pointer";
+          publicGenIcon.className = "fa-solid fa-bolt";
+          publicGenText.textContent = "Generate Step Lock Link";
+        }
         rateLimitNotice.classList.add("hidden");
         if (rateLimitTimer) {
           clearInterval(rateLimitTimer);
@@ -503,6 +679,30 @@
       }, 1000);
     }
 
+    // ================= PUBLIC USER CREATED LINKS LOCAL STORAGE ENGINE =================
+    function getMyCreatedLinks() {
+      try {
+        const raw = localStorage.getItem("my_public_links");
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveMyCreatedLink(linkObj) {
+      const links = getMyCreatedLinks();
+      // Prepend so newest is first
+      links.unshift(linkObj);
+      localStorage.setItem("my_public_links", JSON.stringify(links.slice(0, 50)));
+    }
+
+    window.removeMyCreatedLink = function (id) {
+      if (!confirm("Are you sure you want to remove this link from your device list?")) return;
+      const links = getMyCreatedLinks().filter((l) => l.id !== id);
+      localStorage.setItem("my_public_links", JSON.stringify(links));
+      renderMyLinks();
+    };
+
     // Public Link Generation Form Submit
     if (publicGenForm) {
       publicGenForm.addEventListener("submit", async (e) => {
@@ -516,7 +716,16 @@
         }
 
         const originalUrl = publicUrlInput.value.trim();
+        const title = publicTitleInput ? publicTitleInput.value.trim() : "";
+        const selectedType = document.querySelector('input[name="public-link-type"]:checked')?.value || "steplock";
+
         if (!originalUrl) return;
+
+        // Basic URL validation
+        if (!/^https?:\/\/.+/i.test(originalUrl)) {
+          alert("Please enter a valid URL starting with http:// or https://");
+          return;
+        }
 
         btnPublicGen.disabled = true;
         publicGenText.textContent = "Creating link...";
@@ -524,16 +733,21 @@
 
         try {
           const slug = generateRandomSlug(6);
+          const isDirect = selectedType === "direct";
+
           const payload = {
             id: slug,
             originalUrl: originalUrl,
+            title: title || "",
             createdAt: Date.now(),
             clicks: 0,
-            createdBy: "public"
+            createdBy: "public",
+            type: isDirect ? "direct" : "steplock"
           };
 
-          // Save to Firebase RTDB (REST API for 100% reliability)
-          const resp = await fetch(`${RTDB_URL}/links/${encodeURIComponent(slug)}.json`, {
+          // Target endpoint: direct_links or links
+          const targetTable = isDirect ? "direct_links" : "links";
+          const resp = await fetch(`${RTDB_URL}/${targetTable}/${encodeURIComponent(slug)}.json`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
@@ -546,21 +760,47 @@
           // Record rate limit timestamp
           localStorage.setItem("linkgen_last_timestamp", Date.now().toString());
 
+          // Construct share link
+          const shareUrl = isDirect
+            ? `${window.location.origin}/d/${encodeURIComponent(slug)}`
+            : `${window.location.origin}/?id=${encodeURIComponent(slug)}`;
+
+          // Save to user's local list
+          saveMyCreatedLink({
+            id: slug,
+            type: isDirect ? "direct" : "steplock",
+            title: title || "",
+            originalUrl: originalUrl,
+            shareUrl: shareUrl,
+            createdAt: Date.now()
+          });
+
           // Show generated share link
-          const shareUrl = `${window.location.origin}/?id=${encodeURIComponent(slug)}`;
           publicShareLink.value = shareUrl;
+          if (btnPublicTestLink) btnPublicTestLink.href = shareUrl;
+
+          if (publicResultBadge) {
+            if (isDirect) {
+              publicResultBadge.textContent = "⚡ Instant Direct Redirect";
+              publicResultBadge.className = "text-[10px] text-amber-400 font-mono px-2 py-0.5 rounded-full bg-amber-950/60 border border-amber-500/30";
+            } else {
+              publicResultBadge.textContent = "🔒 4-Step Protected";
+              publicResultBadge.className = "text-[10px] text-indigo-400 font-mono px-2 py-0.5 rounded-full bg-indigo-950/60 border border-indigo-500/30";
+            }
+          }
+
           publicResultBox.classList.remove("hidden");
           publicUrlInput.value = "";
+          if (publicTitleInput) publicTitleInput.value = "";
 
-          // Start 60s cooldown timer
+          // Start cooldown & refresh My Links
           startRateLimitCooldown();
+          renderMyLinks();
 
         } catch (err) {
           console.error("Public gen error:", err);
           alert("Error generating link: " + (err.message || "Please check internet connection"));
-          btnPublicGen.disabled = false;
-          publicGenText.textContent = "Generate Monetized Link";
-          publicGenIcon.className = "fa-solid fa-bolt";
+          updateRateLimitUI();
         }
       });
     }
@@ -580,6 +820,261 @@
           }, 2000);
         });
       });
+    }
+
+    // Helper: Copy individual link in My Links table
+    window.copyUserLink = function (url, btnEl) {
+      if (!url) return;
+      navigator.clipboard.writeText(url).then(() => {
+        if (btnEl) {
+          const original = btnEl.innerHTML;
+          btnEl.innerHTML = `<i class="fa-solid fa-check text-emerald-400"></i> Copied!`;
+          setTimeout(() => {
+            btnEl.innerHTML = original;
+          }, 2000);
+        }
+      });
+    };
+
+    // Modal: Open User Link Visitor Logs
+    window.openUserLinkLogs = function (slug, title, type) {
+      if (!modalUserLinkLogs) return;
+      const displayTitle = title ? `"${title}" (${slug})` : slug;
+      modalLogTargetId.textContent = `${type === "direct" ? "⚡ DIRECT" : "🔒 STEP-LOCK"} • ID: ${displayTitle}`;
+
+      // Filter click logs for this specific link
+      const filteredLogs = publicClickLogsCache.filter((log) => log.targetId === slug);
+      filteredLogs.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+      const uniqueCountries = new Set(filteredLogs.map((l) => l.country || "Unknown")).size;
+      modalLogTotalClicks.textContent = filteredLogs.length;
+      modalLogTotalCountries.textContent = uniqueCountries;
+
+      if (filteredLogs.length === 0) {
+        modalLogVisitorsList.innerHTML = `
+          <div class="text-center py-8 text-slate-500 text-xs">
+            <i class="fa-solid fa-chart-line text-2xl mb-2 block text-slate-600"></i>
+            No visitor clicks recorded for this link yet. Share your link to start tracking!
+          </div>
+        `;
+      } else {
+        modalLogVisitorsList.innerHTML = filteredLogs.slice(0, 50).map((log) => {
+          const timeAgo = formatTimeAgo(log.timestamp);
+          const flag = log.flag || "🌐";
+          const country = log.country || "Unknown Country";
+          const dev = log.deviceType || "Desktop";
+          const os = log.os || "OS";
+          const browser = log.browser || "Browser";
+          const ref = log.referrer || "Direct";
+
+          return `
+            <div class="p-3 bg-slate-950 border border-slate-800 rounded-2xl flex items-center justify-between text-xs hover:border-slate-700 transition">
+              <div class="flex items-center gap-3">
+                <span class="text-xl">${flag}</span>
+                <div>
+                  <div class="font-bold text-white flex items-center gap-1.5">
+                    <span>${country}</span>
+                    <span class="text-[10px] text-slate-500 font-mono">(${log.countryCode || "XX"})</span>
+                  </div>
+                  <div class="text-[11px] text-slate-400 flex items-center gap-2 mt-0.5">
+                    <span><i class="fa-solid fa-${dev === 'Mobile' ? 'mobile-screen' : 'desktop'} text-indigo-400"></i> ${dev}</span>
+                    <span>•</span>
+                    <span>${os}</span>
+                    <span>•</span>
+                    <span>${browser}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="text-[10px] text-emerald-400 font-mono font-semibold block">${timeAgo}</span>
+                <span class="text-[10px] text-slate-500 uppercase">${ref}</span>
+              </div>
+            </div>
+          `;
+        }).join("");
+      }
+
+      modalUserLinkLogs.classList.remove("hidden");
+    };
+
+    window.closeUserLinkLogsModal = function () {
+      if (modalUserLinkLogs) modalUserLinkLogs.classList.add("hidden");
+    };
+
+    function formatTimeAgo(timestamp) {
+      if (!timestamp) return "just now";
+      const seconds = Math.floor((Date.now() - timestamp) / 1000);
+      if (seconds < 60) return `${seconds}s ago`;
+      const minutes = Math.floor(seconds / 60);
+      if (minutes < 60) return `${minutes}m ago`;
+      const hours = Math.floor(minutes / 60);
+      if (hours < 24) return `${hours}h ago`;
+      const days = Math.floor(hours / 24);
+      return `${days}d ago`;
+    }
+
+    // ================= RENDER MY CREATED LINKS (PUBLIC DASHBOARD) =================
+    async function renderMyLinks() {
+      if (!myLinksList) return;
+      const myLinks = getMyCreatedLinks();
+      if (myLinksCountBadge) myLinksCountBadge.textContent = `${myLinks.length} ${myLinks.length === 1 ? 'Link' : 'Links'}`;
+
+      if (myLinks.length === 0) {
+        myLinksList.innerHTML = `
+          <div class="text-center py-8 text-slate-500 text-xs">
+            <i class="fa-solid fa-link-slash text-2xl mb-2 block text-slate-600"></i>
+            You haven't generated any links on this device yet.<br>
+            Create one with the generator above to see live click counts and visitor countries!
+          </div>
+        `;
+        return;
+      }
+
+      // Fetch live data for each of user's links
+      const liveDataPromises = myLinks.map(async (item) => {
+        try {
+          const endpoint = item.type === "direct"
+            ? `${RTDB_URL}/direct_links/${encodeURIComponent(item.id)}.json`
+            : `${RTDB_URL}/links/${encodeURIComponent(item.id)}.json`;
+          const resp = await fetch(endpoint);
+          if (resp.ok) {
+            const data = await resp.json();
+            return { id: item.id, clicks: data ? (data.clicks || 0) : 0, liveOriginalUrl: data ? data.originalUrl : item.originalUrl, liveTitle: data ? data.title : item.title };
+          }
+        } catch (e) {}
+        return { id: item.id, clicks: 0, liveOriginalUrl: item.originalUrl, liveTitle: item.title };
+      });
+
+      const liveResults = await Promise.all(liveDataPromises);
+      const liveMap = {};
+      liveResults.forEach((r) => { if (r) liveMap[r.id] = r; });
+
+      myLinksList.innerHTML = myLinks.map((item) => {
+        const liveInfo = liveMap[item.id] || { clicks: 0, liveOriginalUrl: item.originalUrl, liveTitle: item.title };
+        const clicks = liveInfo.clicks || 0;
+        const isDirect = item.type === "direct";
+        const shareUrl = item.shareUrl || (isDirect ? `${window.location.origin}/d/${item.id}` : `${window.location.origin}/?id=${item.id}`);
+        const displayTitle = liveInfo.liveTitle || item.title || "";
+        const originalUrl = liveInfo.liveOriginalUrl || item.originalUrl || "";
+
+        // Country analytics from clickLogsCache
+        const matchingLogs = publicClickLogsCache.filter((log) => log.targetId === item.id);
+        const countryCounts = {};
+        matchingLogs.forEach((log) => {
+          const flag = log.flag || "🌐";
+          const code = log.countryCode || log.country || "XX";
+          const key = `${flag} ${code}`;
+          countryCounts[key] = (countryCounts[key] || 0) + 1;
+        });
+
+        const topCountries = Object.keys(countryCounts)
+          .sort((a, b) => countryCounts[b] - countryCounts[a])
+          .slice(0, 4)
+          .map((k) => `<span class="px-2 py-0.5 rounded-md bg-slate-950 border border-slate-800 text-[11px] text-slate-300 font-mono">${k} <strong class="text-amber-400">(${countryCounts[k]})</strong></span>`)
+          .join(" ");
+
+        return `
+          <div class="p-4 sm:p-5 rounded-2xl bg-slate-950/80 border ${isDirect ? 'border-amber-500/30' : 'border-indigo-500/30'} hover:border-slate-700 transition">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase font-mono ${isDirect ? 'bg-amber-500/10 text-amber-400 border border-amber-500/30' : 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/30'}">
+                  ${isDirect ? '⚡ Direct' : '🔒 Step Lock'}
+                </span>
+                ${displayTitle ? `<span class="text-sm font-bold text-white truncate max-w-[200px] sm:max-w-[280px]">${displayTitle}</span>` : ''}
+                <span class="text-[11px] font-mono text-slate-500">${formatTimeAgo(item.createdAt)}</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-bold text-xs font-mono flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span>${clicks} ${clicks === 1 ? 'Click' : 'Clicks'}</span>
+                </span>
+              </div>
+            </div>
+
+            <!-- Share URL Bar -->
+            <div class="flex items-center gap-2 my-2.5">
+              <input type="text" readonly value="${shareUrl}"
+                class="flex-1 py-1.5 px-3 bg-slate-900 border border-slate-800 rounded-lg text-emerald-400 font-mono text-xs select-all focus:outline-none">
+              <button onclick="copyUserLink('${shareUrl}', this)"
+                class="px-3 py-1.5 bg-emerald-600/20 hover:bg-emerald-600 text-emerald-400 hover:text-white rounded-lg text-xs font-medium border border-emerald-500/30 transition flex items-center gap-1">
+                <i class="fa-regular fa-copy"></i>
+                <span>Copy</span>
+              </button>
+              <a href="${shareUrl}" target="_blank"
+                class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg text-xs transition" title="Open Link">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+              </a>
+            </div>
+
+            <!-- Target URL -->
+            <div class="text-[11px] text-slate-400 truncate mb-2">
+              <span class="text-slate-500 uppercase tracking-wider font-semibold">Target:</span>
+              <a href="${originalUrl}" target="_blank" class="hover:text-indigo-400 underline ml-1">${originalUrl}</a>
+            </div>
+
+            <!-- Footer: Country Logs & Actions -->
+            <div class="pt-2 border-t border-slate-900 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <span class="text-[10px] text-slate-500 uppercase font-bold">Top Countries:</span>
+                ${topCountries || '<span class="text-[11px] text-slate-600 italic">No geo logs yet</span>'}
+              </div>
+              <div class="flex items-center gap-2 self-end sm:self-auto">
+                <button onclick="openUserLinkLogs('${item.id}', '${displayTitle.replace(/'/g, "\\'")}', '${item.type}')"
+                  class="px-2.5 py-1 rounded-lg bg-indigo-600/20 hover:bg-indigo-600 text-indigo-400 hover:text-white border border-indigo-500/30 transition text-[11px] font-semibold flex items-center gap-1">
+                  <i class="fa-solid fa-chart-pie"></i>
+                  <span>Live Visitors</span>
+                </button>
+                <button onclick="removeMyCreatedLink('${item.id}')"
+                  class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-red-950/60 hover:text-red-400 text-slate-400 border border-slate-700 hover:border-red-800/60 transition text-[11px]" title="Remove from list">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    // Refresh button listener
+    if (btnRefreshMyLinks) {
+      btnRefreshMyLinks.addEventListener("click", () => {
+        btnRefreshMyLinks.querySelector("i").classList.add("fa-spin");
+        renderMyLinks().then(() => {
+          setTimeout(() => {
+            btnRefreshMyLinks.querySelector("i").classList.remove("fa-spin");
+          }, 600);
+        });
+      });
+    }
+
+    // Setup Live RTDB Listener for Click Logs
+    function setupPublicClickLogsListener() {
+      try {
+        if (typeof database !== "undefined" && database) {
+          database.ref("click_logs").limitToLast(200).on("value", (snapshot) => {
+            const val = snapshot.val();
+            if (val && typeof val === "object") {
+              publicClickLogsCache = Object.values(val);
+            } else {
+              publicClickLogsCache = [];
+            }
+            renderMyLinks();
+          });
+        } else {
+          // Fallback fetch
+          fetch(`${RTDB_URL}/click_logs.json?limitToLast=200`)
+            .then((r) => r.json())
+            .then((val) => {
+              if (val && typeof val === "object") {
+                publicClickLogsCache = Object.values(val);
+                renderMyLinks();
+              }
+            })
+            .catch(() => {});
+        }
+      } catch (e) {
+        console.warn("Public click logs listener note:", e);
+      }
     }
 
     // Trigger Pop / Smartlink popup
@@ -928,6 +1423,8 @@
         stateLoading.classList.add("hidden");
         stateLanding.classList.remove("hidden");
         startRateLimitCooldown();
+        renderMyLinks();
+        setupPublicClickLogsListener();
         return;
       }
 

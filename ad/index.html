@@ -125,6 +125,12 @@
             <i class="fa-solid fa-bolt-lightning text-amber-400"></i>
             <span>Direct Links</span>
           </button>
+          <button id="tab-btn-public"
+            class="px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 text-slate-400 hover:text-white"
+            title="Public User Generated Links with Edit & Country Analytics">
+            <i class="fa-solid fa-users text-cyan-400"></i>
+            <span>Public Links</span>
+          </button>
           <button id="tab-btn-analytics"
             class="px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 text-slate-400 hover:text-white"
             title="Realtime Clicks & Geo Stream (urlbit.pro style)">
@@ -818,6 +824,95 @@
         </div>
       </div>
 
+      <!-- ================= SECTION: PUBLIC GENERATED LINKS ================= -->
+      <div id="section-public" class="hidden space-y-8">
+        <!-- Top Public Banner -->
+        <div class="bg-gradient-to-r from-cyan-950/60 via-slate-900 to-slate-900 border border-cyan-500/30 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-bold mb-2">
+                <i class="fa-solid fa-users"></i>
+                <span>Public Users Activity</span>
+              </div>
+              <h2 class="text-2xl sm:text-3xl font-black text-white">Public Generated Links Manager</h2>
+              <p class="text-xs sm:text-sm text-slate-400 mt-1">
+                সাধারণ ভিজিটরদের জেনারেট করা সকল Step-Lock ও Direct Redirect লিংক মনিটর, এডিট ও লাইভ ট্র্যাকিং করুন
+              </p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button id="btn-refresh-public-data" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition text-xs font-semibold flex items-center gap-2 border border-slate-700">
+                <i class="fa-solid fa-arrows-rotate"></i>
+                <span>Refresh Data</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick KPI Cards -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mt-6">
+            <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-4">
+              <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Total Public Links</span>
+              <div id="stat-public-total-links" class="text-2xl font-black text-white font-mono mt-1">0</div>
+            </div>
+            <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-4">
+              <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Total Public Clicks</span>
+              <div id="stat-public-total-clicks" class="text-2xl font-black text-emerald-400 font-mono mt-1">0</div>
+            </div>
+            <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-4">
+              <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Step-Lock (4-Step)</span>
+              <div id="stat-public-steplock-count" class="text-2xl font-black text-indigo-400 font-mono mt-1">0</div>
+            </div>
+            <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-4">
+              <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Direct Redirect</span>
+              <div id="stat-public-direct-count" class="text-2xl font-black text-amber-400 font-mono mt-1">0</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Public Links Table Card -->
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-4">
+          <!-- Search & Filter Controls -->
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div class="relative flex-1 w-full sm:max-w-md">
+              <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-500">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </span>
+              <input type="text" id="search-public-links-input" placeholder="Search by slug, title, or destination URL..."
+                class="w-full pl-10 pr-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition">
+            </div>
+            <div class="flex items-center gap-2 w-full sm:w-auto">
+              <select id="filter-public-type"
+                class="px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-300 focus:outline-none focus:border-cyan-500 transition font-medium">
+                <option value="all">All Link Types (সব লিংক)</option>
+                <option value="steplock">Step Lock (4 Steps) Only</option>
+                <option value="direct">Direct Redirect Only</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Table Container -->
+          <div class="overflow-x-auto rounded-2xl border border-slate-800">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-950 text-slate-400 font-semibold border-b border-slate-800">
+                <tr>
+                  <th class="px-4 py-3 uppercase tracking-wider">Type</th>
+                  <th class="px-4 py-3 uppercase tracking-wider">Short Link / Slug</th>
+                  <th class="px-4 py-3 uppercase tracking-wider">Title & Destination</th>
+                  <th class="px-4 py-3 uppercase tracking-wider">Created</th>
+                  <th class="px-4 py-3 uppercase tracking-wider text-center">Clicks</th>
+                  <th class="px-4 py-3 uppercase tracking-wider">Top Countries</th>
+                  <th class="px-4 py-3 uppercase tracking-wider text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="public-links-table-body" class="divide-y divide-slate-800/60 bg-slate-900/40 font-medium">
+                <tr>
+                  <td colspan="7" class="px-4 py-8 text-center text-slate-500 text-xs">Loading public links...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
       <!-- ================= SECTION 3: REALTIME CLICK & GEO ANALYTICS (URLBIT.PRO STYLE) ================= -->
       <div id="section-analytics" class="hidden space-y-8">
         <!-- Top Analytics Banner -->
@@ -1080,6 +1175,93 @@
         </div>
       </div>
 
+      <!-- Edit Public Link Modal -->
+      <div id="modal-edit-public-link"
+        class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-pen-to-square text-cyan-400"></i>
+              <span>Edit Public Link</span>
+            </h3>
+            <button onclick="closeEditPublicLinkModal()" class="text-slate-400 hover:text-white p-1">
+              <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+          </div>
+          <form id="form-edit-public-link" class="space-y-4">
+            <input type="hidden" id="edit-public-id">
+            <input type="hidden" id="edit-public-type">
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Slug (ID)</label>
+                <input type="text" id="edit-public-slug" readonly
+                  class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-400 font-mono text-xs cursor-not-allowed">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Link Type</label>
+                <input type="text" id="edit-public-type-label" readonly
+                  class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-cyan-400 font-bold text-xs cursor-not-allowed">
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Link Title / Note</label>
+              <input type="text" id="edit-public-title" placeholder="e.g. Video Download, Telegram Link"
+                class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 text-sm focus:outline-none focus:border-cyan-500">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Destination URL *</label>
+              <input type="url" id="edit-public-url" required placeholder="https://..."
+                class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-slate-100 text-sm focus:outline-none focus:border-cyan-500">
+            </div>
+            <div class="flex items-center justify-end gap-2 pt-2">
+              <button type="button" onclick="closeEditPublicLinkModal()"
+                class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-semibold">Cancel</button>
+              <button type="submit"
+                class="px-5 py-2 bg-cyan-600 hover:bg-cyan-500 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-lg shadow-cyan-600/20">
+                <i class="fa-solid fa-check"></i>
+                <span>Save Changes</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Public Link Live Logs Modal -->
+      <div id="modal-public-link-logs"
+        class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full p-6 shadow-2xl relative max-h-[85vh] flex flex-col">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
+            <div class="flex items-center gap-2">
+              <span class="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 flex items-center justify-center text-sm">
+                <i class="fa-solid fa-chart-pie"></i>
+              </span>
+              <div>
+                <h3 class="text-base font-bold text-white">Live Visitor Telemetry for Public Link</h3>
+                <p id="modal-public-logs-title" class="text-xs text-slate-400 font-mono"></p>
+              </div>
+            </div>
+            <button onclick="closePublicLinkLogsModal()" class="text-slate-400 hover:text-white p-1">
+              <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 mb-3">
+            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 text-center">
+              <span class="text-[10px] text-slate-400 uppercase font-bold">Total Recorded Clicks</span>
+              <div id="modal-public-total-clicks" class="text-xl font-black text-emerald-400 font-mono mt-0.5">0</div>
+            </div>
+            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 text-center">
+              <span class="text-[10px] text-slate-400 uppercase font-bold">Unique Countries</span>
+              <div id="modal-public-total-countries" class="text-xl font-black text-cyan-400 font-mono mt-0.5">0</div>
+            </div>
+          </div>
+
+          <div class="flex-1 overflow-y-auto space-y-2 pr-1 min-h-[180px]" id="modal-public-visitors-list">
+            <!-- Rendered via JS -->
+          </div>
+        </div>
+      </div>
+
     </main>
   </div>
 
@@ -1110,12 +1292,24 @@
     const tabBtnCampaigns = document.getElementById("tab-btn-campaigns");
     const tabBtnLinks = document.getElementById("tab-btn-links");
     const tabBtnDirect = document.getElementById("tab-btn-direct");
+    const tabBtnPublic = document.getElementById("tab-btn-public");
     const tabBtnAnalytics = document.getElementById("tab-btn-analytics");
     const sectionCampaigns = document.getElementById("section-campaigns");
     const sectionLinks = document.getElementById("section-links");
     const sectionDirect = document.getElementById("section-direct");
+    const sectionPublic = document.getElementById("section-public");
     const sectionAnalytics = document.getElementById("section-analytics");
     const btnQuickStep100 = document.getElementById("btn-quick-step100");
+
+    // Public Links Tab Elements
+    const statPublicTotalLinks = document.getElementById("stat-public-total-links");
+    const statPublicTotalClicks = document.getElementById("stat-public-total-clicks");
+    const statPublicSteplockCount = document.getElementById("stat-public-steplock-count");
+    const statPublicDirectCount = document.getElementById("stat-public-direct-count");
+    const searchPublicLinksInput = document.getElementById("search-public-links-input");
+    const filterPublicType = document.getElementById("filter-public-type");
+    const btnRefreshPublicData = document.getElementById("btn-refresh-public-data");
+    const publicLinksTableBody = document.getElementById("public-links-table-body");
 
     if (btnQuickStep100) {
       btnQuickStep100.addEventListener("click", () => {
@@ -1248,11 +1442,13 @@
       tabBtnCampaigns.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 text-slate-400 hover:text-white";
       tabBtnLinks.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 text-slate-400 hover:text-white";
       tabBtnDirect.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 text-slate-400 hover:text-white";
+      tabBtnPublic.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 text-slate-400 hover:text-white";
       tabBtnAnalytics.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 text-slate-400 hover:text-white";
 
       sectionCampaigns.classList.add("hidden");
       sectionLinks.classList.add("hidden");
       sectionDirect.classList.add("hidden");
+      sectionPublic.classList.add("hidden");
       sectionAnalytics.classList.add("hidden");
 
       if (targetTab === "campaigns") {
@@ -1266,6 +1462,10 @@
         sectionDirect.classList.remove("hidden");
         renderDirectLinks(searchDirectLinksInput ? searchDirectLinksInput.value : "");
         renderDirectCountryAnalytics();
+      } else if (targetTab === "public") {
+        tabBtnPublic.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 bg-cyan-600 text-white";
+        sectionPublic.classList.remove("hidden");
+        renderPublicLinks();
       } else if (targetTab === "analytics") {
         tabBtnAnalytics.className = "px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-2 bg-blue-600 text-white";
         sectionAnalytics.classList.remove("hidden");
@@ -1277,6 +1477,7 @@
     tabBtnCampaigns.addEventListener("click", () => switchTab("campaigns"));
     tabBtnLinks.addEventListener("click", () => switchTab("links"));
     tabBtnDirect.addEventListener("click", () => switchTab("direct"));
+    tabBtnPublic.addEventListener("click", () => switchTab("public"));
     tabBtnAnalytics.addEventListener("click", () => switchTab("analytics"));
 
     // Safety Fallback: Never leave user stuck on "Checking authentication..."
@@ -1837,6 +2038,7 @@ ${activeCampaignData.totalSteps || 100}টি সহজ স্টেপ সফ�
       database.ref("links").on("value", (snapshot) => {
         allLinks = snapshot.val() || {};
         renderLinks(searchLinksInput ? searchLinksInput.value : "");
+        renderPublicLinks();
       });
     }
 
@@ -1987,6 +2189,7 @@ ${activeCampaignData.totalSteps || 100}টি সহজ স্টেপ সফ�
         allDirectLinks = snapshot.val() || {};
         renderDirectLinks(searchDirectLinksInput ? searchDirectLinksInput.value : "");
         renderDirectCountryAnalytics();
+        renderPublicLinks();
       }, (err) => {
         console.warn("Direct links read note:", err.message);
       });
@@ -2195,6 +2398,7 @@ ${activeCampaignData.totalSteps || 100}টি সহজ স্টেপ সফ�
         }
         renderClickAnalytics();
         renderDirectCountryAnalytics();
+        renderPublicLinks();
       }, (err) => {
         console.warn("Click logs read note:", err.message);
       });
@@ -2484,6 +2688,307 @@ ${activeCampaignData.totalSteps || 100}টি সহজ স্টেপ সফ�
         } catch (err) {
           showToast(err.message, "error");
         }
+      });
+    }
+
+    // ================= PUBLIC USER GENERATED LINKS MANAGER =================
+    function getPublicItemsList() {
+      const origin = window.location.origin;
+      const list = [];
+
+      // 1. From links (Step-Lock)
+      Object.keys(allLinks).forEach((id) => {
+        const item = allLinks[id] || {};
+        if (item.createdBy === "public" || (!item.createdBy || !item.createdBy.includes("@"))) {
+          list.push({
+            ...item,
+            id: id,
+            type: "steplock",
+            sourceTable: "links",
+            shareUrl: `${origin}/?id=${encodeURIComponent(id)}`
+          });
+        }
+      });
+
+      // 2. From direct_links (Direct Redirect)
+      Object.keys(allDirectLinks).forEach((id) => {
+        const item = allDirectLinks[id] || {};
+        if (item.createdBy === "public" || (!item.createdBy || !item.createdBy.includes("@"))) {
+          list.push({
+            ...item,
+            id: id,
+            type: "direct",
+            sourceTable: "direct_links",
+            shareUrl: `${origin}/d/${encodeURIComponent(id)}`
+          });
+        }
+      });
+
+      // Sort newest first
+      list.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+      return list;
+    }
+
+    function renderPublicLinks() {
+      if (!publicLinksTableBody) return;
+      const list = getPublicItemsList();
+
+      const totalLinks = list.length;
+      let totalClicks = 0;
+      let steplockCount = 0;
+      let directCount = 0;
+
+      list.forEach((item) => {
+        totalClicks += (item.clicks || 0);
+        if (item.type === "direct") directCount++;
+        else steplockCount++;
+      });
+
+      if (statPublicTotalLinks) statPublicTotalLinks.textContent = totalLinks;
+      if (statPublicTotalClicks) statPublicTotalClicks.textContent = totalClicks.toLocaleString();
+      if (statPublicSteplockCount) statPublicSteplockCount.textContent = steplockCount;
+      if (statPublicDirectCount) statPublicDirectCount.textContent = directCount;
+
+      const searchTerm = searchPublicLinksInput ? searchPublicLinksInput.value.toLowerCase().trim() : "";
+      const typeFilterVal = filterPublicType ? filterPublicType.value : "all";
+
+      const filtered = list.filter((item) => {
+        if (typeFilterVal !== "all" && item.type !== typeFilterVal) return false;
+        if (!searchTerm) return true;
+        return (
+          item.id.toLowerCase().includes(searchTerm) ||
+          (item.title && item.title.toLowerCase().includes(searchTerm)) ||
+          (item.originalUrl && item.originalUrl.toLowerCase().includes(searchTerm))
+        );
+      });
+
+      if (filtered.length === 0) {
+        publicLinksTableBody.innerHTML = `
+          <tr>
+            <td colspan="7" class="px-4 py-12 text-center text-slate-500 text-xs">
+              <i class="fa-solid fa-folder-open text-2xl mb-2 block text-slate-600"></i>
+              No public links found matching your search.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      publicLinksTableBody.innerHTML = filtered.map((item) => {
+        const isDirect = item.type === "direct";
+        const typeBadge = isDirect
+          ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30 whitespace-nowrap"><i class="fa-solid fa-bolt-lightning mr-1"></i>Direct</span>`
+          : `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/10 text-indigo-400 border border-indigo-500/30 whitespace-nowrap"><i class="fa-solid fa-lock mr-1"></i>Step Lock</span>`;
+
+        const clicks = item.clicks || 0;
+        const dateStr = item.createdAt ? new Date(item.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "N/A";
+
+        // Top countries from allClickLogs
+        const matchingLogs = allClickLogs.filter((l) => l.targetId === item.id);
+        const cMap = {};
+        matchingLogs.forEach((l) => {
+          const k = `${l.flag || "🌐"} ${l.countryCode || "XX"}`;
+          cMap[k] = (cMap[k] || 0) + 1;
+        });
+        const countryBadges = Object.keys(cMap)
+          .sort((a, b) => cMap[b] - cMap[a])
+          .slice(0, 3)
+          .map((k) => `<span class="px-1.5 py-0.5 rounded bg-slate-950 border border-slate-800 text-[10px] font-mono text-slate-300">${k} (${cMap[k]})</span>`)
+          .join(" ");
+
+        return `
+          <tr class="hover:bg-slate-800/40 transition">
+            <td class="px-4 py-3">${typeBadge}</td>
+            <td class="px-4 py-3 font-mono">
+              <div class="flex items-center gap-1.5">
+                <span class="text-white font-bold">${item.id}</span>
+                <button onclick="copyToClipboard('${item.shareUrl}')" class="text-slate-400 hover:text-emerald-400 transition" title="Copy share link">
+                  <i class="fa-regular fa-copy"></i>
+                </button>
+                <a href="${item.shareUrl}" target="_blank" class="text-slate-400 hover:text-white transition" title="Open share link">
+                  <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                </a>
+              </div>
+            </td>
+            <td class="px-4 py-3 max-w-[240px]">
+              ${item.title ? `<div class="font-bold text-white truncate text-xs mb-0.5">${item.title}</div>` : ''}
+              <div class="text-[11px] text-slate-400 truncate">
+                <a href="${item.originalUrl}" target="_blank" class="hover:text-cyan-400 transition underline">${item.originalUrl}</a>
+              </div>
+            </td>
+            <td class="px-4 py-3 text-slate-400 text-[11px] whitespace-nowrap">${dateStr}</td>
+            <td class="px-4 py-3 text-center whitespace-nowrap">
+              <span class="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 font-bold font-mono text-xs border border-emerald-500/20 inline-flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>${clicks}</span>
+              </span>
+            </td>
+            <td class="px-4 py-3">
+              <div class="flex items-center gap-1 flex-wrap">
+                ${countryBadges || '<span class="text-slate-600 text-[11px] italic">No clicks yet</span>'}
+              </div>
+            </td>
+            <td class="px-4 py-3 text-right whitespace-nowrap">
+              <div class="flex items-center justify-end gap-1.5">
+                <button onclick="openPublicLinkLogsModal('${item.id}', '${(item.title || item.id).replace(/'/g, "\\'")}', '${item.type}')"
+                  class="p-1.5 rounded-lg bg-indigo-600/20 hover:bg-indigo-600 text-indigo-400 hover:text-white border border-indigo-500/30 transition" title="View Realtime Visitor Logs">
+                  <i class="fa-solid fa-chart-pie text-xs"></i>
+                </button>
+                <button onclick="openEditPublicLinkModal('${item.id}', '${item.type}')"
+                  class="p-1.5 rounded-lg bg-cyan-600/20 hover:bg-cyan-600 text-cyan-400 hover:text-white border border-cyan-500/30 transition" title="Edit Public Link">
+                  <i class="fa-solid fa-pen-to-square text-xs"></i>
+                </button>
+                <button onclick="deletePublicLink('${item.id}', '${item.type}')"
+                  class="p-1.5 rounded-lg bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white border border-red-500/30 transition" title="Delete Link">
+                  <i class="fa-solid fa-trash-can text-xs"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    // Edit Public Link Modal
+    window.openEditPublicLinkModal = function (id, type) {
+      const table = type === "direct" ? allDirectLinks : allLinks;
+      const item = table[id];
+      if (!item) return;
+
+      document.getElementById("edit-public-id").value = id;
+      document.getElementById("edit-public-type").value = type;
+      document.getElementById("edit-public-slug").value = id;
+      document.getElementById("edit-public-type-label").value = type === "direct" ? "⚡ Direct Redirect" : "🔒 Step Lock (4-Step)";
+      document.getElementById("edit-public-title").value = item.title || "";
+      document.getElementById("edit-public-url").value = item.originalUrl || "";
+      document.getElementById("modal-edit-public-link").classList.remove("hidden");
+    };
+
+    window.closeEditPublicLinkModal = function () {
+      const modal = document.getElementById("modal-edit-public-link");
+      if (modal) modal.classList.add("hidden");
+    };
+
+    const formEditPublicLink = document.getElementById("form-edit-public-link");
+    if (formEditPublicLink) {
+      formEditPublicLink.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const id = document.getElementById("edit-public-id").value.trim();
+        const type = document.getElementById("edit-public-type").value;
+        const title = document.getElementById("edit-public-title").value.trim();
+        const originalUrl = document.getElementById("edit-public-url").value.trim();
+        if (!id || !originalUrl) return;
+
+        try {
+          const table = type === "direct" ? "direct_links" : "links";
+          await database.ref(`${table}/${id}`).update({
+            title: title,
+            originalUrl: originalUrl
+          });
+          if (type === "direct" && allDirectLinks[id]) {
+            allDirectLinks[id].title = title;
+            allDirectLinks[id].originalUrl = originalUrl;
+          } else if (allLinks[id]) {
+            allLinks[id].title = title;
+            allLinks[id].originalUrl = originalUrl;
+          }
+          renderPublicLinks();
+          closeEditPublicLinkModal();
+          showToast("Public link updated successfully!");
+        } catch (err) {
+          showToast(err.message, "error");
+        }
+      });
+    }
+
+    // Delete Public Link
+    window.deletePublicLink = async function (id, type) {
+      if (!confirm(`Are you sure you want to delete public ${type === 'direct' ? 'direct redirect' : 'step-lock'} link '${id}'?`)) return;
+      try {
+        const table = type === "direct" ? "direct_links" : "links";
+        await database.ref(`${table}/${id}`).remove();
+        showToast("Public link deleted successfully!");
+      } catch (err) {
+        showToast(err.message, "error");
+      }
+    };
+
+    // Public Link Visitor Logs Modal
+    window.openPublicLinkLogsModal = function (id, title, type) {
+      const modal = document.getElementById("modal-public-link-logs");
+      if (!modal) return;
+      document.getElementById("modal-public-logs-title").textContent = `${type === "direct" ? "⚡ DIRECT" : "🔒 STEP-LOCK"} • ID: ${title} (${id})`;
+
+      const matchingLogs = allClickLogs.filter((l) => l.targetId === id);
+      matchingLogs.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+      const uniqueCountries = new Set(matchingLogs.map((l) => l.country || "Unknown")).size;
+      document.getElementById("modal-public-total-clicks").textContent = matchingLogs.length;
+      document.getElementById("modal-public-total-countries").textContent = uniqueCountries;
+
+      const listEl = document.getElementById("modal-public-visitors-list");
+      if (matchingLogs.length === 0) {
+        listEl.innerHTML = `<div class="text-center py-8 text-slate-500 text-xs">No visitor logs recorded for this link yet.</div>`;
+      } else {
+        listEl.innerHTML = matchingLogs.slice(0, 50).map((log) => {
+          const timeAgo = formatRelativeTime(log.timestamp);
+          const flag = log.flag || "🌐";
+          const country = log.country || "Unknown";
+          const dev = log.deviceType || "Desktop";
+          const os = log.os || "OS";
+          const browser = log.browser || "Browser";
+          const ref = log.referrer || "Direct";
+
+          return `
+            <div class="p-3 bg-slate-950 border border-slate-800 rounded-xl flex items-center justify-between text-xs hover:border-slate-700 transition">
+              <div class="flex items-center gap-3">
+                <span class="text-xl">${flag}</span>
+                <div>
+                  <div class="font-bold text-white flex items-center gap-1.5">
+                    <span>${country}</span>
+                    <span class="text-[10px] text-slate-500 font-mono">(${log.countryCode || "XX"})</span>
+                  </div>
+                  <div class="text-[11px] text-slate-400 flex items-center gap-2 mt-0.5">
+                    <span>${dev}</span>
+                    <span>•</span>
+                    <span>${os}</span>
+                    <span>•</span>
+                    <span>${browser}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="text-[10px] text-emerald-400 font-mono block">${timeAgo}</span>
+                <span class="text-[10px] text-slate-500 uppercase">${ref}</span>
+              </div>
+            </div>
+          `;
+        }).join("");
+      }
+      modal.classList.remove("hidden");
+    };
+
+    window.closePublicLinkLogsModal = function () {
+      const modal = document.getElementById("modal-public-link-logs");
+      if (modal) modal.classList.add("hidden");
+    };
+
+    // Public links search and filter listeners
+    if (searchPublicLinksInput) {
+      searchPublicLinksInput.addEventListener("input", renderPublicLinks);
+    }
+    if (filterPublicType) {
+      filterPublicType.addEventListener("change", renderPublicLinks);
+    }
+    if (btnRefreshPublicData) {
+      btnRefreshPublicData.addEventListener("click", () => {
+        const icon = btnRefreshPublicData.querySelector("i");
+        if (icon) icon.classList.add("fa-spin");
+        renderPublicLinks();
+        setTimeout(() => {
+          if (icon) icon.classList.remove("fa-spin");
+          showToast("Public data refreshed!");
+        }, 500);
       });
     }
   </script>
