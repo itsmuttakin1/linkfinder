@@ -7,4 +7,4 @@ Disallow: /ad/
 Disallow: /ad/*
 
 # Sitemap
-Sitemap: https://linkfinder.pages.dev/sitemap.xml
+Sitemap: https://redrectorlink.pages.dev/sitemap.xml
