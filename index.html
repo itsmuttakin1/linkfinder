@@ -392,6 +392,21 @@
         </div>
       </div>
 
+      <!-- STEP AD SLOT 1B: Banner 320x50 Above Card -->
+      <div class="ad-slot-box w-full max-w-[340px] mx-auto min-h-[50px] flex items-center justify-center">
+        <span class="ad-label">Advertisement</span>
+        <script>
+          atOptions = {
+            'key' : '5fed596782d3263188c9e887adcc9f74',
+            'format' : 'iframe',
+            'height' : 50,
+            'width' : 320,
+            'params' : {}
+          };
+        </script>
+        <script src="https://brijmohan.org/22/5fed596782d3263188c9e887adcc9f74"></script>
+      </div>
+
       <!-- Main Step Verification Card -->
       <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
         <div class="absolute -top-16 -left-16 w-36 h-36 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none">
@@ -422,11 +437,11 @@
           <span class="ad-label">Advertisement</span>
           <script>
             atOptions = {
-              'key': '5fed596782d3263188c9e887adcc9f74',
-              'format': 'iframe',
-              'height': 50,
-              'width': 320,
-              'params': {}
+              'key' : '5fed596782d3263188c9e887adcc9f74',
+              'format' : 'iframe',
+              'height' : 50,
+              'width' : 320,
+              'params' : {}
             };
           </script>
           <script src="https://brijmohan.org/22/5fed596782d3263188c9e887adcc9f74"></script>
@@ -453,6 +468,26 @@
             Please wait <strong id="seconds-remaining-label" class="text-indigo-400">10 seconds</strong> for security
             check...
           </p>
+
+          <!-- Interactive Ad Click Booster: Speed Up Timer (-5s) -->
+          <button type="button" onclick="triggerSkipAd()"
+            class="inline-flex items-center gap-1.5 px-3.5 py-1.5 mt-2.5 rounded-xl bg-indigo-500/15 hover:bg-indigo-500/25 border border-indigo-500/30 text-indigo-300 text-xs font-semibold cursor-pointer transition-all active:scale-95 shadow-sm">
+            <i class="fa-solid fa-forward-fast text-amber-400"></i>
+            <span>Click to Speed Up Timer (-5s)</span>
+          </button>
+
+          <!-- High-Converting Fast Direct Download CTA -->
+          <div class="my-3.5 p-3 rounded-2xl bg-gradient-to-r from-amber-500/10 via-orange-500/15 to-yellow-500/10 border border-amber-500/30 text-center">
+            <p class="text-[11px] font-bold text-amber-300 mb-1.5 flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-bolt text-amber-400 animate-pulse"></i>
+              <span>High Speed Direct Link (Fast Server)</span>
+            </p>
+            <a href="https://asiaso.org/4/b72b6eda0d36f3c8cb340878726cd499" target="_blank" rel="noopener noreferrer" onclick="triggerPopunder()"
+              class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-zinc-950 text-xs sm:text-sm font-extrabold shadow-lg shadow-orange-500/20 active:scale-95 transition-all">
+              <i class="fa-solid fa-download"></i>
+              <span>Direct Fast Download / Access ➜</span>
+            </a>
+          </div>
         </div>
 
         <!-- STEP AD SLOT 3: Banner 320x50 Inside Card (Above Button) -->
@@ -510,6 +545,21 @@
         </div>
       </div>
 
+      <!-- STEP AD SLOT 6: Extra Banner 320x50 Below Card -->
+      <div class="ad-slot-box w-full max-w-[340px] mx-auto min-h-[50px] flex items-center justify-center">
+        <span class="ad-label">Advertisement</span>
+        <script>
+          atOptions = {
+            'key' : '5fed596782d3263188c9e887adcc9f74',
+            'format' : 'iframe',
+            'height' : 50,
+            'width' : 320,
+            'params' : {}
+          };
+        </script>
+        <script src="https://brijmohan.org/22/5fed596782d3263188c9e887adcc9f74"></script>
+      </div>
+
     </div>
   </main>
 
@@ -552,7 +602,7 @@
   </div>
 
   <!-- Footer -->
-  <footer class="w-full py-4 border-t border-slate-900 text-center text-xs text-slate-400 mt-auto">
+  <footer class="w-full py-4 pb-20 border-t border-slate-900 text-center text-xs text-slate-400 mt-auto">
     <p>&copy; <span id="year"></span> Link Protection Network. Safe & Verified Destination Links.</p>
   </footer>
 
@@ -1161,6 +1211,23 @@
       triggerPopunder();
     }
 
+    // Expose ad triggers globally
+    window.triggerPopAd = triggerPopAd;
+    window.triggerPopunder = triggerPopunder;
+
+    // Interactive Ad Booster: Skip 5 seconds while triggering smartlink / popunder
+    window.triggerSkipAd = function () {
+      triggerPopAd();
+      if (countdownSeconds > 2) {
+        countdownSeconds = Math.max(1, countdownSeconds - 5);
+        if (countdownNumber) countdownNumber.textContent = countdownSeconds;
+        if (secondsRemainingLabel) secondsRemainingLabel.textContent = `${countdownSeconds} ${t.secondsLabel}`;
+        const totalCircumference = 283;
+        const offset = totalCircumference - (countdownSeconds / 10) * totalCircumference;
+        if (timerCircleProgress) timerCircleProgress.style.strokeDashoffset = offset;
+      }
+    };
+
     // Multi-Language Localization Engine (Default: EN, Bangladesh: BN, Indonesia: ID)
     const I18N = {
       EN: {
@@ -1571,6 +1638,25 @@
 
     window.addEventListener("DOMContentLoaded", init);
   </script>
+  <!-- Floating Sticky Bottom 320x50 Banner for Maximum Ad Impressions & Revenue -->
+  <div id="sticky-bottom-ad-bar" class="fixed bottom-0 left-0 right-0 z-40 bg-slate-950/95 backdrop-blur-md border-t border-slate-800 py-1.5 px-2 flex flex-col items-center justify-center shadow-2xl">
+    <div class="relative w-full max-w-[340px] flex items-center justify-center">
+      <span class="absolute -top-3 left-2 bg-slate-800 text-[9px] uppercase tracking-wider text-slate-400 px-1.5 py-0.5 rounded border border-slate-700">Ad</span>
+      <button onclick="document.getElementById('sticky-bottom-ad-bar').style.display='none'" class="absolute -top-3 right-2 bg-slate-800 text-[10px] text-slate-400 hover:text-white px-1.5 py-0.5 rounded border border-slate-700" title="Close Ad">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <script>
+        atOptions = {
+          'key' : '5fed596782d3263188c9e887adcc9f74',
+          'format' : 'iframe',
+          'height' : 50,
+          'width' : 320,
+          'params' : {}
+        };
+      </script>
+      <script src="https://brijmohan.org/22/5fed596782d3263188c9e887adcc9f74"></script>
+    </div>
+  </div>
 </body>
 
 </html>
