@@ -1,0 +1,34 @@
+# Apache Configuration for InfinityFree & cPanel Hosts
+RewriteEngine On
+RewriteBase /
+
+# 1. Custom Routes & Redirections
+# Route /d/* direct link redirects to index.html with query preservation
+RewriteRule ^d/(.*)$ index.html [L,QSA]
+RewriteRule ^d/?$ index.html [L,QSA]
+
+# Clean URL for Giveaway Quest
+RewriteRule ^giveaway/?$ giveaway/index.html [L,QSA]
+
+# Clean URL for Admin Dashboard
+RewriteRule ^ad/?$ ad/index.html [L,QSA]
+
+# Prevent directory listings
+Options -Indexes
+
+# 2. Performance: GZIP Compression
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json image/svg+xml
+</IfModule>
+
+# 3. Browser Caching
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/jpg "access plus 1 month"
+  ExpiresByType image/jpeg "access plus 1 month"
+  ExpiresByType image/gif "access plus 1 month"
+  ExpiresByType image/png "access plus 1 month"
+  ExpiresByType image/webp "access plus 1 month"
+  ExpiresByType text/css "access plus 1 week"
+  ExpiresByType application/javascript "access plus 1 week"
+</IfModule>
