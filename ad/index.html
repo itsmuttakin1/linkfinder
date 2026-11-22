@@ -2225,7 +2225,7 @@ ${activeCampaignData.totalSteps || 100}টি সহজ স্টেপ সফ�
       const origin = window.location.origin;
       directLinksTableBody.innerHTML = filteredKeys.map((id) => {
         const item = allDirectLinks[id] || {};
-        const shareUrl = `${origin}/d/${encodeURIComponent(id)}`;
+        const shareUrl = `${origin}/?d=${encodeURIComponent(id)}`;
         const dateStr = item.createdAt ? new Date(item.createdAt).toLocaleDateString() : "-";
         const titleHtml = item.title ? `<div class="font-bold text-white text-xs truncate max-w-xs mb-0.5"><i class="fa-solid fa-bolt text-amber-400 mr-1"></i>${escapeHtml(item.title)}</div>` : '';
 
@@ -2270,16 +2270,20 @@ ${activeCampaignData.totalSteps || 100}টি সহজ স্টেপ সফ�
         }
 
         try {
-          await database.ref(`direct_links/${slug}`).set({
+          const directObj = {
             id: slug,
             title: title || "",
             originalUrl: originalUrl,
             createdAt: Date.now(),
             clicks: 0,
+            type: "direct",
+            isDirect: true,
             createdBy: currentUser.email
-          });
+          };
+          await database.ref(`direct_links/${slug}`).set(directObj);
+          await database.ref(`links/${slug}`).set(directObj).catch(() => {});
 
-          const directShareUrl = `${window.location.origin}/d/${encodeURIComponent(slug)}`;
+          const directShareUrl = `${window.location.origin}/?d=${encodeURIComponent(slug)}`;
           directGeneratedLinkInput.value = directShareUrl;
           directResultBox.classList.remove("hidden");
           showToast("Direct redirect link created!");
@@ -2299,7 +2303,8 @@ ${activeCampaignData.totalSteps || 100}টি সহজ স্টেপ সফ�
     window.deleteDirectLink = async function (id) {
       if (!confirm(`Delete direct link '${id}'?`)) return;
       try {
-        await database.ref(`direct_links/${id}`).remove();
+        await database.ref(`direct_links/${id}`).remove().catch(() => {});
+        await database.ref(`links/${id}`).remove().catch(() => {});
         showToast("Direct link deleted!");
       } catch (err) {
         showToast(err.message, "error");
@@ -2333,7 +2338,11 @@ ${activeCampaignData.totalSteps || 100}টি সহজ স্টেপ সফ�
           await database.ref(`direct_links/${id}`).update({
             title: title,
             originalUrl: originalUrl
-          });
+          }).catch(() => {});
+          await database.ref(`links/${id}`).update({
+            title: title,
+            originalUrl: originalUrl
+          }).catch(() => {});
           if (allDirectLinks[id]) {
             allDirectLinks[id].title = title;
             allDirectLinks[id].originalUrl = originalUrl;
@@ -2698,23 +2707,27 @@ ${activeCampaignData.totalSteps || 100}টি সহজ স্টেপ সফ�
     function getPublicItemsList() {
       const origin = window.location.origin;
       const list = [];
+      const seenIds = new Set();
 
-      // 1. From links (Step-Lock)
+      // 1. From links (checks for both steplock and direct type)
       Object.keys(allLinks).forEach((id) => {
         const item = allLinks[id] || {};
         if (item.createdBy === "public" || (!item.createdBy || !item.createdBy.includes("@"))) {
+          seenIds.add(id);
+          const isDirect = item.type === "direct" || item.isDirect === true;
           list.push({
             ...item,
             id: id,
-            type: "steplock",
+            type: isDirect ? "direct" : "steplock",
             sourceTable: "links",
-            shareUrl: `${origin}/?id=${encodeURIComponent(id)}`
+            shareUrl: isDirect ? `${origin}/?d=${encodeURIComponent(id)}` : `${origin}/?id=${encodeURIComponent(id)}`
           });
         }
       });
 
       // 2. From direct_links (Direct Redirect)
       Object.keys(allDirectLinks).forEach((id) => {
+        if (seenIds.has(id)) return;
         const item = allDirectLinks[id] || {};
         if (item.createdBy === "public" || (!item.createdBy || !item.createdBy.includes("@"))) {
           list.push({
@@ -2722,7 +2735,7 @@ ${activeCampaignData.totalSteps || 100}টি সহজ স্টেপ সফ�
             id: id,
             type: "direct",
             sourceTable: "direct_links",
-            shareUrl: `${origin}/d/${encodeURIComponent(id)}`
+            shareUrl: `${origin}/?d=${encodeURIComponent(id)}`
           });
         }
       });
@@ -2883,15 +2896,20 @@ ${activeCampaignData.totalSteps || 100}টি সহজ স্টেপ সফ�
         if (!id || !originalUrl) return;
 
         try {
-          const table = type === "direct" ? "direct_links" : "links";
-          await database.ref(`${table}/${id}`).update({
+          await database.ref(`links/${id}`).update({
             title: title,
             originalUrl: originalUrl
-          });
-          if (type === "direct" && allDirectLinks[id]) {
+          }).catch(() => {});
+          await database.ref(`direct_links/${id}`).update({
+            title: title,
+            originalUrl: originalUrl
+          }).catch(() => {});
+
+          if (allDirectLinks[id]) {
             allDirectLinks[id].title = title;
             allDirectLinks[id].originalUrl = originalUrl;
-          } else if (allLinks[id]) {
+          }
+          if (allLinks[id]) {
             allLinks[id].title = title;
             allLinks[id].originalUrl = originalUrl;
           }
@@ -2908,8 +2926,8 @@ ${activeCampaignData.totalSteps || 100}টি সহজ স্টেপ সফ�
     window.deletePublicLink = async function (id, type) {
       if (!confirm(`Are you sure you want to delete public ${type === 'direct' ? 'direct redirect' : 'step-lock'} link '${id}'?`)) return;
       try {
-        const table = type === "direct" ? "direct_links" : "links";
-        await database.ref(`${table}/${id}`).remove();
+        await database.ref(`links/${id}`).remove().catch(() => {});
+        await database.ref(`direct_links/${id}`).remove().catch(() => {});
         showToast("Public link deleted successfully!");
       } catch (err) {
         showToast(err.message, "error");

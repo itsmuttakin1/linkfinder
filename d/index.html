@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Direct Redirect | Facebook Link</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/jpeg" href="/images/logo.jpg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!-- Firebase App & Database (Compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+  <script src="/js/firebase-config.js"></script>
+  <script src="/js/telemetry.js"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex items-center justify-center p-4 font-sans antialiased">
+  <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-2xl text-center relative overflow-hidden">
+    <div class="absolute -top-16 -right-16 w-36 h-36 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="w-16 h-16 mx-auto rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center text-2xl mb-4">
+      <i class="fa-solid fa-bolt-lightning animate-bounce"></i>
+    </div>
+
+    <h2 id="status-title" class="text-xl font-bold text-white">Redirecting to Destination...</h2>
+    <p id="status-subtitle" class="text-xs text-slate-400 mt-2">Connecting to direct destination gateway (0s)...</p>
+
+    <div class="mt-6 flex justify-center">
+      <div class="w-8 h-8 border-3 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
+    </div>
+
+    <div id="error-box" class="hidden mt-6 p-4 rounded-xl bg-rose-950/40 border border-rose-500/30 text-rose-300 text-xs">
+      <p id="error-msg">Link not found or expired.</p>
+      <a href="/" class="inline-block mt-3 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg transition font-medium">Back to Home</a>
+    </div>
+  </div>
+
+  <script>
+    const RTDB_URL = "https://itsmuttakin-adf2b-default-rtdb.asia-southeast1.firebasedatabase.app";
+
+    function getSlug() {
+      const urlParams = new URLSearchParams(window.location.search);
+      let s = urlParams.get("d") || urlParams.get("id") || urlParams.get("slug") || urlParams.get("link");
+      if (s) return s.trim();
+
+      const path = window.location.pathname;
+      if (path.includes("/d/")) {
+        const parts = path.split("/d/")[1].split("/")[0].split("?")[0].trim();
+        if (parts && parts !== "index.html") return parts;
+      }
+      if (window.location.hash) {
+        const h = window.location.hash.substring(1).trim();
+        if (h) return h;
+      }
+      return null;
+    }
+
+    async function redirectDirect() {
+      const slug = getSlug();
+      if (!slug) {
+        window.location.replace("/");
+        return;
+      }
+
+      let linkData = null;
+
+      // 1. Check SDK links
+      if (typeof database !== "undefined" && database) {
+        try {
+          const snap = await database.ref(`links/${slug}`).once("value");
+          if (snap.exists()) linkData = snap.val();
+        } catch (e) {}
+        if (!linkData) {
+          try {
+            const snap2 = await database.ref(`direct_links/${slug}`).once("value");
+            if (snap2.exists()) linkData = snap2.val();
+          } catch (e) {}
+        }
+      }
+
+      // 2. Check REST links
+      if (!linkData) {
+        try {
+          const resp = await fetch(`${RTDB_URL}/links/${encodeURIComponent(slug)}.json`);
+          if (resp.ok) {
+            const d = await resp.json();
+            if (d && d.originalUrl) linkData = d;
+          }
+        } catch (e) {}
+      }
+
+      // 3. Check REST direct_links
+      if (!linkData) {
+        try {
+          const resp = await fetch(`${RTDB_URL}/direct_links/${encodeURIComponent(slug)}.json`);
+          if (resp.ok) {
+            const d = await resp.json();
+            if (d && d.originalUrl) linkData = d;
+          }
+        } catch (e) {}
+      }
+
+      if (!linkData || !linkData.originalUrl) {
+        document.getElementById("error-box").classList.remove("hidden");
+        document.getElementById("error-msg").textContent = `Direct link '${slug}' was not found or has expired.`;
+        return;
+      }
+
+      // Record clicks & telemetry
+      try {
+        if (typeof database !== "undefined" && database) {
+          database.ref(`links/${slug}/clicks`).transaction((c) => (c || 0) + 1).catch(() => {});
+          database.ref(`direct_links/${slug}/clicks`).transaction((c) => (c || 0) + 1).catch(() => {});
+        }
+        if (typeof window.recordClickTelemetry === "function") {
+          window.recordClickTelemetry(RTDB_URL, slug, "direct_link", linkData.title || linkData.originalUrl);
+        }
+      } catch (e) {}
+
+      // Instant 0-second redirect
+      window.location.replace(linkData.originalUrl);
+    }
+
+    window.addEventListener("DOMContentLoaded", redirectDirect);
+  </script>
+</body>
+</html>

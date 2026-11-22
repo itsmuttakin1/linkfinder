@@ -3,8 +3,8 @@ RewriteEngine On
 RewriteBase /
 
 # 1. Custom Routes & Redirections
-# Route /d/* direct link redirects to index.html with query preservation
-RewriteRule ^d/(.*)$ index.html [L,QSA]
+# Route /d/* direct link to index.html with query param d
+RewriteRule ^d/(.*)$ index.html?d=$1 [L,QSA]
 RewriteRule ^d/?$ index.html [L,QSA]
 
 # Clean URL for Giveaway Quest
