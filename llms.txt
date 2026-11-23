@@ -1,0 +1,33 @@
+# Url Hunter
+
+> Url Hunter (https://redrectorlink.pages.dev) is a high-speed, free URL shortener, link generator, and monetized redirect protector. It lets users shorten long URLs, create instant 0-second direct redirect links, protect links with 4-step bot verification, and track real-time clicks and visitor telemetry (country, device, browser) for free without registration.
+
+## Core Capabilities & Features
+
+- **Free URL Shortener**: Shorten any long URL into a compact, easily shareable short link (`https://redrectorlink.pages.dev/?id=slug` or `/?d=slug`).
+- **Instant 0-Second Direct Redirect**: 1-click clean shortcut link that instantly redirects visitors in 0 seconds to target destination with no waiting timer.
+- **4-Step Monetized Link Shield**: Protect destination URLs with sequential bot verification checks, countdown timers, and anti-tamper mechanisms.
+- **Real-Time Click & Country Telemetry**: Realtime visitor analytics tracking total clicks, unique countries, operating systems, and browsers powered by Firebase Realtime Database.
+- **Custom Link Title & Branding**: Attach custom titles, headlines, and instructions to shortened URLs.
+- **Anti-Adblock & Bot Defense**: Integrated anti-cheat and bot-filtering algorithms to ensure legitimate traffic.
+- **Giveaway Quest Platform**: Built-in 100-step sequential verification quest module for promotional campaigns and lucky draws (`/giveaway`).
+- **Admin Dashboard**: Secure telemetry control center for managing links, viewing live click streams, and monitoring conversion analytics (`/ad`).
+
+## Primary Use Cases
+
+- **Content Creators & Marketers**: Shorten YouTube, Telegram, Facebook, and affiliate links with live country tracking.
+- **File Sharers & Publishers**: Protect high-value download links with multi-step verification and monetized advertising units.
+- **Community Giveaways**: Run fair, verifiable giveaway quests with automated ticket generation and live lottery draws.
+- **Direct Redirections**: Clean, fast link forwarding with zero latency.
+
+## Links & Endpoints
+
+- [Homepage & URL Generator](https://redrectorlink.pages.dev/): Create free short links (Direct or Step Lock) and view personal link analytics.
+- [Direct Link Gateway](https://redrectorlink.pages.dev/?d=): Instant 0-second redirection route.
+- [Giveaway Quest](https://redrectorlink.pages.dev/giveaway): 100-step sequential verification campaign engine.
+- [Sitemap](https://redrectorlink.pages.dev/sitemap.xml): XML sitemap for search crawlers.
+- [Full Documentation](https://redrectorlink.pages.dev/llms-full.txt): Comprehensive technical and feature documentation for AI agents.
+
+## Supported Alternative Keywords
+
+URL shortener, link shortener, shorten url, short link, bitly, tinyurl, free url shortener, shorten link, bit.ly, link shortcut, how to shorten a link, make url shorter, custom url, custom link, url generator, link generator, tiny url shortener, bitly link shortener, shortlink, shorten url free, short link generator, link converter, raccourcisseur de lien, acortador de url, acortar link, link kürzen, persingkat link, ย่อ url, 縮短網址, اختصار روابط.

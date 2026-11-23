@@ -2,18 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
-    <loc>http://facebooklink.ct.ws/</loc>
-    <lastmod>2026-11-17</lastmod>
-    <changefreq>daily</changefreq>
+    <loc>https://redrectorlink.pages.dev/</loc>
+    <lastmod>2026-11-23</lastmod>
+    <changefreq>always</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>http://facebooklink.ct.ws/images/logo.jpg</image:loc>
-      <image:title>Facebook Link Logo</image:title>
+      <image:loc>https://redrectorlink.pages.dev/images/logo.jpg</image:loc>
+      <image:title>Url Hunter - Free URL Shortener &amp; Link Generator</image:title>
+      <image:caption>Shorten URLs, generate short links, and protect destination links with Url Hunter</image:caption>
     </image:image>
   </url>
   <url>
-    <loc>http://facebooklink.ct.ws/giveaway</loc>
-    <lastmod>2026-11-17</lastmod>
+    <loc>https://redrectorlink.pages.dev/giveaway</loc>
+    <lastmod>2026-11-23</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>

@@ -1,11 +1,14 @@
 User-agent: *
 Allow: /
 Allow: /?id=*
+Allow: /?d=*
 Allow: /d/*
 Allow: /giveaway
+Allow: /llms.txt
+Allow: /llms-full.txt
 Disallow: /ad
 Disallow: /ad/
 Disallow: /ad/*
 
 # Sitemap
-Sitemap: http://facebooklink.ct.ws/sitemap.xml
+Sitemap: https://redrectorlink.pages.dev/sitemap.xml

@@ -1,0 +1,50 @@
+# Url Hunter - Comprehensive Technical & AI Reference
+
+> Url Hunter (https://redrectorlink.pages.dev) is a modern web application providing free URL shortening, instant 0-second direct link redirection, monetized 4-step bot verification links, realtime geographic analytics, and community promotional giveaway campaigns.
+
+## Overview & Architecture
+
+Url Hunter is built with a high-performance, mobile-first static architecture hosted globally via Cloudflare Pages and compatible with cPanel / Apache environments. Realtime state, link mappings, and telemetry logs are synchronized via Firebase Realtime Database.
+
+### Domain Information
+- **Canonical Domain**: https://redrectorlink.pages.dev
+- **Previous Name**: Facebook Link
+- **Current Brand**: Url Hunter (Url Hunter • Link Intelligence)
+
+## Key Functionalities
+
+### 1. Free URL Shortener & Link Generator
+Users can shorten long, complex URLs into clean, short links. Supported link types:
+- **Direct Redirect (0s)**: Bypasses all countdown steps and instantly forwards visitors to the destination URL while silently logging visitor telemetry (country, device, browser, referrer).
+- **Step Lock (4-Step Monetized Verification)**: Guides visitors through 4 progressive verification steps (Security Check, Bot Verification, Token Generation, Link Unlock). Each step features countdown timers, dynamic ad units, and anti-reload protection.
+
+### 2. URL Parameters & Routing
+- `https://redrectorlink.pages.dev/?id={slug}`: Opens 4-step verification or instant direct link depending on link metadata.
+- `https://redrectorlink.pages.dev/?d={slug}`: Forces immediate 0-second direct redirection to target URL.
+- `https://redrectorlink.pages.dev/d/{slug}`: Clean Apache / Cloudflare rewrite path forwarding to the direct redirection engine.
+- `https://redrectorlink.pages.dev/giveaway?c={campaignId}`: Launches the 100-step promotional quest view.
+- `https://redrectorlink.pages.dev/ad`: Admin telemetry dashboard.
+
+### 3. Realtime Telemetry & Click Tracking
+Url Hunter captures non-invasive telemetry for every generated link:
+- IP-based Country Geolocation (Flag, Country Name, Country Code)
+- Operating System & Device Type (Desktop, Mobile, Tablet, Windows, macOS, Android, iOS)
+- Web Browser Identification (Chrome, Firefox, Safari, Edge, Opera)
+- Timestamp & Referrer Domain
+- Total Click Counters stored in Firebase Realtime Database
+
+### 4. Search Keywords & Semantic Intent
+Url Hunter satisfies global search queries across multiple languages:
+- English: url shortener, shorten url, link shortener, short link, bitly, tinyurl, free url shortener, shorten link, bit.ly, link shortcut, how to shorten a link, make url shorter, custom url, custom link, url generator, link generator, tiny url shortener, bitly link shortener, shortlink, shorten url free, short link generator, link converter, create short link.
+- Spanish: acortar url, acortador de url, acortar link, acortador de link, acortar link gratis.
+- French: raccourcir lien, raccourcisseur de lien, raccourcir un lien, reducteur de lien, raccourcir url.
+- German: link kürzen, url kürzen.
+- Indonesian: perpendek link, persingkat link, mempersingkat link.
+- Arabic: اختصار روابط, تقصير الروابط.
+- Thai: ย่อ url, ย่อลิ้ง, ย่อลิงค์.
+- Chinese: 縮短網址.
+
+## Technical Specifications
+- Frontend: HTML5, Tailwind CSS, FontAwesome 6, Vanilla JavaScript ES6+
+- Backend Data: Firebase Realtime Database Compat SDK (v10.8.0) + REST API
+- SEO: Schema.org WebApplication, SoftwareApplication, FAQPage JSON-LD, OpenGraph, Twitter Cards
